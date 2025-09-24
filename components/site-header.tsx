@@ -1,32 +1,32 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Droplets, Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Droplets, Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { name: "Home", path: "/" },
-  { name: "About", path: "/about" },
   { name: "Manufacturers", path: "/manufacturers" },
+  { name: "Territory", path: "/territory" },
   { name: "Projects", path: "/projects" },
   { name: "Blog", path: "/blog" },
   { name: "Contact", path: "/contact" },
-]
+];
 
 export function SiteHeader() {
-  const pathname = usePathname()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <div className="container mx-auto px-4 lg:px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
-          <Droplets className="h-8 w-8 text-[#1FA9A4]" />
-          <span className="text-xl font-bold text-[#123D6A]">W-Cubed</span>
+          <Droplets className="h-8 w-8 text-[#4986C8]" />
+          <span className="text-xl font-bold text-[#1C4E80]">W-Cubed</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -37,12 +37,12 @@ export function SiteHeader() {
               href={item.path}
               className={cn(
                 "relative text-sm font-medium transition-colors",
-                pathname === item.path ? "text-[#1FA9A4]" : "hover:text-[#1FA9A4]",
+                pathname === item.path ? "text-[#4986C8]" : "hover:text-[#4986C8]"
               )}
             >
               {item.name}
               {pathname === item.path && (
-                <span className="absolute left-0 right-0 bottom-[-1px] h-[2px] bg-[#1FA9A4]" />
+                <span className="absolute left-0 right-0 bottom-[-1px] h-[2px] bg-[#4986C8]" />
               )}
             </Link>
           ))}
@@ -61,7 +61,7 @@ export function SiteHeader() {
         </div>
 
         <div className="hidden md:block">
-          <Button className="bg-[#1FA9A4] hover:bg-[#1FA9A4]/90">
+          <Button className="bg-[#4986C8] hover:bg-[#4986C8]/90">
             <Link href="/contact">Contact Your Rep</Link>
           </Button>
         </div>
@@ -86,15 +86,15 @@ export function SiteHeader() {
                     className={cn(
                       "text-sm font-medium transition-colors p-2 rounded-md",
                       pathname === item.path
-                        ? "text-[#1FA9A4] bg-[#1FA9A4]/10"
-                        : "hover:text-[#1FA9A4] hover:bg-[#1FA9A4]/5",
+                        ? "text-[#4986C8] bg-[#4986C8]/10"
+                        : "hover:text-[#4986C8] hover:bg-[#4986C8]/5"
                     )}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.name}
                   </Link>
                 ))}
-                <Button className="bg-[#1FA9A4] hover:bg-[#1FA9A4]/90 mt-2">
+                <Button className="bg-[#4986C8] hover:bg-[#4986C8]/90 mt-2">
                   <Link href="/contact">Contact Your Rep</Link>
                 </Button>
               </nav>
@@ -103,5 +103,5 @@ export function SiteHeader() {
         )}
       </AnimatePresence>
     </header>
-  )
+  );
 }
