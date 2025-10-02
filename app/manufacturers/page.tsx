@@ -29,7 +29,7 @@ const manufacturers = [
   {
     id: "ksb",
     name: "KSB",
-    logo: "/placeholder.svg?height=120&width=200&text=KSB",
+    logo: "/manufacturers/ksb-logo.svg",
     category: "Pumps & Mixers",
     description:
       "Leading manufacturer of pumps, valves, and systems for water transport and treatment.",
@@ -50,7 +50,7 @@ const manufacturers = [
   {
     id: "kaeser",
     name: "Kaeser Blowers",
-    logo: "/placeholder.svg?height=120&width=200&text=Kaeser",
+    logo: "/manufacturers/Kaeser-compressor-logo.png",
     category: "Air Systems",
     description: "Premium compressed air systems and blowers for water treatment applications.",
     keyProducts: [
@@ -66,7 +66,7 @@ const manufacturers = [
   {
     id: "pratt",
     name: "Pratt Valves",
-    logo: "/placeholder.svg?height=120&width=200&text=Pratt",
+    logo: "/manufacturers/pratt-a-mueller-brand-logo-vector.png",
     category: "Valves",
     description: "Comprehensive valve solutions for water and wastewater applications.",
     keyProducts: [
@@ -86,7 +86,7 @@ const manufacturers = [
   {
     id: "hydro-gate",
     name: "Hydro Gate",
-    logo: "/placeholder.svg?height=120&width=200&text=Hydro+Gate",
+    logo: "/manufacturers/Hydro-gate-logo.png",
     category: "Flow Control",
     description: "Specialized gates, valves, and flow control equipment for water systems.",
     keyProducts: [
@@ -109,7 +109,7 @@ const manufacturers = [
   {
     id: "fournier",
     name: "Fournier",
-    logo: "/placeholder.svg?height=120&width=200&text=Fournier",
+    logo: "/manufacturers/Fournier-logo.svg",
     category: "Dewatering",
     description: "Advanced sludge dewatering solutions for wastewater treatment.",
     keyProducts: [
@@ -125,7 +125,7 @@ const manufacturers = [
   {
     id: "edi",
     name: "EDI",
-    logo: "/placeholder.svg?height=120&width=200&text=EDI",
+    logo: "/manufacturers/EDI-Logo.png",
     category: "Aeration Systems",
     description: "Membrane and diffuser systems for biological treatment processes.",
     keyProducts: [
@@ -147,7 +147,7 @@ const manufacturers = [
   {
     id: "veolia-suez",
     name: "Veolia/Suez",
-    logo: "/placeholder.svg?height=120&width=200&text=Veolia+Suez",
+    logo: "/manufacturers/suez-logo.png",
     category: "Treatment Solutions",
     description: "Comprehensive water treatment and reuse solutions.",
     keyProducts: [
@@ -168,7 +168,7 @@ const manufacturers = [
   {
     id: "trillium-flow",
     name: "Trillium Flow Technologies",
-    logo: "/placeholder.svg?height=120&width=200&text=Trillium+Flow",
+    logo: "/manufacturers/Trillium-logo.png",
     category: "Pumps & Equipment",
     description: "Specialized pumping and grit removal equipment for wastewater treatment.",
     keyProducts: [
@@ -188,7 +188,7 @@ const manufacturers = [
   {
     id: "kusters-zima",
     name: "Kusters Zima Water",
-    logo: "/placeholder.svg?height=120&width=200&text=Kusters+Zima",
+    logo: "/manufacturers/kusters-water-logo.png",
     category: "Treatment Equipment",
     description: "Dependable, cost-effective solutions for water and wastewater treatment.",
     keyProducts: [
@@ -218,7 +218,7 @@ const manufacturers = [
   {
     id: "pentair-fairbanks",
     name: "Pentair Fairbanks",
-    logo: "/placeholder.svg?height=120&width=200&text=Pentair+Fairbanks",
+    logo: "/manufacturers/pentair-logo.png",
     category: "Pumps",
     description: "Submersible and solids handling pumps for wastewater applications.",
     keyProducts: [
@@ -236,6 +236,31 @@ const manufacturers = [
     specialty: "Solids Handling Pumps (Utah Only)",
     territoryNote:
       "We only represent Pentair Fairbanks products for the State of Utah. Not Idaho or Wyoming.",
+  },
+  {
+    id: "nexom",
+    name: "Nexom",
+    logo: "/manufacturers/nexom-logo.jpg",
+    category: "Treatment Solutions",
+    description:
+      "Advanced wastewater treatment solutions specializing in lagoon systems, MBBR, IFAS, and filtration technologies.",
+    keyProducts: [
+      "Lagoon Solutions - Cold Weather Treatment",
+      "BOD & TSS Removal Systems",
+      "Ammonia Removal (Nitrification)",
+      "Phosphorus Removal Technology",
+      "Total Nitrogen/Nitrate Removal (Denitrification)",
+      "Post Lagoon MBBR Systems",
+      "Waterfowl Prevention Solutions",
+      "Odor Control Systems",
+      "Desludging and Sludge Management",
+      "Mita Cloth Disk Filtration",
+      "BluePRO Reactive Filtration",
+      "BlueNite Sand Filter Denitrification",
+    ],
+    website: "https://nexom.com/",
+    established: "2015",
+    specialty: "Advanced Wastewater Treatment & Filtration",
   },
 ];
 
@@ -367,13 +392,34 @@ export default function ManufacturersPage() {
                   <Card className="h-full hover:shadow-lg transition-shadow">
                     <CardHeader className="text-center">
                       <div className="h-20 flex items-center justify-center mb-4">
-                        <Image
-                          src={manufacturer.logo || "/placeholder.svg"}
-                          alt={`${manufacturer.name} logo`}
-                          width={200}
-                          height={120}
-                          className="max-h-16 w-auto object-contain"
-                        />
+                        {manufacturer.id === "veolia-suez" ? (
+                          <div className="flex items-center gap-4">
+                            <Image
+                              src="/manufacturers/veolia-capsule-logo.svg"
+                              alt="Veolia logo"
+                              width={100}
+                              height={70}
+                              className="max-h-24 w-auto object-contain"
+                            />
+                            <Image
+                              src="/manufacturers/suez-logo.png"
+                              alt="Suez logo"
+                              width={80}
+                              height={60}
+                              className="max-h-8 w-auto object-contain"
+                            />
+                          </div>
+                        ) : (
+                          <Image
+                            src={manufacturer.logo || "/placeholder.svg"}
+                            alt={`${manufacturer.name} logo`}
+                            width={200}
+                            height={120}
+                            className={`object-contain ${
+                              manufacturer.id === "pentair-fairbanks" ? "max-h-32" : "max-h-16"
+                            } w-auto`}
+                          />
+                        )}
                       </div>
                       <CardTitle className="text-xl text-[#1C4E80]">{manufacturer.name}</CardTitle>
                       <Badge variant="secondary">{manufacturer.category}</Badge>
@@ -416,13 +462,34 @@ export default function ManufacturersPage() {
                     <CardContent className="p-6">
                       <div className="flex flex-col md:flex-row gap-6">
                         <div className="flex-shrink-0">
-                          <Image
-                            src={manufacturer.logo || "/placeholder.svg"}
-                            alt={`${manufacturer.name} logo`}
-                            width={200}
-                            height={120}
-                            className="h-16 w-auto object-contain"
-                          />
+                          {manufacturer.id === "veolia-suez" ? (
+                            <div className="flex items-center gap-4">
+                              <Image
+                                src="/manufacturers/veolia-capsule-logo.svg"
+                                alt="Veolia logo"
+                                width={120}
+                                height={80}
+                                className="h-18 w-auto object-contain"
+                              />
+                              <Image
+                                src="/manufacturers/suez-logo.png"
+                                alt="Suez logo"
+                                width={100}
+                                height={60}
+                                className="h-16 w-auto object-contain"
+                              />
+                            </div>
+                          ) : (
+                            <Image
+                              src={manufacturer.logo || "/placeholder.svg"}
+                              alt={`${manufacturer.name} logo`}
+                              width={200}
+                              height={120}
+                              className={`object-contain ${
+                                manufacturer.id === "pentair-fairbanks" ? "h-20" : "h-16"
+                              } w-auto`}
+                            />
+                          )}
                         </div>
                         <div className="flex-grow space-y-3">
                           <div className="flex items-center gap-3">

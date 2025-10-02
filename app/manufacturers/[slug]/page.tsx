@@ -1,27 +1,27 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ExternalLink, ArrowLeft, Calendar, MapPin, Award, Phone, Mail } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { useParams } from "next/navigation"
-import { SiteHeader } from "@/components/site-header"
-import { SiteFooter } from "@/components/site-footer"
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ExternalLink, ArrowLeft, Calendar, MapPin, Award, Phone, Mail } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.6 },
-}
+};
 
 // This would typically come from a CMS or API
 const manufacturerData = {
   ksb: {
     name: "KSB",
-    logo: "/placeholder.svg?height=120&width=200&text=KSB",
+    logo: "/manufacturers/ksb-logo.svg",
     category: "Pumps & Systems",
     established: "1871",
     headquarters: "Frankenthal, Germany",
@@ -54,7 +54,8 @@ const manufacturerData = {
     features: [
       {
         title: "Energy Efficiency",
-        description: "Advanced hydraulic designs for maximum efficiency and reduced operating costs",
+        description:
+          "Advanced hydraulic designs for maximum efficiency and reduced operating costs",
       },
       {
         title: "Reliability",
@@ -66,14 +67,15 @@ const manufacturerData = {
       },
     ],
   },
-}
+};
 
 export default function ManufacturerDetailPage() {
-  const params = useParams()
-  const slug = params.slug as string
+  const params = useParams();
+  const slug = params.slug as string;
 
   // In a real app, you'd fetch this data based on the slug
-  const manufacturer = manufacturerData[slug as keyof typeof manufacturerData] || manufacturerData.ksb
+  const manufacturer =
+    manufacturerData[slug as keyof typeof manufacturerData] || manufacturerData.ksb;
 
   return (
     <div className="min-h-screen bg-background">
@@ -84,7 +86,10 @@ export default function ManufacturerDetailPage() {
       <section className="py-6 bg-slate-50">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="flex items-center space-x-2 text-sm" {...fadeInUp}>
-            <Link href="/manufacturers" className="flex items-center text-[#1FA9A4] hover:underline">
+            <Link
+              href="/manufacturers"
+              className="flex items-center text-[#1FA9A4] hover:underline"
+            >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back to Manufacturers
             </Link>
@@ -114,7 +119,9 @@ export default function ManufacturerDetailPage() {
                   {manufacturer.category}
                 </Badge>
               </div>
-              <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-[#123D6A]">{manufacturer.name}</h1>
+              <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-[#123D6A]">
+                {manufacturer.name}
+              </h1>
               <p className="text-xl text-muted-foreground">{manufacturer.description}</p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="bg-[#1FA9A4] hover:bg-[#1FA9A4]/90">
@@ -244,8 +251,8 @@ export default function ManufacturerDetailPage() {
             >
               <h2 className="text-3xl lg:text-4xl font-bold text-[#123D6A]">Applications</h2>
               <p className="text-lg text-muted-foreground">
-                {manufacturer.name} equipment serves a wide range of water and wastewater applications across various
-                industries.
+                {manufacturer.name} equipment serves a wide range of water and wastewater
+                applications across various industries.
               </p>
               <div className="grid grid-cols-2 gap-4">
                 {manufacturer.applications.map((application, index) => (
@@ -278,7 +285,9 @@ export default function ManufacturerDetailPage() {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#123D6A]">Why Choose {manufacturer.name}?</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-[#123D6A]">
+              Why Choose {manufacturer.name}?
+            </h2>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -333,5 +342,5 @@ export default function ManufacturerDetailPage() {
       {/* Footer */}
       <SiteFooter />
     </div>
-  )
+  );
 }
