@@ -248,7 +248,7 @@ export default function ContactPage() {
               <div className="space-y-6">
                 <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">Send Us a Message</h2>
                 <p className="text-lg text-muted-foreground">
-                  Have a specific question or project in mind? Fill out the form and we'll get back
+                  Have a specific question or project in mind? Fill out the form and we&apos;ll get back
                   to you within 24 hours.
                 </p>
               </div>
@@ -297,7 +297,7 @@ export default function ContactPage() {
                 <CardHeader className="px-0 pt-0">
                   <CardTitle className="text-[#1C4E80]">Contact Form</CardTitle>
                   <CardDescription>
-                    Fill out the form below and we'll connect you with the right representative.
+                    Fill out the form below and we&apos;ll connect you with the right representative.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="px-0 pb-0">
