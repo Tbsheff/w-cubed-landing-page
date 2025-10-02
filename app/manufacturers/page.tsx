@@ -34,17 +34,19 @@ const manufacturers = [
     description:
       "Leading manufacturer of pumps, valves, and systems for water transport and treatment.",
     keyProducts: [
-      "Amacan K/P - Wet-installed submersible motor pump",
-      "Amaline - Horizontal propeller pump with submersible motor",
-      "ARX - Vertical single-stage submersible motor pump",
-      "KRT - Horizontal/vertical single-stage submersible motor pump",
+      "Amacan K/P: Wet-installed submersible motor pump for installation in discharge tubes with or without Axial Propeller options",
+      "Amaline: Wet-installed horizontal propeller pump with submersible motor, equipped with direct drive or spur gear",
+      "ARX: Vertical single-stage submersible motor pump for wet installation, with vortex impeller or open dual-vane impeller",
+      "KRT: Horizontal or vertical single-stage submersible motor pump in close-coupled design, with various next-generation impeller types, for wet or dry installation",
       "Horizontal Split Case Pumps (NSF61)",
       "Vertical Turbine Pumps",
-      "Amamix - Horizontal submersible mixer",
-      "Amaprop - Horizontal submersible mixer with gear drive",
+      "Horizontal Radially Splite Volute Casing Pumps",
+      "Close Coupled Horizontal and Vertical Volute Casing Pumps",
+      "Cutter(Grinder) Pumps",
+      "Amamix: Horizontal submersible mixer with self-cleaning ECB propeller, close-coupled design, direct drive",
+      "Amaprop: Horizontal submersible mixer with self-cleaning ECB propeller, close-coupled design, with coaxial spur gear drive",
     ],
     website: "https://www.ksb.com/en-us/product/product-catalog",
-    established: "1871",
     specialty: "Municipal & Industrial Pumping & Mixing",
   },
   {
@@ -54,13 +56,11 @@ const manufacturers = [
     category: "Air Systems",
     description: "Premium compressed air systems and blowers for water treatment applications.",
     keyProducts: [
-      "Rotary lobe blowers with OMEGA rotors",
-      "Rotary screw blowers with SIGMA profile",
-      "Turbo blowers with permanent magnet motors",
-      "Magnetic bearing systems",
+      "Rotary lobe blowers with our efficient tri-lobe OMEGA rotors to minimize pulsation effects",
+      "Rotary screw blowers with the energy-saving SIGMA profile – designed by KAESER for optimum pressure and output",
+      "Turbo blowers with high-speed, permanent magnet motors featuring wear-proof, magnetic bearings",
     ],
     website: "https://us.kaeser.com/products-and-solutions/blowers/",
-    established: "1919",
     specialty: "Compressed Air & Blower Systems",
   },
   {
@@ -80,7 +80,6 @@ const manufacturers = [
       "Air Valves",
     ],
     website: "https://www.henrypratt.com/products/",
-    established: "1945",
     specialty: "Water & Wastewater Valves",
   },
   {
@@ -103,7 +102,6 @@ const manufacturers = [
       "Trash Racks",
     ],
     website: "https://www.hydrogate.com/products/gates/",
-    established: "1962",
     specialty: "Water Control Structures",
   },
   {
@@ -119,7 +117,6 @@ const manufacturers = [
       "Filter Shake and Press Systems",
     ],
     website: "https://www.fournierdewatering.com/",
-    established: "1978",
     specialty: "Sludge Dewatering Systems",
   },
   {
@@ -141,7 +138,6 @@ const manufacturers = [
       "ModuleAir Retrievable Systems",
     ],
     website: "https://wastewater.com/",
-    established: "1985",
     specialty: "Membrane & Diffuser Systems",
   },
   {
@@ -162,7 +158,6 @@ const manufacturers = [
       "UV Disinfection & Oxidation",
     ],
     website: "https://www.watertechnologies.com/",
-    established: "1853",
     specialty: "Water Treatment & Reuse",
   },
   {
@@ -182,7 +177,6 @@ const manufacturers = [
       "Self-Primer Pumping Options",
     ],
     website: "https://www.trilliumflow.com/",
-    established: "2019",
     specialty: "Grit Removal & Pumping",
   },
   {
@@ -212,7 +206,6 @@ const manufacturers = [
       "XGT Vortex Grit Removal Systems",
     ],
     website: "https://www.zimacorp.com/water/",
-    established: "1950",
     specialty: "Clarification & Headworks",
   },
   {
@@ -232,8 +225,7 @@ const manufacturers = [
       "End Suction Pumps",
     ],
     website: "https://www.pentair.com/en-us/brands/fairbanks-nijhuis.html",
-    established: "1893",
-    specialty: "Solids Handling Pumps (Utah Only)",
+    specialty: "Solids Handling Pumps",
     territoryNote:
       "We only represent Pentair Fairbanks products for the State of Utah. Not Idaho or Wyoming.",
   },
@@ -259,7 +251,6 @@ const manufacturers = [
       "BlueNite Sand Filter Denitrification",
     ],
     website: "https://nexom.com/",
-    established: "2015",
     specialty: "Advanced Wastewater Treatment & Filtration",
   },
 ];
@@ -555,6 +546,56 @@ export default function ManufacturersPage() {
               </Button>
             </motion.div>
           )}
+        </div>
+      </section>
+
+      {/* Contact Information */}
+      <section className="py-20 bg-slate-50">
+        <div className="container mx-auto px-4 lg:px-6">
+          <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
+            <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
+              Our Sales Representatives
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Contact your territory representative for expert guidance and support.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <motion.div {...fadeInUp}>
+              <Card className="text-center">
+                <CardHeader>
+                  <CardTitle className="text-xl text-[#1C4E80]">Utah Territory</CardTitle>
+                  <CardDescription>Sales Representative</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <h3 className="text-lg font-semibold">Brad Gwinnup</h3>
+                  <div className="space-y-1 text-sm text-muted-foreground">
+                    <p>📞 C: 801-232-8241</p>
+                    <p>📧 BradG@WCubedInc.com</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div {...fadeInUp}>
+              <Card className="text-center">
+                <CardHeader>
+                  <CardTitle className="text-xl text-[#1C4E80]">
+                    Idaho & Wyoming Territory
+                  </CardTitle>
+                  <CardDescription>Sales Representative</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <h3 className="text-lg font-semibold">Austin Gwinnup</h3>
+                  <div className="space-y-1 text-sm text-muted-foreground">
+                    <p>📞 C: 801-803-8558</p>
+                    <p>📧 AustinG@WCubedInc.com</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
         </div>
       </section>
 

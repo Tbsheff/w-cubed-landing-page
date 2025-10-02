@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, ArrowLeft, Calendar, MapPin, Award, Phone, Mail } from "lucide-react";
+import { ExternalLink, ArrowLeft, Phone, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -17,55 +17,217 @@ const fadeInUp = {
   transition: { duration: 0.6 },
 };
 
-// This would typically come from a CMS or API
+// Manufacturer data array for individual pages (contains more detailed information)
 const manufacturerData = {
   ksb: {
     name: "KSB",
     logo: "/manufacturers/ksb-logo.svg",
-    category: "Pumps & Systems",
-    established: "1871",
-    headquarters: "Frankenthal, Germany",
+    category: "Pumps & Mixers",
     description:
-      "KSB is a leading manufacturer of pumps, valves, and systems for water transport and treatment. With over 150 years of experience, KSB provides innovative solutions for municipal water supply, wastewater treatment, and industrial applications.",
+      "Leading manufacturer of pumps, valves, and systems for water transport and treatment.",
     keyProducts: [
-      "Centrifugal Pumps",
-      "Submersible Pumps",
-      "Control Valves",
-      "Pump Systems",
-      "Water Treatment Equipment",
-      "Process Pumps",
+      "Amacan K/P: Wet-installed submersible motor pump for installation in discharge tubes with or without Axial Propeller options",
+      "Amaline: Wet-installed horizontal propeller pump with submersible motor, equipped with direct drive or spur gear",
+      "ARX: Vertical single-stage submersible motor pump for wet installation, with vortex impeller or open dual-vane impeller",
+      "KRT: Horizontal or vertical single-stage submersible motor pump in close-coupled design, with various next-generation impeller types, for wet or dry installation",
+      "Horizontal Split Case Pumps (NSF61)",
+      "Vertical Turbine Pumps",
+      "Horizontal Radially Splite Volute Casing Pumps",
+      "Close Coupled Horizontal and Vertical Volute Casing Pumps",
+      "Cutter(Grinder) Pumps",
+      "Amamix: Horizontal submersible mixer with self-cleaning ECB propeller, close-coupled design, direct drive",
+      "Amaprop: Horizontal submersible mixer with self-cleaning ECB propeller, close-coupled design, with coaxial spur gear drive",
     ],
-    applications: [
-      "Municipal Water Supply",
-      "Wastewater Treatment",
-      "Industrial Process",
-      "Building Services",
-      "Mining & Minerals",
-      "Power Generation",
+    website: "https://www.ksb.com/en-us/product/product-catalog",
+    specialty: "Municipal & Industrial Pumping & Mixing",
+  },
+  kaeser: {
+    name: "Kaeser Blowers",
+    logo: "/manufacturers/Kaeser-compressor-logo.png",
+    category: "Air Systems",
+    description: "Premium compressed air systems and blowers for water treatment applications.",
+    keyProducts: [
+      "Rotary lobe blowers with our efficient tri-lobe OMEGA rotors to minimize pulsation effects",
+      "Rotary screw blowers with the energy-saving SIGMA profile – designed by KAESER for optimum pressure and output",
+      "Turbo blowers with high-speed, permanent magnet motors featuring wear-proof, magnetic bearings",
     ],
-    certifications: ["ISO 9001", "ISO 14001", "OHSAS 18001"],
-    website: "https://www.ksb.com",
-    brochure: "/placeholder.pdf",
-    images: [
-      "/placeholder.svg?height=400&width=600&text=KSB+Pump+Installation",
-      "/placeholder.svg?height=400&width=600&text=KSB+Manufacturing",
-      "/placeholder.svg?height=400&width=600&text=KSB+Products",
+    website: "https://us.kaeser.com/products-and-solutions/blowers/",
+    specialty: "Compressed Air & Blower Systems",
+  },
+  pratt: {
+    name: "Pratt Valves",
+    logo: "/manufacturers/pratt-a-mueller-brand-logo-vector.png",
+    category: "Valves",
+    description: "Comprehensive valve solutions for water and wastewater applications.",
+    keyProducts: [
+      "Butterfly Valves",
+      "Knife Gate Valves",
+      "Energy Dissipating Valves",
+      "Gate Valves",
+      "Plug Valves",
+      "Ball-Rotary Cone Valves",
+      "Check Valves",
+      "Air Valves",
     ],
-    features: [
-      {
-        title: "Energy Efficiency",
-        description:
-          "Advanced hydraulic designs for maximum efficiency and reduced operating costs",
-      },
-      {
-        title: "Reliability",
-        description: "Proven technology with minimal maintenance requirements",
-      },
-      {
-        title: "Customization",
-        description: "Tailored solutions for specific application requirements",
-      },
+    website: "https://www.henrypratt.com/products/",
+    specialty: "Water & Wastewater Valves",
+  },
+  "hydro-gate": {
+    name: "Hydro Gate",
+    logo: "/manufacturers/Hydro-gate-logo.png",
+    category: "Flow Control",
+    description: "Specialized gates, valves, and flow control equipment for water systems.",
+    keyProducts: [
+      "Series HG 560: AWWA C560 Heavy Duty Cast Iron Slide Gates",
+      "Series HG 561: AWWA C561 Stainless Steel Slide Gates. C562, C513 - Aluminum Slide Gates",
+      "Radial (Taintor) Gates",
+      "Overshot Gates",
+      "Heavy Duty Flap Gates",
+      "Fabricated Flap Gates",
+      "Flexible Rubber Flap Gates",
+      "Stop Logs",
+      "Roller Gates",
+      "Butterfly Gates",
+      "Bulkhead Gates",
+      "Trash Racks",
+      "Dual Leaf Slide & Roller Gates",
     ],
+    website: "https://www.hydrogate.com/products/gates/",
+    specialty: "Water Control Structures",
+  },
+  fournier: {
+    name: "Fournier",
+    logo: "/manufacturers/Fournier-logo.svg",
+    category: "Dewatering",
+    description: "Advanced sludge dewatering solutions for wastewater treatment.",
+    keyProducts: [
+      "Rotary Press: Sludge De-Watering with Polymer Feed System and Friction Force Screens",
+      "Filter Press: Sludge De-Watering with Closed Cloth Filter Shake and Press",
+    ],
+    website: "https://www.fournierdewatering.com/",
+    specialty: "Sludge Dewatering Systems",
+  },
+  edi: {
+    name: "EDI",
+    logo: "/manufacturers/EDI-Logo.png",
+    category: "Aeration Systems",
+    description: "Membrane and diffuser systems for biological treatment processes.",
+    keyProducts: [
+      "Membranes: EPDM, Armor-Coated EPDM, Standard Polyurethane",
+      "High-Temperature Polyurethane (HTPU)",
+      "Matrix, Matrix Plus, Silicone",
+      "Specialty Polymers",
+      "Coarse air diffusers",
+      "Fine air diffusers in multiple options",
+      "Disc, Tube, or Panel Diffusers",
+      "Available in Fixed Grid, Submersible or Floating Laterals",
+      "ModuleAir Retrievable Systems, and Streamline Options",
+    ],
+    website: "https://wastewater.com/",
+    specialty: "Membrane & Diffuser Systems",
+  },
+  "veolia-suez": {
+    name: "Veolia/Suez",
+    logo: "/manufacturers/suez-logo.png",
+    category: "Treatment Solutions",
+    description: "Comprehensive water treatment and reuse solutions.",
+    keyProducts: [
+      "Produced Water/Waste Discharge and Reuse Help Opportunities",
+      "Physical/chemical processes",
+      "Biological treatment",
+      "Anaerobic wastewater treatment",
+      "Filtration and separation",
+      "Evaporation and crystallization",
+      "Mobile water treatment",
+      "Treatment chemicals and membrane-based solution",
+      "UV Disinfection & Oxidation for Water Treatment",
+    ],
+    website: "https://www.watertechnologies.com/",
+    specialty: "Water Treatment & Reuse",
+  },
+  "trillium-flow": {
+    name: "Trillium Flow Technologies",
+    logo: "/manufacturers/Trillium-logo.png",
+    category: "Pumps & Equipment",
+    description: "Specialized pumping and grit removal equipment for wastewater treatment.",
+    keyProducts: [
+      "WEMCO: HydroGritter, Grit Cyclone and Classifier",
+      "Screw-Flow Screw Impeller Pumps",
+      "Torque Flow (Model C) Grit Pumps",
+      "Prerotation An Automatic Wet Well Cleaning and Flow Matching System",
+      "WSP: Chop Flow, Non-Clog, Self-Primer Pumping Options",
+    ],
+    website: "https://www.trilliumflow.com/",
+    specialty: "Grit Removal & Pumping",
+  },
+  "kusters-zima": {
+    name: "Kusters Zima Water",
+    logo: "/manufacturers/kusters-water-logo.png",
+    category: "Treatment Equipment",
+    description: "Dependable, Cost-Effective Solutions for Water and WasteWater Treatment.",
+    keyProducts: [
+      "Clarification: C.I. Bridge Supported Drives Hydraulic Clarifier Drives",
+      "C.I. Pier Supported Turntables Drives Flocculating Clarifiers",
+      "LA-EDI Clarifier Inlets Solids Contact Clarifiers",
+      "Spiral Blade Clarifiers Standard Scraper Clarifiers",
+      "Suction Lift Clarifiers Tapered Header Suction Clarifiers",
+      "Traveling Bridge Clarifier",
+      "Biological: Zi-Biox Package WasteWater Treatment Plants",
+      "Zi-Biox Trickling Filter Distributor",
+      "Headworks Protechtor Product Lines: Multi-Rake Bar Screens",
+      "Internally Fed Drum Screens Screenings Washer Compactors",
+      "Perforated Plate Filter Screens Centerflow Band Screens",
+      "Circular Grit Collectors, Grit Washers Grit Classifiers",
+      "Headworks Complete Plant Packaged Solution",
+    ],
+    website: "https://www.zimacorp.com/water/",
+    specialty: "Clarification & Headworks",
+  },
+  "pentair-fairbanks": {
+    name: "Pentair Fairbanks",
+    logo: "/manufacturers/pentair-logo.png",
+    category: "Pumps",
+    description: "Submersible and solids handling pumps for wastewater applications.",
+    keyProducts: [
+      "Submersible Solids Handling Pumps",
+      "Solids Handling Pumps",
+      "Vertical Turbine Solids Handling Pumps",
+      "Vortex Pumps",
+      "Split Case Pumps",
+      "In-Line Pumps",
+      "Propeller Pumps",
+      "End Suction Pumps",
+    ],
+    website: "https://www.pentair.com/en-us/brands/fairbanks-nijhuis.html",
+    specialty: "Solids Handling Pumps",
+    territoryNote:
+      "We only represent Pentair Fairbanks products for the State of Utah. Not Idaho or Wyoming.",
+  },
+  nexom: {
+    name: "Nexom",
+    logo: "/manufacturers/nexom-logo.jpg",
+    category: "Treatment Solutions",
+    description:
+      "Advanced wastewater treatment solutions specializing in lagoon systems, MBBR, IFAS, and filtration technologies.",
+    keyProducts: [
+      "Lagoon Solutions: Cold Weather Treatment, BOD & TSS Removal",
+      "Ammonia Removal (Nitrification)",
+      "Phosphorus Removal Technology",
+      "Total Nitrogen/Nitrate Removal (Denitrification)",
+      "Post Lagoon MBBR Systems",
+      "Waterfowl Prevention Solutions",
+      "Odor Control Systems",
+      "Desludging and Sludge Management",
+      "Laboratory Services and In-House Testing",
+      "Installation & Maintenance Services",
+      "MBBR & IFAS: High-Streight or Highly Variable BOD Treatment",
+      "Enhanced Biological Phosphorus Removal",
+      "Mita Cloth Disk Filter",
+      "BluePRO Reactive Filtration for Ultra-Low Phosphorus & Metals",
+      "BlueNite Sand Filter-Based Biological Denitrification",
+    ],
+    website: "https://nexom.com/",
+    specialty: "Advanced Wastewater Treatment & Filtration",
   },
 };
 
@@ -73,7 +235,7 @@ export default function ManufacturerDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
 
-  // In a real app, you'd fetch this data based on the slug
+  // Fetch manufacturer data or default to KSB
   const manufacturer =
     manufacturerData[slug as keyof typeof manufacturerData] || manufacturerData.ksb;
 
@@ -88,7 +250,7 @@ export default function ManufacturerDetailPage() {
           <motion.div className="flex items-center space-x-2 text-sm" {...fadeInUp}>
             <Link
               href="/manufacturers"
-              className="flex items-center text-[#1FA9A4] hover:underline"
+              className="flex items-center text-[#4986C8] hover:underline"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back to Manufacturers
@@ -97,218 +259,154 @@ export default function ManufacturerDetailPage() {
         </div>
       </section>
 
-      {/* Hero Section */}
-      <section className="py-20 bg-background">
+      {/* Hero Section - Centered with Logo Above */}
+      <section className="py-10 md:py-14 bg-background">
         <div className="container mx-auto px-4 lg:px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              className="space-y-6"
-              initial={{ opacity: 0, x: -60 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <div className="flex items-center space-x-4">
+          <motion.div className="max-w-3xl mx-auto text-center" {...fadeInUp}>
+            {/* Logo */}
+            {manufacturer.logo && (
+              <div className="mt-8 mb-6">
                 <Image
-                  src={manufacturer.logo || "/placeholder.svg"}
+                  src={manufacturer.logo}
                   alt={`${manufacturer.name} logo`}
-                  width={200}
-                  height={120}
-                  className="h-16 w-auto object-contain"
+                  width={160}
+                  height={100}
+                  className="h-16 md:h-20 w-auto object-contain mx-auto"
                 />
-                <Badge variant="outline" className="border-[#1FA9A4]/30 text-[#123D6A]">
-                  {manufacturer.category}
-                </Badge>
               </div>
-              <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-[#123D6A]">
-                {manufacturer.name}
-              </h1>
-              <p className="text-xl text-muted-foreground">{manufacturer.description}</p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-[#1FA9A4] hover:bg-[#1FA9A4]/90">
-                  <Phone className="mr-2 h-4 w-4" />
-                  Contact Rep
-                </Button>
-                <Button size="lg" variant="outline" className="bg-transparent" asChild>
-                  <a href={manufacturer.website} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    Visit Website
-                  </a>
-                </Button>
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 60 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <Image
-                src={manufacturer.images?.[0] || "/placeholder.svg?height=500&width=600"}
-                alt={`${manufacturer.name} products`}
-                width={600}
-                height={500}
-                className="rounded-lg shadow-lg"
-              />
-            </motion.div>
-          </div>
-        </div>
-      </section>
+            )}
 
-      {/* Company Info */}
-      <section className="py-20 bg-slate-50">
-        <div className="container mx-auto px-4 lg:px-6">
-          <div className="grid md:grid-cols-3 gap-8">
-            <motion.div {...fadeInUp}>
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="h-5 w-5 text-[#1FA9A4]" />
-                    <CardTitle className="text-lg text-[#123D6A]">Established</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-2xl font-bold text-[#1FA9A4]">{manufacturer.established}</p>
-                  <p className="text-sm text-muted-foreground">Years of experience</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-            <motion.div {...fadeInUp}>
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center space-x-2">
-                    <MapPin className="h-5 w-5 text-[#1FA9A4]" />
-                    <CardTitle className="text-lg text-[#123D6A]">Headquarters</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-lg font-semibold">{manufacturer.headquarters}</p>
-                  <p className="text-sm text-muted-foreground">Global presence</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-            <motion.div {...fadeInUp}>
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center space-x-2">
-                    <Award className="h-5 w-5 text-[#1FA9A4]" />
-                    <CardTitle className="text-lg text-[#123D6A]">Certifications</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-1">
-                    {manufacturer.certifications.map((cert, index) => (
-                      <Badge key={index} variant="outline" className="mr-1">
-                        {cert}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+            {/* Company Name - Larger */}
+            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-[#1C4E80] mb-2">
+              {manufacturer.name}
+            </h1>
 
-      {/* Key Products */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 lg:px-6">
-          <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#123D6A]">Key Products</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive range of water equipment solutions
+            {/* Category Badge - Moved below title, centered */}
+            <div className="mb-4">
+              <Badge
+                variant="outline"
+                className="border-[#4986C8]/30 text-[#4986C8] bg-blue-50 px-3 py-1"
+              >
+                {manufacturer.category}
+              </Badge>
+            </div>
+
+            {/* Description */}
+            <p className="text-lg text-gray-700 leading-relaxed mb-6 max-w-2xl mx-auto">
+              {manufacturer.description}
             </p>
-          </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {manufacturer.keyProducts.map((product, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="text-center hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="text-lg text-[#123D6A]">{product}</CardTitle>
-                  </CardHeader>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Applications */}
-      <section className="py-20 bg-slate-50">
-        <div className="container mx-auto px-4 lg:px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              className="space-y-6"
-              initial={{ opacity: 0, x: -60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-3xl lg:text-4xl font-bold text-[#123D6A]">Applications</h2>
-              <p className="text-lg text-muted-foreground">
-                {manufacturer.name} equipment serves a wide range of water and wastewater
-                applications across various industries.
-              </p>
-              <div className="grid grid-cols-2 gap-4">
-                {manufacturer.applications.map((application, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-[#1FA9A4] rounded-full"></div>
-                    <span className="text-sm">{application}</span>
-                  </div>
-                ))}
+            {/* Territories Note */}
+            {manufacturer.territoryNote && (
+              <div className="bg-[#4986C8]/10 border border-[#4986C8]/30 rounded-lg p-4 mx-auto mb-6">
+                <p className="text-[#1C4E80] font-semibold">⚠️ Territory Restriction</p>
+                <p className="text-[#123D6A]">{manufacturer.territoryNote}</p>
               </div>
+            )}
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col md:flex-row gap-4 justify-center mb-10">
+              <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90 px-8 py-3">
+                <Phone className="mr-2 h-4 w-4" />
+                Contact Rep
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="bg-transparent border-2 border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white px-8 py-3 font-medium"
+                asChild
+              >
+                <a href={manufacturer.website} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  Visit Website
+                </a>
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Key Products Section - MOVED UP */}
+      <section className="py-10 md:py-14 bg-slate-50">
+        <div className="container mx-auto px-4 lg:px-6">
+          <div className="max-w-6xl mx-auto">
+            <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
+              <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">Key Products</h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                Comprehensive range of water equipment solutions represented by W-Cubed
+              </p>
             </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <Image
-                src={manufacturer.images?.[1] || "/placeholder.svg?height=400&width=500"}
-                alt={`${manufacturer.name} applications`}
-                width={500}
-                height={400}
-                className="rounded-lg shadow-lg"
-              />
-            </motion.div>
+
+            <div className="grid gap-6">
+              {manufacturer.keyProducts.map((product, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.05 }}
+                  viewport={{ once: true }}
+                >
+                  <Card className="hover:shadow-lg transition-shadow">
+                    <CardContent className="p-6">
+                      <p className="text-[#123D6A] font-medium leading-relaxed">{product}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="py-20 bg-background">
+      {/* Sales Representatives - MOVED AFTER PRODUCTS */}
+      <section className="py-10 md:py-14 bg-background">
         <div className="container mx-auto px-4 lg:px-6">
-          <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#123D6A]">
-              Why Choose {manufacturer.name}?
-            </h2>
-          </motion.div>
+          <div className="max-w-4xl mx-auto">
+            <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
+              <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
+                Contact Your Sales Representative
+              </h2>
+              <p className="text-xl text-muted-foreground">
+                Our experienced sales team can help you evaluate {manufacturer.name} solutions for
+                your projects.
+              </p>
+            </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {manufacturer.features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="text-center h-full">
+            <div className="grid md:grid-cols-2 gap-8">
+              <motion.div {...fadeInUp}>
+                <Card className="text-center">
                   <CardHeader>
-                    <CardTitle className="text-xl text-[#123D6A]">{feature.title}</CardTitle>
+                    <CardTitle className="text-xl text-[#1C4E80]">Utah Territory</CardTitle>
+                    <CardDescription>Sales Representative</CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-base">{feature.description}</CardDescription>
+                  <CardContent className="space-y-4">
+                    <h3 className="text-lg font-semibold">Brad Gwinnup</h3>
+                    <div className="space-y-1 text-sm text-muted-foreground">
+                      <p>📞 C: 801-232-8241</p>
+                      <p>📧 BradG@WCubedInc.com</p>
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
-            ))}
+
+              <motion.div {...fadeInUp}>
+                <Card className="text-center">
+                  <CardHeader>
+                    <CardTitle className="text-xl text-[#1C4E80]">
+                      Idaho & Wyoming Territory
+                    </CardTitle>
+                    <CardDescription>Sales Representative</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <h3 className="text-lg font-semibold">Austin Gwinnup</h3>
+                    <div className="space-y-1 text-sm text-muted-foreground">
+                      <p>📞 C: 801-803-8558</p>
+                      <p>📧 AustinG@WCubedInc.com</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -316,26 +414,31 @@ export default function ManufacturerDetailPage() {
       {/* CTA Section */}
       <section className="py-20 bg-[#123D6A]">
         <div className="container mx-auto px-4 lg:px-6">
-          <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-bold">Ready to Learn More?</h2>
-            <p className="text-xl opacity-90 max-w-2xl mx-auto">
-              Contact our team to discuss {manufacturer.name} solutions for your next project.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-[#1FA9A4] hover:bg-[#1FA9A4]/90">
-                <Phone className="mr-2 h-4 w-4" />
-                Contact Your Rep
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white text-white hover:bg-white hover:text-[#123D6A] bg-transparent"
-              >
-                <Mail className="mr-2 h-4 w-4" />
-                Request Quote
-              </Button>
-            </div>
-          </motion.div>
+          <div className="max-w-4xl mx-auto">
+            <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
+              <h2 className="text-3xl lg:text-4xl font-bold">
+                Ready to Discuss {manufacturer.name}?
+              </h2>
+              <p className="text-xl opacity-90 max-w-2xl mx-auto">
+                Contact our sales team for product information, engineering support, and customized
+                solutions.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/80">
+                  <Phone className="mr-2 h-4 w-4" />
+                  Contact Your Rep
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-white text-white hover:bg-white hover:text-[#123D6A] bg-transparent"
+                >
+                  <Mail className="mr-2 h-4 w-4" />
+                  Request Quote
+                </Button>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
