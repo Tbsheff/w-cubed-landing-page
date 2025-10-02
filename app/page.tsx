@@ -43,7 +43,6 @@ const manufacturers = [
   { name: "Pratt", logo: "/placeholder.svg?height=60&width=120&text=Pratt" },
   { name: "Hydro Gate", logo: "/placeholder.svg?height=60&width=120&text=Hydro+Gate" },
   { name: "Fournier", logo: "/placeholder.svg?height=60&width=120&text=Fournier" },
-  { name: "Nexom", logo: "/placeholder.svg?height=60&width=120&text=Nexom" },
 ];
 
 const blogPosts = [
