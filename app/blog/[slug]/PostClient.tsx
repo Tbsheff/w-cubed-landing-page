@@ -270,7 +270,7 @@ export default function PostClient({ post }: PostClientProps) {
             )}
 
             {/* CTA Section */}
-            <section className="py-20 bg[#123D6A]">
+            <section className="py-20 bg-[#123D6A]">
                 <div className="container mx-auto px-4 lg:px-6">
                     <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
                         <h2 className="text-3xl lg:text-4xl font-bold">Ready to Optimize Your Systems?</h2>

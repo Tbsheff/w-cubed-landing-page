@@ -111,8 +111,9 @@ const SelectLabel = React.forwardRef<
 ))
 SelectLabel.displayName = SelectPrimitive.Label.displayName
 
-// @ts-nocheck
-type SelectItemProps = React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> & { value: string }
+type SelectItemProps = Omit<React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>, 'value'> & {
+  value: string
+}
 
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,

@@ -1,6 +1,7 @@
 import { sanityClient } from '@/lib/sanity.client'
 import { postBySlugQuery, allPostSlugsQuery } from '@/lib/sanity.queries'
 import PostClient from './PostClient'
+import { notFound } from 'next/navigation'
 import { urlForImage } from '@/lib/sanity.image'
 
 export const dynamic = 'force-static'
@@ -11,9 +12,20 @@ export async function generateStaticParams() {
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const data = await sanityClient.fetch(postBySlugQuery, { slug: params.slug })
+  type PostResult = {
+    title: string
+    excerpt?: string
+    imageUrl?: string
+    mainImage?: any
+    date?: string
+    author?: { name?: string; image?: any }
+    categories?: Array<{ title?: string }>
+    body?: any
+  }
 
-  if (!data) return null
+  const data = await sanityClient.fetch<PostResult>(postBySlugQuery, { slug: params.slug })
+
+  if (!data) return notFound()
 
   const post = {
     title: data.title,
@@ -22,7 +34,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     date: data.date,
     authorName: data.author?.name,
     authorImageUrl: data.author?.image ? urlForImage(data.author.image).width(160).height(160).url() : undefined,
-    categories: (data.categories || []).map((c: any) => c.title),
+    categories: (data.categories || []).map((c) => c.title as string).filter(Boolean),
     body: data.body,
     slug: params.slug,
     related: [],
