@@ -179,7 +179,12 @@ export default function ManufacturersPage() {
   };
 
   // Debug log to track state changes
-  console.log("Current state:", { viewMode, filteredCount: filteredManufacturers.length, searchTerm, selectedCategory });
+  console.log("Current state:", {
+    viewMode,
+    filteredCount: filteredManufacturers.length,
+    searchTerm,
+    selectedCategory,
+  });
 
   return (
     <PageWrapper>
