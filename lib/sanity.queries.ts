@@ -1,4 +1,4 @@
-import { groq } from 'groq'
+import groq from 'groq'
 
 export const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][0]{
   _id,
@@ -22,7 +22,7 @@ export const postsListQuery = groq`*[_type == "post"]|order(coalesce(publishedAt
   title,
   "slug": slug.current,
   "excerpt": coalesce(excerpt, body[0].children[0].text),
-  coalesce(publishedAt,_updatedAt) as date,
+  "date": coalesce(publishedAt, _updatedAt),
   mainImage,
   "imageUrl": mainImage.asset->url,
   author->{ name },

@@ -94,7 +94,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                             <Input
                                 placeholder="Search articles..."
                                 value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onChange={(e: any) => setSearchTerm(e.target.value)}
                                 className="pl-10"
                             />
                         </div>
@@ -169,9 +169,9 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                                         </CardHeader>
                                         <CardContent className="space-y-4">
                                             {post.excerpt && <CardDescription className="text-base">{post.excerpt}</CardDescription>}
-                                            {post.tags?.length > 0 && (
+                                            {post.tags && post.tags.length > 0 && (
                                                 <div className="flex flex-wrap gap-1">
-                                                    {post.tags.slice(0, 3).map((tag: string, idx: number) => (
+                                                    {post.tags.slice(0, 3).map((tag: any, idx: number) => (
                                                         <Badge key={idx} variant="outline" className="text-xs">
                                                             {tag}
                                                         </Badge>
