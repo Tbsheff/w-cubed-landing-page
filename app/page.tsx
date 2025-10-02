@@ -20,6 +20,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { PageWrapper } from "@/components/page-wrapper";
 
@@ -38,37 +39,46 @@ const staggerContainer = {
 };
 
 const manufacturers = [
-  { name: "KSB", logo: "/placeholder.svg?height=60&width=120&text=KSB" },
-  { name: "Kaeser", logo: "/placeholder.svg?height=60&width=120&text=Kaeser" },
-  { name: "Pratt", logo: "/placeholder.svg?height=60&width=120&text=Pratt" },
-  { name: "Hydro Gate", logo: "/placeholder.svg?height=60&width=120&text=Hydro+Gate" },
-  { name: "Fournier", logo: "/placeholder.svg?height=60&width=120&text=Fournier" },
+  { id: "ksb", name: "KSB", logo: "/manufacturers/ksb-logo.svg" },
+  { id: "kaeser", name: "Kaeser Blowers", logo: "/manufacturers/Kaeser-compressor-logo.png" },
+  {
+    id: "pratt",
+    name: "Pratt Valves",
+    logo: "/manufacturers/pratt-a-mueller-brand-logo-vector.png",
+  },
+  { id: "hydro-gate", name: "Hydro Gate", logo: "/manufacturers/Hydro-gate-logo.png" },
+  { id: "fournier", name: "Fournier", logo: "/manufacturers/Fournier-logo.svg" },
+  { id: "edi", name: "EDI", logo: "/manufacturers/EDI-Logo.png" },
+  { id: "veolia-suez", name: "Veolia/Suez", logo: "/manufacturers/suez-logo.png" },
+  { id: "trillium-flow", name: "Trillium Flow", logo: "/manufacturers/Trillium-logo.png" },
+  { id: "kusters-zima", name: "Kusters Zima", logo: "/manufacturers/kusters-water-logo.png" },
+  { id: "pentair-fairbanks", name: "Pentair Fairbanks", logo: "/manufacturers/pentair-logo.png" },
 ];
 
-const blogPosts = [
+const projectHighlights = [
   {
-    title: "Optimizing Water Treatment Systems for Industrial Applications",
-    excerpt:
-      "Learn how to maximize efficiency in your water treatment processes with the latest equipment innovations.",
-    image: "/placeholder.svg?height=200&width=300&text=Water+Treatment",
-    date: "Dec 15, 2024",
-    category: "Technical",
+    title: "Municipal Water Treatment Facilities",
+    description:
+      "Successfully designed and installed pumping systems for municipal water and wastewater treatment plants across our four-state territory.",
+    image: "/placeholder.svg?height=200&width=300&text=Municipal+Project",
+    category: "Municipal",
+    states: ["UT", "NV", "ID", "WY"],
   },
   {
-    title: "Case Study: Municipal Water Plant Upgrade in Salt Lake City",
-    excerpt:
-      "How we helped upgrade a major municipal facility with state-of-the-art pumping systems.",
-    image: "/placeholder.svg?height=200&width=300&text=Case+Study",
-    date: "Dec 10, 2024",
-    category: "Project",
+    title: "Industrial Plant Solutions",
+    description:
+      "Custom water-process equipment solutions for manufacturing facilities, mines, and processing plants throughout the Mountain West.",
+    image: "/placeholder.svg?height=200&width=300&text=Industrial+Project",
+    category: "Industrial",
+    states: ["UT", "ID"],
   },
   {
-    title: "Preventive Maintenance Best Practices for Water Equipment",
-    excerpt:
-      "Essential maintenance tips to extend the life of your water-process equipment and reduce downtime.",
-    image: "/placeholder.svg?height=200&width=300&text=Maintenance",
-    date: "Dec 5, 2024",
-    category: "Technical",
+    title: "Commercial & Infrastructure",
+    description:
+      "Reliable pumping and treatment systems for commercial developments, resorts, and infrastructure projects.",
+    image: "/placeholder.svg?height=200&width=300&text=Commercial+Project",
+    category: "Commercial",
+    states: ["NV", "WY"],
   },
 ];
 
@@ -76,11 +86,11 @@ export default function WCubedLanding() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % blogPosts.length);
+    setCurrentSlide((prev) => (prev + 1) % projectHighlights.length);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + blogPosts.length) % blogPosts.length);
+    setCurrentSlide((prev) => (prev - 1 + projectHighlights.length) % projectHighlights.length);
   };
 
   return (
@@ -108,17 +118,24 @@ export default function WCubedLanding() {
                 Delivering reliable solutions across the Mountain West for nearly four decades.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90 text-lg px-8 py-4">
-                  Contact Your Rep
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-[#1C4E80] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white bg-transparent text-lg px-8 py-4"
-                >
-                  View Manufacturers
-                </Button>
+                <Link href="/contact">
+                  <Button
+                    size="lg"
+                    className="bg-[#4986C8] hover:bg-[#4986C8]/90 text-lg px-8 py-4"
+                  >
+                    Get Project Quote
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+                <Link href="/manufacturers">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-[#1C4E80] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white bg-transparent text-lg px-8 py-4"
+                  >
+                    Browse Equipment
+                  </Button>
+                </Link>
               </div>
             </motion.div>
             <motion.div
@@ -234,17 +251,44 @@ export default function WCubedLanding() {
           >
             {manufacturers.map((manufacturer, index) => (
               <motion.div
-                key={index}
+                key={manufacturer.id}
                 variants={fadeInUp}
                 className="grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
               >
-                <Image
-                  src={manufacturer.logo || "/placeholder.svg"}
-                  alt={`${manufacturer.name} logo`}
-                  width={120}
-                  height={60}
-                  className="h-12 w-auto object-contain"
-                />
+                <Link href={`/manufacturers/${manufacturer.id}`}>
+                  {manufacturer.id === "veolia-suez" ? (
+                    <div className="flex items-center gap-3 cursor-pointer">
+                      <Image
+                        src="/manufacturers/veolia-capsule-logo.svg"
+                        alt="Veolia logo"
+                        width={100}
+                        height={70}
+                        className="h-12 w-auto object-contain"
+                      />
+                      <Image
+                        src="/manufacturers/suez-logo.png"
+                        alt="Suez logo"
+                        width={80}
+                        height={60}
+                        className="h-8 w-auto object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <Image
+                      src={manufacturer.logo}
+                      alt={`${manufacturer.name} logo`}
+                      width={120}
+                      height={60}
+                      className={`object-contain cursor-pointer ${
+                        manufacturer.id === "pentair-fairbanks"
+                          ? "max-h-16"
+                          : manufacturer.id === "fournier"
+                          ? "max-h-10"
+                          : "max-h-12"
+                      } w-auto`}
+                    />
+                  )}
+                </Link>
               </motion.div>
             ))}
           </motion.div>
@@ -380,53 +424,81 @@ export default function WCubedLanding() {
               Service Territory
             </Badge>
             <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
-              Find Your Territory Representative
+              Our Expert Team Across Four States
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Our experienced representatives provide personalized service across Utah, Nevada,
-              Idaho, and Wyoming
+              Dedicated representatives and specialized engineers providing comprehensive support
+              across Utah, Nevada, Idaho, and Wyoming
             </p>
           </motion.div>
 
           <motion.div
-            className="flex justify-center mb-8"
-            initial={{ opacity: 0, y: 60 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12"
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
             viewport={{ once: true }}
           >
-            <div className="bg-gradient-to-br from-slate-50 to-[#95C6EC]/10 rounded-2xl p-8 max-w-4xl w-full">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="text-center">
-                  <div className="w-16 h-16 rounded-lg mx-auto mb-4 flex items-center justify-center text-white font-bold text-lg shadow-lg bg-[#1C4E80]">
-                    UT
-                  </div>
-                  <h3 className="font-semibold text-[#1C4E80] mb-1">Utah</h3>
-                  <p className="text-sm text-muted-foreground">Brad Gwinnup</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 rounded-lg mx-auto mb-4 flex items-center justify-center text-white font-bold text-lg shadow-lg bg-[#4986C8]">
-                    NV
-                  </div>
-                  <h3 className="font-semibold text-[#1C4E80] mb-1">Nevada</h3>
-                  <p className="text-sm text-muted-foreground">Brad Gwinnup</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 rounded-lg mx-auto mb-4 flex items-center justify-center text-white font-bold text-lg shadow-lg bg-[#95C6EC]">
-                    ID
-                  </div>
-                  <h3 className="font-semibold text-[#1C4E80] mb-1">Idaho</h3>
-                  <p className="text-sm text-muted-foreground">Austin Gwinnup</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 rounded-lg mx-auto mb-4 flex items-center justify-center text-white font-bold text-lg shadow-lg bg-[#1C4E80]">
-                    WY
-                  </div>
-                  <h3 className="font-semibold text-[#1C4E80] mb-1">Wyoming</h3>
-                  <p className="text-sm text-muted-foreground">Austin Gwinnup</p>
-                </div>
-              </div>
-            </div>
+            {[
+              {
+                name: "Brad Gwinnup",
+                title: "President",
+                territories: ["Utah", "Nevada"],
+                phone: "801-232-8241",
+                color: "#1C4E80",
+              },
+              {
+                name: "Austin Gwinnup",
+                title: "Sales Representative",
+                territories: ["Idaho", "Wyoming"],
+                phone: "801-803-8558",
+                color: "#4986C8",
+              },
+              {
+                name: "Cason Gwinnup",
+                title: "Application Engineer",
+                territories: ["All Territories"],
+                phone: "801-664-2438",
+                color: "#95C6EC",
+              },
+              {
+                name: "Robert Haws",
+                title: "Project Manager",
+                territories: ["All Territories"],
+                phone: "385-270-6128",
+                color: "#1C4E80",
+              },
+            ].map((rep, index) => (
+              <motion.div key={index} variants={fadeInUp}>
+                <Card className="text-center hover:shadow-lg transition-shadow h-full">
+                  <CardHeader>
+                    <div
+                      className="w-16 h-16 rounded-lg mx-auto mb-4 flex items-center justify-center text-white font-bold text-lg shadow-lg"
+                      style={{ backgroundColor: rep.color }}
+                    >
+                      {rep.territories
+                        .slice(0, 2)
+                        .map((t) => t.slice(0, 2))
+                        .join("")}
+                    </div>
+                    <CardTitle className="text-lg text-[#1C4E80]">{rep.name}</CardTitle>
+                    <CardDescription className="text-sm text-[#4986C8] font-medium">
+                      {rep.title}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex flex-wrap justify-center gap-1">
+                      {rep.territories.map((territory, idx) => (
+                        <Badge key={idx} variant="outline" className="text-xs">
+                          {territory}
+                        </Badge>
+                      ))}
+                    </div>
+                    <p className="text-sm text-muted-foreground">{rep.phone}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
           </motion.div>
 
           <motion.div
@@ -437,22 +509,26 @@ export default function WCubedLanding() {
             viewport={{ once: true }}
           >
             <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90">
-              View Detailed Territory Map
+              View Complete Team Directory
             </Button>
           </motion.div>
         </div>
       </section>
 
-      {/* Blog/Project Carousel */}
-      <section id="blog" className="py-20 bg-background">
+      {/* Project Highlights Carousel */}
+      <section id="projects" className="py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
             <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
-              Latest Updates
+              Our Expertise
             </Badge>
             <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
-              Recent Projects & Insights
+              Project Types We Serve
             </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Specialized water-process equipment solutions across multiple industries and
+              applications
+            </p>
           </motion.div>
 
           <div className="relative">
@@ -467,14 +543,14 @@ export default function WCubedLanding() {
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               >
-                {blogPosts.map((post, index) => (
+                {projectHighlights.map((project, index) => (
                   <div key={index} className="w-full flex-shrink-0 px-4">
                     <Card className="max-w-2xl mx-auto overflow-hidden">
                       <div className="md:flex">
                         <div className="md:w-1/2">
                           <Image
-                            src={post.image || "/placeholder.svg"}
-                            alt={post.title}
+                            src={project.image}
+                            alt={project.title}
                             width={300}
                             height={200}
                             className="w-full h-48 md:h-full object-cover"
@@ -482,21 +558,29 @@ export default function WCubedLanding() {
                         </div>
                         <div className="md:w-1/2 p-6">
                           <Badge variant="secondary" className="mb-3">
-                            {post.category}
+                            {project.category}
                           </Badge>
                           <CardTitle className="text-xl mb-3 text-[#123D6A]">
-                            {post.title}
+                            {project.title}
                           </CardTitle>
-                          <CardDescription className="mb-4">{post.excerpt}</CardDescription>
+                          <CardDescription className="mb-4">{project.description}</CardDescription>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">{post.date}</span>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="text-[#4986C8] border-[#4986C8] hover:bg-[#4986C8] hover:text-white bg-transparent"
-                            >
-                              Read More
-                            </Button>
+                            <div className="flex gap-1">
+                              {project.states.map((state, idx) => (
+                                <Badge key={idx} variant="outline" className="text-xs">
+                                  {state}
+                                </Badge>
+                              ))}
+                            </div>
+                            <Link href="/manufacturers">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-[#4986C8] border-[#4986C8] hover:bg-[#4986C8] hover:text-white bg-transparent"
+                              >
+                                View Solutions
+                              </Button>
+                            </Link>
                           </div>
                         </div>
                       </div>
@@ -522,12 +606,12 @@ export default function WCubedLanding() {
 
             {/* Dots indicator */}
             <div className="flex justify-center mt-6 space-x-2">
-              {blogPosts.map((_, index) => (
+              {projectHighlights.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
                   className={`w-3 h-3 rounded-full transition-colors ${
-                    index === currentSlide ? "bg-[#1FA9A4]" : "bg-slate-300"
+                    index === currentSlide ? "bg-[#4986C8]" : "bg-slate-300"
                   }`}
                 />
               ))}
@@ -542,20 +626,24 @@ export default function WCubedLanding() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-[#1C4E80] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white bg-transparent"
-            >
-              View All Manufacturers
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white bg-transparent"
-            >
-              Read Our Blog
-            </Button>
+            <Link href="/manufacturers">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-[#1C4E80] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white bg-transparent"
+              >
+                View All Manufacturers
+              </Button>
+            </Link>
+            <Link href="/contact">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white bg-transparent"
+              >
+                Discuss Your Project
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -586,10 +674,13 @@ export default function WCubedLanding() {
                 <Phone className="h-10 w-10 text-[#4986C8]" />
               </div>
               <h3 className="font-semibold text-lg text-[#1C4E80] mb-2">Call Us</h3>
+              <p className="text-muted-foreground mb-2 text-sm">(801) 232-8241</p>
               <p className="text-muted-foreground mb-4">
                 Speak directly with your territory representative
               </p>
-              <Button className="bg-[#4986C8] hover:bg-[#4986C8]/90">Find Your Rep</Button>
+              <Link href="/territory">
+                <Button className="bg-[#4986C8] hover:bg-[#4986C8]/90">Find Your Rep</Button>
+              </Link>
             </motion.div>
 
             <motion.div
@@ -603,13 +694,16 @@ export default function WCubedLanding() {
                 <Mail className="h-10 w-10 text-[#4986C8]" />
               </div>
               <h3 className="font-semibold text-lg text-[#1C4E80] mb-2">Email Us</h3>
+              <p className="text-muted-foreground mb-2 text-sm">Bradg@wcubedinc.com</p>
               <p className="text-muted-foreground mb-4">Send detailed project information</p>
-              <Button
-                variant="outline"
-                className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white"
-              >
-                Send Message
-              </Button>
+              <Link href="/contact">
+                <Button
+                  variant="outline"
+                  className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white"
+                >
+                  Get Quote Form
+                </Button>
+              </Link>
             </motion.div>
 
             <motion.div
@@ -623,13 +717,16 @@ export default function WCubedLanding() {
                 <MapPin className="h-10 w-10 text-[#4986C8]" />
               </div>
               <h3 className="font-semibold text-lg text-[#1C4E80] mb-2">Visit Us</h3>
-              <p className="text-muted-foreground mb-4">Salt Lake City, UT headquarters</p>
-              <Button
-                variant="outline"
-                className="border-[#1C4E80] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white"
-              >
-                Get Directions
-              </Button>
+              <p className="text-muted-foreground mb-2 text-sm">Salt Lake City, Utah</p>
+              <p className="text-muted-foreground mb-4">Appointment recommended</p>
+              <Link href="/contact">
+                <Button
+                  variant="outline"
+                  className="border-[#1C4E80] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white"
+                >
+                  Schedule Visit
+                </Button>
+              </Link>
             </motion.div>
           </div>
 
@@ -641,13 +738,15 @@ export default function WCubedLanding() {
             viewport={{ once: true }}
           >
             <p className="text-muted-foreground mb-4">Need more detailed contact information?</p>
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white"
-            >
-              View Full Contact Page
-            </Button>
+            <Link href="/contact">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white"
+              >
+                Complete Contact Form
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>

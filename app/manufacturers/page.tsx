@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Search, ExternalLink, Grid, List } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { PageWrapper } from "@/components/page-wrapper";
 
 const fadeInUp = {
@@ -147,14 +147,39 @@ export default function ManufacturersPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  const filteredManufacturers = manufacturers.filter((manufacturer) => {
-    const matchesSearch =
-      manufacturer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      manufacturer.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "All" || manufacturer.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // Simple, reliable filtering without caching issues
+  const filteredManufacturers = useMemo(() => {
+    return manufacturers.filter((manufacturer) => {
+      const matchesSearch =
+        manufacturer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        manufacturer.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "All" || manufacturer.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchTerm, selectedCategory]);
+
+  // Simple event handlers
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  };
+
+  const handleViewModeChange = (mode: "grid" | "list") => {
+    console.log("Changing view mode to:", mode);
+    setViewMode(mode);
+  };
+
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory("All");
+  };
+
+  // Debug log to track state changes
+  console.log("Current state:", { viewMode, filteredCount: filteredManufacturers.length, searchTerm, selectedCategory });
 
   return (
     <PageWrapper>
@@ -187,7 +212,7 @@ export default function ManufacturersPage() {
               <Input
                 placeholder="Search manufacturers..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearchChange}
                 className="pl-10"
               />
             </div>
@@ -200,7 +225,7 @@ export default function ManufacturersPage() {
                     key={category}
                     variant={selectedCategory === category ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSelectedCategory(category)}
+                    onClick={() => handleCategoryChange(category)}
                     className={
                       selectedCategory === category
                         ? "bg-[#4986C8] hover:bg-[#4986C8]/90"
@@ -215,7 +240,7 @@ export default function ManufacturersPage() {
                 <Button
                   variant={viewMode === "grid" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setViewMode("grid")}
+                  onClick={() => handleViewModeChange("grid")}
                   className={
                     viewMode === "grid" ? "bg-[#4986C8] hover:bg-[#4986C8]/90" : "bg-transparent"
                   }
@@ -225,7 +250,7 @@ export default function ManufacturersPage() {
                 <Button
                   variant={viewMode === "list" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setViewMode("list")}
+                  onClick={() => handleViewModeChange("list")}
                   className={
                     viewMode === "list" ? "bg-[#4986C8] hover:bg-[#4986C8]/90" : "bg-transparent"
                   }
@@ -280,7 +305,7 @@ export default function ManufacturersPage() {
                             width={200}
                             height={120}
                             className={`object-contain ${
-                              manufacturer.id === "pentair-fairbanks" ? "max-h-32" : "max-h-16"
+                              manufacturer.id === "pentair-fairbanks" ? "max-h-20" : "max-h-16"
                             } w-auto`}
                           />
                         )}
@@ -407,14 +432,7 @@ export default function ManufacturersPage() {
               <p className="text-muted-foreground text-lg">
                 No manufacturers found matching your criteria.
               </p>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSearchTerm("");
-                  setSelectedCategory("All");
-                }}
-                className="mt-4 bg-transparent"
-              >
+              <Button variant="outline" onClick={clearFilters} className="mt-4 bg-transparent">
                 Clear Filters
               </Button>
             </motion.div>

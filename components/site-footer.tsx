@@ -1,5 +1,5 @@
-import Link from "next/link"
-import { Droplets } from "lucide-react"
+import Link from "next/link";
+import { Droplets } from "lucide-react";
 
 export function SiteFooter() {
   return (
@@ -12,12 +12,12 @@ export function SiteFooter() {
               <span className="text-xl font-bold">W-Cubed</span>
             </div>
             <p className="text-slate-300">
-              Water-process equipment experts serving Utah, Idaho, and Wyoming since 1986.
+              Water-process equipment experts serving Utah, Nevada, Idaho, and Wyoming since 1986.
             </p>
             <div className="text-sm text-slate-400">
-              <p>1234 Water Works Drive</p>
-              <p>Salt Lake City, UT 84101</p>
-              <p>Phone: (555) 123-4567</p>
+              <p>Salt Lake City, Utah</p>
+              <p>Phone: (801) 232-8241</p>
+              <p>Fax: (801) 664-2439</p>
             </div>
           </div>
           <div>
@@ -64,24 +64,30 @@ export function SiteFooter() {
             <h3 className="font-semibold mb-4">Connect</h3>
             <ul className="space-y-2 text-slate-300">
               <li>
-                <a href="tel:+15551234567" className="hover:text-[#1FA9A4] transition-colors">
-                  (555) 123-4567
+                <a href="tel:+18012328241" className="hover:text-[#1FA9A4] transition-colors">
+                  (801) 232-8241
                 </a>
               </li>
               <li>
-                <a href="mailto:info@wcubedinc.com" className="hover:text-[#1FA9A4] transition-colors">
-                  info@wcubedinc.com
+                <a
+                  href="mailto:Bradg@wcubedinc.com"
+                  className="hover:text-[#1FA9A4] transition-colors"
+                >
+                  Bradg@wcubedinc.com
                 </a>
               </li>
             </ul>
           </div>
         </div>
         <div className="border-t border-slate-700 mt-8 pt-8 text-center text-slate-400">
-          <p>&copy; {new Date().getFullYear()} W-Cubed. All rights reserved. | Serving UT · ID · WY since 1986</p>
+          <p>
+            &copy; {new Date().getFullYear()} W-Cubed. All rights reserved. | Serving UT · NV · ID ·
+            WY since 1986
+          </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
 
-export default SiteFooter
+export default SiteFooter;
