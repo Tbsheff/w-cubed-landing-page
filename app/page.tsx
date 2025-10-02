@@ -272,7 +272,7 @@ export default function WCubedLanding() {
               <p className="text-lg text-muted-foreground">
                 W-Cubed began in 1986 when our founder started building custom control panels in his
                 garage for local water treatment facilities. What started as a small operation
-                focused on quality and customer service has grown into the Mountain West's premier
+                focused on quality and customer service has grown into the Mountain West&apos;s premier
                 water equipment representative.
               </p>
               <p className="text-lg text-muted-foreground">
