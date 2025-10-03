@@ -184,8 +184,8 @@ export default function ContactPage() {
                   Tell Us About Your Project
                 </h2>
                 <p className="text-lg text-muted-foreground">
-                  Fill out the form and we'll connect you with the right representative for your
-                  area and project type.
+                  Fill out the form and we&apos;ll connect you with the right representative for
+                  your area and project type.
                 </p>
               </div>
 
@@ -226,8 +226,8 @@ export default function ContactPage() {
                 <CardHeader className="px-0 pt-0">
                   <CardTitle className="text-[#1C4E80]">Project Contact Form</CardTitle>
                   <CardDescription>
-                    Provide details about your project and we'll get you connected with the right
-                    solutions.
+                    Provide details about your project and we&apos;ll get you connected with the
+                    right solutions.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="px-0 pb-0">
@@ -353,7 +353,7 @@ export default function ContactPage() {
           <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
             <h2 className="text-3xl lg:text-4xl font-bold">Ready to Start Your Project?</h2>
             <p className="text-xl opacity-90 max-w-2xl mx-auto">
-              Whether you're planning a new installation or need immediate support, our team is
+              Whether you&apos;re planning a new installation or need immediate support, our team is
               ready to help you succeed.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
