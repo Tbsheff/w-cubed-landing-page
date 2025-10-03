@@ -28,8 +28,8 @@ const representatives = [
     title: "President",
     territories: ["Utah", "Nevada"],
     phone: "801-232-8241",
-    email: "BradG@WCubedInc.com",
-    role: "Sales Representative",
+    email: "Bradg@wcubedinc.com",
+    role: "Utah, Nevada",
     image: "/placeholder.svg?height=300&width=300&text=Brad+Gwinnup",
   },
   {
@@ -37,8 +37,8 @@ const representatives = [
     title: "Sales Representative",
     territories: ["Idaho", "Wyoming"],
     phone: "801-803-8558",
-    email: "AustinG@WCubedInc.com",
-    role: "Sales Representative",
+    email: "Austing@wcubedinc.com",
+    role: "Idaho, Wyoming",
     image: "/placeholder.svg?height=300&width=300&text=Austin+Gwinnup",
   },
   {
@@ -46,7 +46,7 @@ const representatives = [
     title: "Application Engineer/Project Manager",
     territories: ["All Territories"],
     phone: "801-664-2438",
-    email: "CasonG@WCubedInc.com",
+    email: "Casong@wcubedinc.com",
     role: "Aftermarket Sales",
     image: "/placeholder.svg?height=300&width=300&text=Cason+Gwinnup",
   },
@@ -55,7 +55,7 @@ const representatives = [
     title: "Application Engineer/Project Manager",
     territories: ["All Territories"],
     phone: "385-270-6128",
-    email: "RobertH@WCubedInc.com",
+    email: "Roberth@wcubedinc.com",
     role: "Parts",
     image: "/placeholder.svg?height=300&width=300&text=Robert+Haws",
   },
@@ -253,7 +253,7 @@ export default function TerritoryPage() {
               <motion.div key={index} variants={fadeInUp}>
                 <Card className="text-center hover:shadow-lg transition-shadow h-full">
                   <CardHeader>
-                    <div className="relative w-32 h-32 mx-auto mb-4">
+                    <div className="relative w-16 h-16 mx-auto mb-4">
                       <Image
                         src={rep.image || "/placeholder.svg"}
                         alt={rep.name}
@@ -265,7 +265,7 @@ export default function TerritoryPage() {
                     <CardDescription className="text-[#4986C8] font-medium">
                       {rep.title}
                     </CardDescription>
-                    <Badge variant="secondary" className="mt-2">
+                    <Badge variant="secondary" className="mt-2 mx-auto">
                       {rep.role}
                     </Badge>
                   </CardHeader>
@@ -322,8 +322,8 @@ export default function TerritoryPage() {
               States and Counties We Serve
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive coverage across four states with dedicated representatives for each
-              region
+              Comprehensive coverage across four states with dedicated representatives and clear
+              territory assignments
             </p>
           </motion.div>
 
@@ -371,43 +371,6 @@ export default function TerritoryPage() {
                 </Card>
               </motion.div>
             ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Territory Map Visualization */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 lg:px-6">
-          <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <Badge variant="outline" className="border-[#1C4E80]/30 text-[#1C4E80]">
-              Territory Map
-            </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
-              Visual Territory Overview
-            </h2>
-          </motion.div>
-
-          <motion.div
-            className="bg-gradient-to-br from-slate-50 to-[#95C6EC]/10 rounded-2xl p-8"
-            initial={{ opacity: 0, y: 60 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {states.map((state, index) => (
-                <div key={index} className="text-center">
-                  <div
-                    className="w-16 h-16 rounded-lg mx-auto mb-4 flex items-center justify-center text-white font-bold text-lg shadow-lg"
-                    style={{ backgroundColor: state.color }}
-                  >
-                    {state.name.substring(0, 2).toUpperCase()}
-                  </div>
-                  <h3 className="font-semibold text-[#1C4E80] mb-1">{state.name}</h3>
-                  <p className="text-sm text-muted-foreground">{state.rep}</p>
-                </div>
-              ))}
-            </div>
           </motion.div>
         </div>
       </section>

@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Search, ExternalLink, Grid, List } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { PageWrapper } from "@/components/page-wrapper";
 
 const fadeInUp = {
@@ -25,215 +25,119 @@ const staggerContainer = {
   },
 };
 
-const manufacturers = [
+interface Manufacturer {
+  id: string;
+  name: string;
+  logo: string;
+  category: string;
+  description: string;
+  keyProducts: string[];
+  website: string;
+  specialty: string;
+  territoryNote?: string;
+}
+
+const manufacturers: Manufacturer[] = [
   {
     id: "ksb",
     name: "KSB",
-    logo: "/placeholder.svg?height=120&width=200&text=KSB",
+    logo: "/manufacturers/ksb-logo.svg",
     category: "Pumps & Mixers",
     description:
       "Leading manufacturer of pumps, valves, and systems for water transport and treatment.",
-    keyProducts: [
-      "Amacan K/P - Wet-installed submersible motor pump",
-      "Amaline - Horizontal propeller pump with submersible motor",
-      "ARX - Vertical single-stage submersible motor pump",
-      "KRT - Horizontal/vertical single-stage submersible motor pump",
-      "Horizontal Split Case Pumps (NSF61)",
-      "Vertical Turbine Pumps",
-      "Amamix - Horizontal submersible mixer",
-      "Amaprop - Horizontal submersible mixer with gear drive",
-    ],
+    keyProducts: ["Submersible Motor Pumps", "Pump Mixing Systems", "Vertical Turbine Pumps"],
     website: "https://www.ksb.com/en-us/product/product-catalog",
-    established: "1871",
     specialty: "Municipal & Industrial Pumping & Mixing",
   },
   {
     id: "kaeser",
     name: "Kaeser Blowers",
-    logo: "/placeholder.svg?height=120&width=200&text=Kaeser",
-    category: "Air Systems",
+    logo: "/manufacturers/Kaeser-compressor-logo.png",
+    category: "Blowers & Aeration",
     description: "Premium compressed air systems and blowers for water treatment applications.",
-    keyProducts: [
-      "Rotary lobe blowers with OMEGA rotors",
-      "Rotary screw blowers with SIGMA profile",
-      "Turbo blowers with permanent magnet motors",
-      "Magnetic bearing systems",
-    ],
+    keyProducts: ["Rotary Lobe Blowers", "Rotary Screw Blowers", "Turbo Blowers"],
     website: "https://us.kaeser.com/products-and-solutions/blowers/",
-    established: "1919",
     specialty: "Compressed Air & Blower Systems",
   },
   {
     id: "pratt",
     name: "Pratt Valves",
-    logo: "/placeholder.svg?height=120&width=200&text=Pratt",
-    category: "Valves",
+    logo: "/manufacturers/pratt-a-mueller-brand-logo-vector.png",
+    category: "Valves & Flow Control",
     description: "Comprehensive valve solutions for water and wastewater applications.",
-    keyProducts: [
-      "Butterfly Valves",
-      "Knife Gate Valves",
-      "Energy Dissipating Valves",
-      "Gate Valves",
-      "Plug Valves",
-      "Ball-Rotary Cone Valves",
-      "Check Valves",
-      "Air Valves",
-    ],
+    keyProducts: ["Butterfly Valves", "Gate Valves", "Check Valves"],
     website: "https://www.henrypratt.com/products/",
-    established: "1945",
     specialty: "Water & Wastewater Valves",
   },
   {
     id: "hydro-gate",
     name: "Hydro Gate",
-    logo: "/placeholder.svg?height=120&width=200&text=Hydro+Gate",
-    category: "Flow Control",
+    logo: "/manufacturers/Hydro-gate-logo.png",
+    category: "Valves & Flow Control",
     description: "Specialized gates, valves, and flow control equipment for water systems.",
-    keyProducts: [
-      "Series HG 560 - AWWA C560 Heavy Duty Cast Iron Slide Gates",
-      "Series HG 561 - AWWA C561 Stainless Steel Slide Gates",
-      "C562, C513 - Aluminum Slide Gates",
-      "Radial (Taintor) Gates",
-      "Overshot Gates",
-      "Heavy Duty Flap Gates",
-      "Stop Logs",
-      "Roller Gates",
-      "Butterfly Gates",
-      "Bulkhead Gates",
-      "Trash Racks",
-    ],
+    keyProducts: ["Slide Gates", "Radial (Taintor) Gates", "Flap Gates"],
     website: "https://www.hydrogate.com/products/gates/",
-    established: "1962",
     specialty: "Water Control Structures",
   },
   {
     id: "fournier",
     name: "Fournier",
-    logo: "/placeholder.svg?height=120&width=200&text=Fournier",
+    logo: "/manufacturers/Fournier-logo.svg",
     category: "Dewatering",
     description: "Advanced sludge dewatering solutions for wastewater treatment.",
-    keyProducts: [
-      "Rotary Press - Sludge De-Watering with Polymer Feed System",
-      "Friction Force Screens",
-      "Filter Press - Sludge De-Watering with Closed Cloth Filter",
-      "Filter Shake and Press Systems",
-    ],
+    keyProducts: ["Rotary Press Systems", "Filter Press Systems"],
     website: "https://www.fournierdewatering.com/",
-    established: "1978",
     specialty: "Sludge Dewatering Systems",
   },
   {
     id: "edi",
     name: "EDI",
-    logo: "/placeholder.svg?height=120&width=200&text=EDI",
-    category: "Aeration Systems",
+    logo: "/manufacturers/EDI-Logo.png",
+    category: "Blowers & Aeration",
     description: "Membrane and diffuser systems for biological treatment processes.",
-    keyProducts: [
-      "EPDM Membranes",
-      "Armor-Coated EPDM Membranes",
-      "Standard Polyurethane Membranes",
-      "High-Temperature Polyurethane (HTPU)",
-      "Matrix & Matrix Plus Membranes",
-      "Silicone Membranes",
-      "Coarse Air Diffusers",
-      "Fine Air Diffusers",
-      "Disc, Tube, and Panel Diffusers",
-      "ModuleAir Retrievable Systems",
-    ],
+    keyProducts: ["Fine Bubble Membranes", "Coarse Bubble Diffusers", "Retrievable Systems"],
     website: "https://wastewater.com/",
-    established: "1985",
     specialty: "Membrane & Diffuser Systems",
   },
   {
     id: "veolia-suez",
     name: "Veolia/Suez",
-    logo: "/placeholder.svg?height=120&width=200&text=Veolia+Suez",
-    category: "Treatment Solutions",
+    logo: "/manufacturers/suez-logo.png",
+    category: "Treatment Systems",
     description: "Comprehensive water treatment and reuse solutions.",
-    keyProducts: [
-      "Physical/chemical processes",
-      "Biological treatment systems",
-      "Anaerobic wastewater treatment",
-      "Filtration and separation",
-      "Evaporation and crystallization",
-      "Mobile water treatment",
-      "Treatment chemicals",
-      "Membrane-based solutions",
-      "UV Disinfection & Oxidation",
-    ],
+    keyProducts: ["Biological Treatment", "Membrane Solutions", "UV Disinfection"],
     website: "https://www.watertechnologies.com/",
-    established: "1853",
     specialty: "Water Treatment & Reuse",
   },
   {
     id: "trillium-flow",
     name: "Trillium Flow Technologies",
-    logo: "/placeholder.svg?height=120&width=200&text=Trillium+Flow",
-    category: "Pumps & Equipment",
+    logo: "/manufacturers/Trillium-logo.png",
+    category: "Grit Removal",
     description: "Specialized pumping and grit removal equipment for wastewater treatment.",
-    keyProducts: [
-      "WEMCO HydroGritter",
-      "Grit Cyclone and Classifier",
-      "Screw-Flow Screw Impeller Pumps",
-      "Torque Flow (Model C) Grit Pumps",
-      "Prerotation Wet Well Cleaning System",
-      "WSP Chop Flow Pumps",
-      "Non-Clog Pumps",
-      "Self-Primer Pumping Options",
-    ],
+    keyProducts: ["Grit Collection Systems", "Screw Pumping", "Non-Clog Pumps"],
     website: "https://www.trilliumflow.com/",
-    established: "2019",
     specialty: "Grit Removal & Pumping",
   },
   {
     id: "kusters-zima",
     name: "Kusters Zima Water",
-    logo: "/placeholder.svg?height=120&width=200&text=Kusters+Zima",
-    category: "Treatment Equipment",
+    logo: "/manufacturers/kusters-water-logo.png",
+    category: "Treatment Systems",
     description: "Dependable, cost-effective solutions for water and wastewater treatment.",
-    keyProducts: [
-      "C.I. Bridge Supported Drives",
-      "Hydraulic Clarifier Drives",
-      "C.I. Pier Supported Turntables",
-      "Flocculating Clarifiers",
-      "LA-EDI Clarifier Inlets",
-      "Solids Contact Clarifiers",
-      "Spiral Blade Clarifiers",
-      "Standard Scraper Clarifiers",
-      "Suction Lift Clarifiers",
-      "Traveling Bridge Clarifier",
-      "Zi-Biox Package Plants",
-      "Trickling Filter Distributors",
-      "Multi-Rake Bar Screens",
-      "Internally Fed Drum Screens",
-      "Screenings Washer Compactors",
-      "Perforated Plate Filter Screens",
-      "Centerflow Band Screens",
-      "XGT Vortex Grit Removal Systems",
-    ],
+    keyProducts: ["Clarification Systems", "Package Treatment Plants", "Headworks Equipment"],
     website: "https://www.zimacorp.com/water/",
-    established: "1950",
     specialty: "Clarification & Headworks",
   },
   {
     id: "pentair-fairbanks",
     name: "Pentair Fairbanks",
-    logo: "/placeholder.svg?height=120&width=200&text=Pentair+Fairbanks",
-    category: "Pumps",
+    logo: "/manufacturers/pentair-logo.png",
+    category: "Solids Handling Pumps",
     description: "Submersible and solids handling pumps for wastewater applications.",
-    keyProducts: [
-      "Submersible Solids Handling Pumps",
-      "Solids Handling Pumps",
-      "Vertical Turbine Solids Handling Pumps",
-      "Vortex Pumps",
-      "Split Case Pumps",
-      "In-Line Pumps",
-      "Propeller Pumps",
-      "End Suction Pumps",
-    ],
+    keyProducts: ["Solids Handling Pumps", "Vortex Pumps", "Submersible Pumps"],
     website: "https://www.pentair.com/en-us/brands/fairbanks-nijhuis.html",
-    established: "1893",
-    specialty: "Solids Handling Pumps (Utah Only)",
+    specialty: "Solids Handling Pumps",
     territoryNote:
       "We only represent Pentair Fairbanks products for the State of Utah. Not Idaho or Wyoming.",
   },
@@ -242,15 +146,12 @@ const manufacturers = [
 const categories = [
   "All",
   "Pumps & Mixers",
-  "Air Systems",
-  "Valves",
-  "Flow Control",
+  "Blowers & Aeration",
+  "Valves & Flow Control",
   "Dewatering",
-  "Aeration Systems",
-  "Treatment Solutions",
-  "Pumps & Equipment",
-  "Treatment Equipment",
-  "Pumps",
+  "Treatment Systems",
+  "Grit Removal",
+  "Solids Handling Pumps",
 ];
 
 export default function ManufacturersPage() {
@@ -258,13 +159,43 @@ export default function ManufacturersPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  const filteredManufacturers = manufacturers.filter((manufacturer) => {
-    const matchesSearch =
-      manufacturer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      manufacturer.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "All" || manufacturer.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+  // Simple, reliable filtering without caching issues
+  const filteredManufacturers = useMemo(() => {
+    return manufacturers.filter((manufacturer) => {
+      const matchesSearch =
+        manufacturer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        manufacturer.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "All" || manufacturer.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchTerm, selectedCategory]);
+
+  // Simple event handlers
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  };
+
+  const handleViewModeChange = (mode: "grid" | "list") => {
+    console.log("Changing view mode to:", mode);
+    setViewMode(mode);
+  };
+
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory("All");
+  };
+
+  // Debug log to track state changes
+  console.log("Current state:", {
+    viewMode,
+    filteredCount: filteredManufacturers.length,
+    searchTerm,
+    selectedCategory,
   });
 
   return (
@@ -311,7 +242,7 @@ export default function ManufacturersPage() {
                     key={category}
                     variant={selectedCategory === category ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSelectedCategory(category)}
+                    onClick={() => handleCategoryChange(category)}
                     className={
                       selectedCategory === category
                         ? "bg-[#4986C8] hover:bg-[#4986C8]/90"
@@ -326,7 +257,7 @@ export default function ManufacturersPage() {
                 <Button
                   variant={viewMode === "grid" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setViewMode("grid")}
+                  onClick={() => handleViewModeChange("grid")}
                   className={
                     viewMode === "grid" ? "bg-[#4986C8] hover:bg-[#4986C8]/90" : "bg-transparent"
                   }
@@ -336,7 +267,7 @@ export default function ManufacturersPage() {
                 <Button
                   variant={viewMode === "list" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setViewMode("list")}
+                  onClick={() => handleViewModeChange("list")}
                   className={
                     viewMode === "list" ? "bg-[#4986C8] hover:bg-[#4986C8]/90" : "bg-transparent"
                   }
@@ -367,13 +298,34 @@ export default function ManufacturersPage() {
                   <Card className="h-full hover:shadow-lg transition-shadow">
                     <CardHeader className="text-center">
                       <div className="h-20 flex items-center justify-center mb-4">
-                        <Image
-                          src={manufacturer.logo || "/placeholder.svg"}
-                          alt={`${manufacturer.name} logo`}
-                          width={200}
-                          height={120}
-                          className="max-h-16 w-auto object-contain"
-                        />
+                        {manufacturer.id === "veolia-suez" ? (
+                          <div className="flex items-center gap-4">
+                            <Image
+                              src="/manufacturers/veolia-capsule-logo.svg"
+                              alt="Veolia logo"
+                              width={100}
+                              height={70}
+                              className="max-h-24 w-auto object-contain"
+                            />
+                            <Image
+                              src="/manufacturers/suez-logo.png"
+                              alt="Suez logo"
+                              width={80}
+                              height={60}
+                              className="max-h-8 w-auto object-contain"
+                            />
+                          </div>
+                        ) : (
+                          <Image
+                            src={manufacturer.logo || "/placeholder.svg"}
+                            alt={`${manufacturer.name} logo`}
+                            width={200}
+                            height={120}
+                            className={`object-contain ${
+                              manufacturer.id === "pentair-fairbanks" ? "max-h-20" : "max-h-16"
+                            } w-auto`}
+                          />
+                        )}
                       </div>
                       <CardTitle className="text-xl text-[#1C4E80]">{manufacturer.name}</CardTitle>
                       <Badge variant="secondary">{manufacturer.category}</Badge>
@@ -416,13 +368,34 @@ export default function ManufacturersPage() {
                     <CardContent className="p-6">
                       <div className="flex flex-col md:flex-row gap-6">
                         <div className="flex-shrink-0">
-                          <Image
-                            src={manufacturer.logo || "/placeholder.svg"}
-                            alt={`${manufacturer.name} logo`}
-                            width={200}
-                            height={120}
-                            className="h-16 w-auto object-contain"
-                          />
+                          {manufacturer.id === "veolia-suez" ? (
+                            <div className="flex items-center gap-4">
+                              <Image
+                                src="/manufacturers/veolia-capsule-logo.svg"
+                                alt="Veolia logo"
+                                width={120}
+                                height={80}
+                                className="h-18 w-auto object-contain"
+                              />
+                              <Image
+                                src="/manufacturers/suez-logo.png"
+                                alt="Suez logo"
+                                width={100}
+                                height={60}
+                                className="h-16 w-auto object-contain"
+                              />
+                            </div>
+                          ) : (
+                            <Image
+                              src={manufacturer.logo || "/placeholder.svg"}
+                              alt={`${manufacturer.name} logo`}
+                              width={200}
+                              height={120}
+                              className={`object-contain ${
+                                manufacturer.id === "pentair-fairbanks" ? "h-20" : "h-16"
+                              } w-auto`}
+                            />
+                          )}
                         </div>
                         <div className="flex-grow space-y-3">
                           <div className="flex items-center gap-3">
@@ -476,18 +449,61 @@ export default function ManufacturersPage() {
               <p className="text-muted-foreground text-lg">
                 No manufacturers found matching your criteria.
               </p>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSearchTerm("");
-                  setSelectedCategory("All");
-                }}
-                className="mt-4 bg-transparent"
-              >
+              <Button variant="outline" onClick={clearFilters} className="mt-4 bg-transparent">
                 Clear Filters
               </Button>
             </motion.div>
           )}
+        </div>
+      </section>
+
+      {/* Contact Information */}
+      <section className="py-20 bg-slate-50">
+        <div className="container mx-auto px-4 lg:px-6">
+          <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
+            <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
+              Our Sales Representatives
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Contact your territory representative for expert guidance and support.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <motion.div {...fadeInUp}>
+              <Card className="text-center">
+                <CardHeader>
+                  <CardTitle className="text-xl text-[#1C4E80]">Utah Territory</CardTitle>
+                  <CardDescription>Sales Representative</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <h3 className="text-lg font-semibold">Brad Gwinnup</h3>
+                  <div className="space-y-1 text-sm text-muted-foreground">
+                    <p>📞 C: 801-232-8241</p>
+                    <p>📧 BradG@WCubedInc.com</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div {...fadeInUp}>
+              <Card className="text-center">
+                <CardHeader>
+                  <CardTitle className="text-xl text-[#1C4E80]">
+                    Idaho & Wyoming Territory
+                  </CardTitle>
+                  <CardDescription>Sales Representative</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <h3 className="text-lg font-semibold">Austin Gwinnup</h3>
+                  <div className="space-y-1 text-sm text-muted-foreground">
+                    <p>📞 C: 801-803-8558</p>
+                    <p>📧 AustinG@WCubedInc.com</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
         </div>
       </section>
 
