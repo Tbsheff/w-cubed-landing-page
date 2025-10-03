@@ -25,7 +25,19 @@ const staggerContainer = {
   },
 };
 
-const manufacturers = [
+interface Manufacturer {
+  id: string;
+  name: string;
+  logo: string;
+  category: string;
+  description: string;
+  keyProducts: string[];
+  website: string;
+  specialty: string;
+  territoryNote?: string;
+}
+
+const manufacturers: Manufacturer[] = [
   {
     id: "ksb",
     name: "KSB",

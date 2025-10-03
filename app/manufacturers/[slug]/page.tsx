@@ -18,7 +18,18 @@ const fadeInUp = {
 };
 
 // Manufacturer data array for individual pages (contains more detailed information)
-const manufacturerData = {
+interface ManufacturerDetail {
+  name: string;
+  logo: string;
+  category: string;
+  description: string;
+  keyProducts: string[];
+  website: string;
+  specialty: string;
+  territoryNote?: string;
+}
+
+const manufacturerData: Record<string, ManufacturerDetail> = {
   ksb: {
     name: "KSB",
     logo: "/manufacturers/ksb-logo.svg",
