@@ -217,7 +217,7 @@ export default function ManufacturersPage() {
               <Input
                 placeholder="Search manufacturers..."
                 value={searchTerm}
-                onChange={handleSearchChange}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>

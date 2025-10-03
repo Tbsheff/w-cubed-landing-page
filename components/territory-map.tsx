@@ -96,7 +96,7 @@ export function TerritoryMap() {
           <DialogHeader>
             <DialogTitle>Contact Your Territory Representative</DialogTitle>
             <DialogDescription>
-              Select your state and we'll connect you with the right representative for your water-process equipment
+              Select your state and we&apos;ll connect you with the right representative for your water-process equipment
               needs.
             </DialogDescription>
           </DialogHeader>
