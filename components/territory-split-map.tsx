@@ -185,8 +185,6 @@ export function TerritorySplitMap() {
   const [viewState, setViewState] = useState<MapViewState>(DEFAULT_VIEW);
   const lastUserView = useRef<MapViewState>(DEFAULT_VIEW);
   const [tooltip, setTooltip] = useState<{ content: string; x: number; y: number } | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -302,24 +300,6 @@ export function TerritorySplitMap() {
 
     return () => clearTimeout(timeout);
   }, [searchQuery]);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 1023px)");
-    const handleChange = (event: MediaQueryListEvent) => {
-      setIsMobile(event.matches);
-    };
-
-    setIsMobile(mediaQuery.matches);
-    mediaQuery.addEventListener("change", handleChange);
-
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []);
-
-  useEffect(() => {
-    if (isMobile) {
-      setIsMobileDrawerOpen(Boolean(selectedCountyId));
-    }
-  }, [isMobile, selectedCountyId]);
 
   const countiesMeta = useMemo<CountyMeta[]>(() => {
     if (!geographies.length) {
@@ -1009,35 +989,17 @@ export function TerritorySplitMap() {
             </div>
           </div>
 
+          {/* Desktop sidebar - hidden on mobile */}
           <aside className="hidden rounded-2xl border bg-background p-6 shadow-sm lg:block">
             {drawerContent}
           </aside>
         </div>
-      </div>
 
-      <AnimatePresence>
-        {isMobile && isMobileDrawerOpen && (
-          <motion.div
-            className="fixed inset-x-0 bottom-0 z-40 rounded-t-3xl border-t bg-background shadow-2xl"
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "100%" }}
-            transition={{ type: "spring", stiffness: 260, damping: 25 }}
-          >
-            <div className="mx-auto w-full max-w-lg p-6">
-              <button
-                type="button"
-                aria-label="Close panel"
-                className="mx-auto mb-4 flex h-10 w-12 items-center justify-center"
-                onClick={() => setIsMobileDrawerOpen(false)}
-              >
-                <div className="h-1.5 w-10 rounded-full bg-muted" />
-              </button>
-              {drawerContent}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Mobile content - visible below map on mobile, hidden on desktop */}
+        <div className="mt-6 rounded-2xl border bg-background p-6 shadow-sm lg:hidden">
+          {drawerContent}
+        </div>
+      </div>
     </section>
   );
 }
