@@ -4,13 +4,10 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Droplets,
   Phone,
   Mail,
-  MapPin,
   ArrowRight,
   CheckCircle,
   Wrench,
@@ -23,6 +20,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { PageWrapper } from "@/components/page-wrapper";
+import { territoryRepresentatives } from "@/lib/representatives";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
@@ -283,8 +281,8 @@ export default function WCubedLanding() {
                         manufacturer.id === "pentair-fairbanks"
                           ? "max-h-16"
                           : manufacturer.id === "fournier"
-                          ? "max-h-10"
-                          : "max-h-12"
+                            ? "max-h-10"
+                            : "max-h-12"
                       } w-auto`}
                     />
                   )}
@@ -416,85 +414,81 @@ export default function WCubedLanding() {
         </div>
       </section>
 
-      {/* Territory Selector Section */}
+      {/* Meet Our Territory Representatives */}
       <section id="territory" className="py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
             <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
-              Service Territory
+              Get In Touch
             </Badge>
             <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
-              Our Expert Team Across Four States
+              Meet Your Territory Team
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Dedicated representatives and specialized engineers providing comprehensive support
-              across Utah, Nevada, Idaho, and Wyoming
+              Reach out directly to the representative serving your area for quotes, project
+              support, and technical guidance.
             </p>
           </motion.div>
 
           <motion.div
-            className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12"
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
             viewport={{ once: true }}
           >
-            {[
-              {
-                name: "Brad Gwinnup",
-                title: "President",
-                territories: ["Utah", "Nevada"],
-                phone: "801-232-8241",
-                color: "#1C4E80",
-              },
-              {
-                name: "Austin Gwinnup",
-                title: "Sales Representative",
-                territories: ["Idaho", "Wyoming"],
-                phone: "801-803-8558",
-                color: "#4986C8",
-              },
-              {
-                name: "Cason Gwinnup",
-                title: "Application Engineer",
-                territories: ["All Territories"],
-                phone: "801-664-2438",
-                color: "#95C6EC",
-              },
-              {
-                name: "Robert Haws",
-                title: "Project Manager",
-                territories: ["All Territories"],
-                phone: "385-270-6128",
-                color: "#1C4E80",
-              },
-            ].map((rep, index) => (
-              <motion.div key={index} variants={fadeInUp}>
+            {territoryRepresentatives.map((rep) => (
+              <motion.div key={rep.email} variants={fadeInUp}>
                 <Card className="text-center hover:shadow-lg transition-shadow h-full">
                   <CardHeader>
-                    <div
-                      className="w-16 h-16 rounded-lg mx-auto mb-4 flex items-center justify-center text-white font-bold text-lg shadow-lg"
-                      style={{ backgroundColor: rep.color }}
-                    >
-                      {rep.territories
-                        .slice(0, 2)
-                        .map((t) => t.slice(0, 2))
-                        .join("")}
+                    <div className="relative w-16 h-16 mx-auto mb-4">
+                      <Image
+                        src={rep.image || "/placeholder.svg"}
+                        alt={rep.name}
+                        fill
+                        className="rounded-full object-cover"
+                      />
                     </div>
-                    <CardTitle className="text-lg text-[#1C4E80]">{rep.name}</CardTitle>
-                    <CardDescription className="text-sm text-[#4986C8] font-medium">
+                    <CardTitle className="text-xl text-[#1C4E80]">{rep.name}</CardTitle>
+                    <CardDescription className="text-[#4986C8] font-medium">
                       {rep.title}
                     </CardDescription>
+                    <Badge variant="secondary" className="mt-2 mx-auto">
+                      {rep.role}
+                    </Badge>
                   </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex flex-wrap justify-center gap-1">
-                      {rep.territories.map((territory, idx) => (
-                        <Badge key={idx} variant="outline" className="text-xs">
-                          {territory}
-                        </Badge>
-                      ))}
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex flex-wrap justify-center gap-1">
+                        {rep.territories.map((territory) => (
+                          <Badge key={territory} variant="outline" className="text-xs">
+                            {territory}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">{rep.phone}</p>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center justify-center gap-2 text-[#1C4E80]">
+                        <Phone className="h-4 w-4 text-[#4986C8]" />
+                        <span>{rep.phone}</span>
+                      </div>
+                      <div className="flex items-center justify-center gap-2 text-[#1C4E80]">
+                        <Mail className="h-4 w-4 text-[#4986C8]" />
+                        <span>{rep.email}</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-2 pt-2">
+                      <Link href={`tel:${rep.phone}`}>
+                        <Button variant="outline" size="sm" className="w-full">
+                          <Phone className="h-4 w-4 mr-2" /> Call
+                        </Button>
+                      </Link>
+                      <Link href={`mailto:${rep.email}`}>
+                        <Button variant="outline" size="sm" className="w-full">
+                          <Mail className="h-4 w-4 mr-2" /> Email
+                        </Button>
+                      </Link>
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -502,21 +496,28 @@ export default function WCubedLanding() {
           </motion.div>
 
           <motion.div
-            className="text-center"
+            className="text-center mt-12"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90">
-              View Complete Team Directory
-            </Button>
+            <p className="text-muted-foreground mb-4">Prefer a quick overview of territories?</p>
+            <Link href="/territory">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white"
+              >
+                Explore Territory Coverage
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>
 
       {/* Project Highlights Carousel */}
-      <section id="projects" className="py-20 bg-background">
+      <section id="projects" className="py-20 bg-slate-50">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
             <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
@@ -642,109 +643,6 @@ export default function WCubedLanding() {
                 className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white bg-transparent"
               >
                 Discuss Your Project
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-slate-50">
-        <div className="container mx-auto px-4 lg:px-6">
-          <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
-              Get In Touch
-            </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">Ready to Get Started?</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Contact our team for quotes, technical support, or to discuss your water-process
-              equipment needs
-            </p>
-          </motion.div>
-
-          <div className="grid lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <motion.div
-              className="text-center"
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <div className="bg-[#4986C8]/10 p-6 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                <Phone className="h-10 w-10 text-[#4986C8]" />
-              </div>
-              <h3 className="font-semibold text-lg text-[#1C4E80] mb-2">Call Us</h3>
-              <p className="text-muted-foreground mb-2 text-sm">(801) 232-8241</p>
-              <p className="text-muted-foreground mb-4">
-                Speak directly with your territory representative
-              </p>
-              <Link href="/territory">
-                <Button className="bg-[#4986C8] hover:bg-[#4986C8]/90">Find Your Rep</Button>
-              </Link>
-            </motion.div>
-
-            <motion.div
-              className="text-center"
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              <div className="bg-[#4986C8]/10 p-6 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                <Mail className="h-10 w-10 text-[#4986C8]" />
-              </div>
-              <h3 className="font-semibold text-lg text-[#1C4E80] mb-2">Email Us</h3>
-              <p className="text-muted-foreground mb-2 text-sm">Bradg@wcubedinc.com</p>
-              <p className="text-muted-foreground mb-4">Send detailed project information</p>
-              <Link href="/contact">
-                <Button
-                  variant="outline"
-                  className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white"
-                >
-                  Get Quote Form
-                </Button>
-              </Link>
-            </motion.div>
-
-            <motion.div
-              className="text-center"
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              viewport={{ once: true }}
-            >
-              <div className="bg-[#4986C8]/10 p-6 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                <MapPin className="h-10 w-10 text-[#4986C8]" />
-              </div>
-              <h3 className="font-semibold text-lg text-[#1C4E80] mb-2">Visit Us</h3>
-              <p className="text-muted-foreground mb-2 text-sm">Salt Lake City, Utah</p>
-              <p className="text-muted-foreground mb-4">Appointment recommended</p>
-              <Link href="/contact">
-                <Button
-                  variant="outline"
-                  className="border-[#1C4E80] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white"
-                >
-                  Schedule Visit
-                </Button>
-              </Link>
-            </motion.div>
-          </div>
-
-          <motion.div
-            className="text-center mt-12"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <p className="text-muted-foreground mb-4">Need more detailed contact information?</p>
-            <Link href="/contact">
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white"
-              >
-                Complete Contact Form
               </Button>
             </Link>
           </motion.div>
