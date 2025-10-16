@@ -24,11 +24,6 @@ export function SiteFooter() {
             <h3 className="font-semibold mb-4">Company</h3>
             <ul className="space-y-2 text-slate-300">
               <li>
-                <Link href="/about" className="hover:text-[#1FA9A4] transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
                 <Link href="/contact" className="hover:text-[#1FA9A4] transition-colors">
                   Contact
                 </Link>
