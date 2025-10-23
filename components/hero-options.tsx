@@ -24,7 +24,7 @@ export function HeroOption1() {
             </Badge>
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-[#123D6A]">
               Water-process equipment experts,
-              <span className="text-[#1FA9A4] block">serving UT · ID · WY</span>
+              <span className="text-[#1FA9A4] block lg:whitespace-nowrap">serving UT · ID · WY</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-lg">
               Your trusted partner for water treatment, pumping systems, and process equipment.
@@ -100,7 +100,7 @@ export function HeroOption2() {
             </Badge>
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-[#123D6A]">
               Water-process equipment experts,
-              <span className="text-[#1FA9A4] block">serving UT · ID · WY</span>
+              <span className="text-[#1FA9A4] block lg:whitespace-nowrap">serving UT · ID · WY</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-lg">
               Your trusted partner for water treatment, pumping systems, and process equipment.
@@ -181,7 +181,7 @@ export function HeroOption3() {
             </Badge>
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-[#123D6A]">
               Water-process equipment experts,
-              <span className="text-[#1FA9A4] block">serving UT · ID · WY</span>
+              <span className="text-[#1FA9A4] block lg:whitespace-nowrap">serving UT · ID · WY</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-lg">
               Your trusted partner for water treatment, pumping systems, and process equipment.

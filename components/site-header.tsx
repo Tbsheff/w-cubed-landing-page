@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Droplets, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -24,9 +25,15 @@ export function SiteHeader() {
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <div className="container mx-auto px-4 lg:px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2">
-          <Droplets className="h-8 w-8 text-[#4986C8]" />
-          <span className="text-xl font-bold text-[#1C4E80]">W-Cubed</span>
+        <Link href="/" className="flex items-center space-x-2" aria-label="W-Cubed home">
+          <Image
+            src="/logo.png"
+            alt="W-Cubed"
+            width={200}
+            height={48}
+            className="h-10 w-auto"
+            priority
+          />
         </Link>
 
         {/* Desktop Navigation */}

@@ -28,3 +28,30 @@ export const postsListQuery = groq`*[_type == "post"]|order(coalesce(publishedAt
   author->{ name },
   categories[]->{ title }
 }`
+
+export const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug][0]{
+  _id,
+  _updatedAt,
+  title,
+  "slug": slug.current,
+  "excerpt": coalesce(excerpt, body[0].children[0].text),
+  publishedAt,
+  "date": coalesce(publishedAt, _updatedAt),
+  mainImage,
+  "imageUrl": mainImage.asset->url,
+  categories[]->{ title },
+  body
+}`
+
+export const allProjectSlugsQuery = groq`*[_type == "project" && defined(slug.current)]{ "slug": slug.current }`
+
+export const projectsListQuery = groq`*[_type == "project"]|order(coalesce(publishedAt,_updatedAt) desc){
+  _id,
+  title,
+  "slug": slug.current,
+  "excerpt": coalesce(excerpt, body[0].children[0].text),
+  "date": coalesce(publishedAt, _updatedAt),
+  mainImage,
+  "imageUrl": mainImage.asset->url,
+  categories[]->{ title }
+}`

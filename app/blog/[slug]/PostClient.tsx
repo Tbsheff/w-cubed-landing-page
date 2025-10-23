@@ -204,12 +204,14 @@ export default function PostClient({ post }: PostClientProps) {
                                     </Card>
 
                                     {/* Contact CTA */}
-                                    <Card className="p-6 bg-[#1FA9A4]/5 border-[#1FA9A4]/20">
-                                        <h3 className="font-semibold text-[#123D6A] mb-2">Need Expert Advice?</h3>
-                                        <p className="text-sm text-muted-foreground mb-4">
-                                            Our team can help you optimize your water treatment systems for maximum efficiency.
-                                        </p>
-                                        <Button className="w-full bg-[#1FA9A4] hover:bg-[#1FA9A4]/90">Contact Our Experts</Button>
+                                    <Card className="p-7 lg:p-8 bg-[#1FA9A4]/5 border-[#1FA9A4]/20">
+                                        <div className="flex flex-col gap-4">
+                                            <h3 className="text-xl font-semibold text-[#123D6A] leading-snug">Need Expert Advice?</h3>
+                                            <p className="text-[15px] leading-7 text-muted-foreground">
+                                                Our team can help you optimize your water treatment systems for maximum efficiency.
+                                            </p>
+                                            <Button size="lg" className="w-full bg-[#1FA9A4] hover:bg-[#1FA9A4]/90 text-base text-white">Contact Our Experts</Button>
+                                        </div>
                                     </Card>
                                 </div>
                             </motion.div>

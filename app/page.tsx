@@ -99,7 +99,7 @@ export default function WCubedLanding() {
         <div className="container mx-auto px-4 lg:px-6 relative w-full">
           <div className="grid lg:grid-cols-2 gap-12 items-center h-full py-8">
             <motion.div
-              className="space-y-8"
+              className="space-y-8 relative z-10"
               initial={{ opacity: 0, x: -60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
@@ -109,7 +109,18 @@ export default function WCubedLanding() {
               </Badge>
               <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-[#1C4E80] leading-tight">
                 Water-process equipment experts,
-                <span className="text-[#4986C8] block">serving UT · NV · ID · WY</span>
+                <span className="text-[#4986C8] block">
+                  {"serving "}
+                  <span className="inline-flex flex-wrap gap-3 align-baseline">
+                    <span className="whitespace-nowrap">UT</span>
+                    <span className="opacity-60">·</span>
+                    <span className="whitespace-nowrap">NV</span>
+                    <span className="opacity-60">·</span>
+                    <span className="whitespace-nowrap">ID</span>
+                    <span className="opacity-60">·</span>
+                    <span className="whitespace-nowrap">WY</span>
+                  </span>
+                </span>
               </h1>
               <p className="text-xl lg:text-2xl text-muted-foreground max-w-lg leading-relaxed">
                 Your trusted partner for water treatment, pumping systems, and process equipment.
@@ -189,7 +200,6 @@ export default function WCubedLanding() {
           transition={{ duration: 0.8, delay: 1 }}
         >
           <div className="flex flex-col items-center space-y-2">
-            <span className="text-sm text-muted-foreground">Scroll to explore</span>
             <motion.div
               animate={{ y: [0, 8, 0] }}
               transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
@@ -277,13 +287,12 @@ export default function WCubedLanding() {
                       alt={`${manufacturer.name} logo`}
                       width={120}
                       height={60}
-                      className={`object-contain cursor-pointer ${
-                        manufacturer.id === "pentair-fairbanks"
-                          ? "max-h-16"
-                          : manufacturer.id === "fournier"
-                            ? "max-h-10"
-                            : "max-h-12"
-                      } w-auto`}
+                      className={`object-contain cursor-pointer ${manufacturer.id === "pentair-fairbanks"
+                        ? "max-h-16"
+                        : manufacturer.id === "fournier"
+                          ? "max-h-10"
+                          : "max-h-12"
+                        } w-auto`}
                     />
                   )}
                 </Link>
@@ -565,7 +574,7 @@ export default function WCubedLanding() {
                             {project.title}
                           </CardTitle>
                           <CardDescription className="mb-4">{project.description}</CardDescription>
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between gap-4">
                             <div className="flex gap-1">
                               {project.states.map((state, idx) => (
                                 <Badge key={idx} variant="outline" className="text-xs">
@@ -611,9 +620,8 @@ export default function WCubedLanding() {
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    index === currentSlide ? "bg-[#4986C8]" : "bg-slate-300"
-                  }`}
+                  className={`w-3 h-3 rounded-full transition-colors ${index === currentSlide ? "bg-[#4986C8]" : "bg-slate-300"
+                    }`}
                 />
               ))}
             </div>
