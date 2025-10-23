@@ -156,7 +156,7 @@ export default function WCubedLanding() {
               {/* Clean, simple equipment showcase */}
               <div className="relative bg-gradient-to-br from-white to-slate-50 rounded-3xl p-12 shadow-2xl border max-w-2xl">
                 <Image
-                  src="/placeholder.svg?height=500&width=600&text=Clean+Industrial+Pump"
+                  src="/hero-image.png"
                   alt="Industrial Water Equipment"
                   width={600}
                   height={500}
