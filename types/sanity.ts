@@ -39,7 +39,7 @@ export interface LegacyRepInfo {
   name: string
   email: string
   phone: string
-  photo: string
+  photo?: string
 }
 
 export interface LegacyTerritoryData {

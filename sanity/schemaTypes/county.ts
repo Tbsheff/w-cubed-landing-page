@@ -27,7 +27,7 @@ export default defineType({
       validation: (rule) =>
         rule.required().custom((value) => {
           if (!value) return 'State code is required'
-          if (!STATE_CODES.includes(value)) {
+          if (!STATE_CODES.includes(value as any)) {
             return `State code must be one of: ${STATE_CODES.join(', ')}`
           }
           return true

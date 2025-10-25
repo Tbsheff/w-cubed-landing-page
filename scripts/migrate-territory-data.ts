@@ -6,7 +6,7 @@
  *   pnpm tsx scripts/migrate-territory-data.ts            # Actually create documents
  */
 
-import { createClient } from '@sanity/client'
+import { createClient } from 'next-sanity'
 import * as fs from 'fs'
 import * as path from 'path'
 
