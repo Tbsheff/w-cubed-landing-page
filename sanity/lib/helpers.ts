@@ -1,21 +1,23 @@
-import { urlFor } from './image'
-import type { SanityImageAssetDocument } from 'next-sanity'
+import type { SanityImageAsset } from '@/types/sanity'
 
 /**
  * Get URL for salesperson photo with appropriate sizing
  * Returns placeholder if no photo provided
  */
 export function getSalespersonPhotoUrl(
-  photo?: SanityImageAssetDocument | null,
+  photo?: SanityImageAsset | null,
   options: { width?: number; height?: number } = {}
 ): string {
   const { width = 160, height = 160 } = options
 
-  if (!photo) {
+  if (!photo?.asset?.url) {
     return `/placeholder.svg?height=${height}&width=${width}&text=Photo`
   }
 
-  return urlFor(photo).width(width).height(height).url()
+  // Return the URL directly from the GROQ query result
+  // Note: This doesn't use urlFor because we're getting the URL directly from the query
+  // If you need image transformations, update the GROQ query to include them
+  return photo.asset.url
 }
 
 /**

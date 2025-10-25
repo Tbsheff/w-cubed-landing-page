@@ -31,7 +31,7 @@ type CountyFeatureProperties = {
 
 type CountyFeature = Feature<Geometry | null, CountyFeatureProperties>;
 
-type RepId = "brad" | "austin";
+type RepId = string; // Can be "brad", "austin", or Sanity document IDs like "salesperson-brad"
 
 interface CountyMeta {
   id: string;
@@ -140,9 +140,16 @@ const isCountyServed = (stateCode: string, countyName: string) => {
   return servedSet.has(countyName.trim().toLowerCase());
 };
 
-const REP_COLORS: Record<RepId, string> = {
+const REP_COLORS: Record<string, string> = {
   brad: "#1C4E80",
   austin: "#4986C8",
+  "salesperson-brad": "#1C4E80",
+  "salesperson-austin": "#4986C8",
+};
+
+// Get color for a rep ID with fallback
+const getRepColor = (repId: string): string => {
+  return REP_COLORS[repId] || "#1C4E80"; // Fallback to default blue
 };
 
 const STATE_COLORS: Record<string, string> = {
@@ -575,7 +582,7 @@ export function TerritorySplitMap() {
 
       const fillColor =
         colorMode === "rep"
-          ? REP_COLORS[county.properties.repId]
+          ? getRepColor(county.properties.repId)
           : STATE_COLORS[county.properties.state];
       const isSelected = county.properties.id === selectedCountyId;
       const isHovered = county.properties.id === hoveredCountyId;

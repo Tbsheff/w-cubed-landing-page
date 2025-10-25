@@ -1,12 +1,20 @@
 import type { SanityImageAssetDocument } from 'next-sanity'
 
+// Sanity image asset structure as returned by GROQ queries
+export interface SanityImageAsset {
+  asset?: {
+    _id: string
+    url: string
+  }
+}
+
 export interface Salesperson {
   _id: string
   _type: 'salesperson'
   name: string
   email: string
   phone: string
-  photo?: SanityImageAssetDocument
+  photo?: SanityImageAsset
   active: boolean
 }
 

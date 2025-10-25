@@ -60,16 +60,7 @@ export default defineType({
       title: 'Assigned Salesperson',
       type: 'reference',
       to: [{ type: 'salesperson' }],
-      description: 'The salesperson assigned to this county',
-      validation: (rule) =>
-        rule.custom((value, context) => {
-          const parent = context.document as any
-          // Only require salesperson if county is served
-          if (parent?.served && !value) {
-            return 'Served counties must have an assigned salesperson'
-          }
-          return true
-        }),
+      description: 'The salesperson assigned to this county (optional for served counties)',
     }),
   ],
   preview: {
