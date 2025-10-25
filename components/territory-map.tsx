@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,8 +14,12 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { getTerritoryData } from "@/sanity/lib/queries"
+import { useSanityTerritories } from "@/lib/feature-flags"
+import { STATES } from "@/lib/constants/states"
 
-const territories = {
+// Hardcoded fallback territories
+const FALLBACK_TERRITORIES = {
   utah: { name: "Utah", rep: "John Smith", color: "#1FA9A4" },
   idaho: { name: "Idaho", rep: "Sarah Johnson", color: "#123D6A" },
   wyoming: { name: "Wyoming", rep: "Mike Davis", color: "#1FA9A4" },
@@ -24,6 +28,53 @@ const territories = {
 export function TerritoryMap() {
   const [hoveredState, setHoveredState] = useState<string | null>(null)
   const [selectedState, setSelectedState] = useState<string>("")
+  const [territories, setTerritories] = useState(FALLBACK_TERRITORIES)
+  const [isLoading, setIsLoading] = useState(true)
+  const shouldUseSanity = useSanityTerritories()
+
+  useEffect(() => {
+    const loadTerritories = async () => {
+      if (shouldUseSanity) {
+        try {
+          const data = await getTerritoryData()
+
+          // Build territories map from Sanity data
+          const territoriesMap: any = {}
+
+          // Group salespeople by state
+          const stateReps: Record<string, Set<string>> = {}
+          data.counties.forEach(county => {
+            if (county.served && county.salesperson) {
+              if (!stateReps[county.stateCode]) {
+                stateReps[county.stateCode] = new Set()
+              }
+              stateReps[county.stateCode].add(county.salesperson.name)
+            }
+          })
+
+          // Create territory entries
+          Object.entries(STATES).forEach(([code, state]) => {
+            const reps = stateReps[code] ? Array.from(stateReps[code]).join(', ') : 'No rep assigned'
+            territoriesMap[state.name.toLowerCase()] = {
+              name: state.name,
+              rep: reps,
+              color: code === 'UT' || code === 'WY' ? '#1FA9A4' : '#123D6A',
+            }
+          })
+
+          setTerritories(territoriesMap)
+        } catch (error) {
+          console.error('Failed to load territories from Sanity, using fallback:', error)
+          setTerritories(FALLBACK_TERRITORIES)
+        }
+      } else {
+        setTerritories(FALLBACK_TERRITORIES)
+      }
+      setIsLoading(false)
+    }
+
+    loadTerritories()
+  }, [shouldUseSanity])
 
   return (
     <div className="flex flex-col items-center space-y-6">
