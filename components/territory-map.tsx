@@ -30,10 +30,11 @@ export function TerritoryMap() {
   const [selectedState, setSelectedState] = useState<string>("")
   const [territories, setTerritories] = useState(FALLBACK_TERRITORIES)
   const [isLoading, setIsLoading] = useState(true)
+  const shouldUseSanity = useSanityTerritories()
 
   useEffect(() => {
     const loadTerritories = async () => {
-      if (useSanityTerritories()) {
+      if (shouldUseSanity) {
         try {
           const data = await getTerritoryData()
 
@@ -73,7 +74,7 @@ export function TerritoryMap() {
     }
 
     loadTerritories()
-  }, [])
+  }, [shouldUseSanity])
 
   return (
     <div className="flex flex-col items-center space-y-6">

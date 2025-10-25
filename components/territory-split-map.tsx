@@ -200,13 +200,14 @@ export function TerritorySplitMap() {
   // Territory data state (from Sanity or hardcoded fallback)
   const [territoryData, setTerritoryData] = useState<LegacyTerritoryData | null>(null);
   const [isLoadingTerritoryData, setIsLoadingTerritoryData] = useState(true);
+  const shouldUseSanity = useSanityTerritories();
 
   // Load territory data from Sanity or use hardcoded fallback
   useEffect(() => {
     const loadTerritoryData = async () => {
       setIsLoadingTerritoryData(true);
 
-      if (useSanityTerritories()) {
+      if (shouldUseSanity) {
         try {
           const data = await getTerritoryData();
           const adapted = adaptTerritoryDataToLegacyFormat(data);
@@ -233,7 +234,7 @@ export function TerritorySplitMap() {
     };
 
     loadTerritoryData();
-  }, []);
+  }, [shouldUseSanity]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
