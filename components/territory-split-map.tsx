@@ -12,6 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Mail, Minus, Phone, Plus, RefreshCcw, Search, X } from "lucide-react";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
+import { getTerritoryData } from "@/sanity/lib/queries";
+import { adaptTerritoryDataToLegacyFormat, getRepIdByFips } from "@/lib/adapters/territory-adapter";
+import { useSanityTerritories } from "@/lib/feature-flags";
+import type { LegacyTerritoryData } from "@/types/sanity";
 
 type ColorMode = "rep" | "state";
 
@@ -186,6 +190,44 @@ export function TerritorySplitMap() {
   const lastUserView = useRef<MapViewState>(DEFAULT_VIEW);
   const [tooltip, setTooltip] = useState<{ content: string; x: number; y: number } | null>(null);
 
+  // Territory data state (from Sanity or hardcoded fallback)
+  const [territoryData, setTerritoryData] = useState<LegacyTerritoryData | null>(null);
+  const [isLoadingTerritoryData, setIsLoadingTerritoryData] = useState(true);
+
+  // Load territory data from Sanity or use hardcoded fallback
+  useEffect(() => {
+    const loadTerritoryData = async () => {
+      setIsLoadingTerritoryData(true);
+
+      if (useSanityTerritories()) {
+        try {
+          const data = await getTerritoryData();
+          const adapted = adaptTerritoryDataToLegacyFormat(data);
+          setTerritoryData(adapted);
+        } catch (error) {
+          console.error('Failed to load territory data from Sanity, using fallback:', error);
+          // Fallback to hardcoded data
+          setTerritoryData({
+            REP_INFO,
+            countyToRepMap: {}, // Will be built from STATE_CODES
+            SERVED_COUNTIES,
+          });
+        }
+      } else {
+        // Use hardcoded data
+        setTerritoryData({
+          REP_INFO,
+          countyToRepMap: {}, // Will be built from STATE_CODES
+          SERVED_COUNTIES,
+        });
+      }
+
+      setIsLoadingTerritoryData(false);
+    };
+
+    loadTerritoryData();
+  }, []);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -225,7 +267,7 @@ export function TerritorySplitMap() {
   }, []);
 
   useEffect(() => {
-    if (!isInView || geographies.length > 0) {
+    if (!isInView || geographies.length > 0 || !territoryData) {
       return;
     }
 
@@ -263,7 +305,13 @@ export function TerritorySplitMap() {
 
           const stateEntry = STATE_CODES[stateCode as keyof typeof STATE_CODES];
           const id = `${stateEntry.code}:${countyName}`;
-          const served = isCountyServed(stateEntry.code, countyName);
+
+          // Check if county is served using dynamic territory data
+          const served = territoryData.SERVED_COUNTIES[stateEntry.code]?.has(countyName.toLowerCase()) ||
+                        stateEntry.code === 'UT'; // All Utah counties served
+
+          // Get rep ID from countyToRepMap (Sanity) or fall back to STATE_CODES (hardcoded)
+          let repId = territoryData.countyToRepMap[normalized] || stateEntry.repId;
 
           const nextFeature: CountyFeature = {
             type: "Feature",
@@ -273,7 +321,7 @@ export function TerritorySplitMap() {
               county: countyName,
               state: stateEntry.code,
               stateName: stateEntry.name,
-              repId: stateEntry.repId,
+              repId: repId as RepId,
               fips: normalized,
               served,
             },
@@ -291,7 +339,7 @@ export function TerritorySplitMap() {
     return () => {
       isMounted = false;
     };
-  }, [geographies.length, isInView]);
+  }, [geographies.length, isInView, territoryData]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -356,12 +404,12 @@ export function TerritorySplitMap() {
   }, [countiesMeta, hoveredCountyId]);
 
   const activeCounty = selectedCounty ?? hoveredCounty;
-  const activeRep = activeCounty
-    ? REP_INFO[activeCounty.repId]
-    : selectedCounty
-      ? REP_INFO[selectedCounty.repId]
+  const activeRep = activeCounty && territoryData
+    ? territoryData.REP_INFO[activeCounty.repId]
+    : selectedCounty && territoryData
+      ? territoryData.REP_INFO[selectedCounty.repId]
       : null;
-  const selectedRep = selectedCounty ? REP_INFO[selectedCounty.repId] : null;
+  const selectedRep = selectedCounty && territoryData ? territoryData.REP_INFO[selectedCounty.repId] : null;
 
   const filteredSearchResults = useMemo(() => {
     if (!debouncedSearch) {
@@ -565,10 +613,12 @@ export function TerritorySplitMap() {
 
   const handleMapMouseMove = useCallback(
     (event: ReactMouseEvent<SVGPathElement, globalThis.MouseEvent>, county: CountyFeature) => {
+      if (!territoryData) return;
+
       setTooltip({
         content: county.properties.served
           ? `${county.properties.county} County • ${county.properties.state} • ${
-              REP_INFO[county.properties.repId].name
+              territoryData.REP_INFO[county.properties.repId]?.name || 'Unassigned'
             }`
           : `${county.properties.county} County • ${county.properties.state} • Not currently served`,
         x: event.clientX + TOOLTIP_OFFSET.x,
@@ -580,7 +630,7 @@ export function TerritorySplitMap() {
         setHoveredCountyId(null);
       }
     },
-    [handleHoverCounty]
+    [handleHoverCounty, territoryData]
   );
 
   const handleMapMouseLeave = useCallback(() => {
@@ -623,7 +673,28 @@ export function TerritorySplitMap() {
     setSearchQuery("");
   }, []);
 
-  const repOrder: RepId[] = ["brad", "austin"];
+  const repOrder: RepId[] = territoryData ? Object.keys(territoryData.REP_INFO) as RepId[] : ["brad", "austin"];
+
+  // Show loading state if territory data not loaded
+  if (isLoadingTerritoryData || !territoryData) {
+    return (
+      <section ref={containerRef} className="relative py-16">
+        <div className="container mx-auto px-4 lg:px-6">
+          <div className="mb-10 max-w-2xl">
+            <Badge variant="outline" className="border-[#1C4E80]/30 text-[#1C4E80]">
+              Interactive Coverage
+            </Badge>
+            <h2 className="mt-3 text-3xl font-bold text-[#1C4E80] md:text-4xl">
+              County-level Territory Explorer
+            </h2>
+            <p className="mt-2 text-lg text-muted-foreground">
+              Loading territory data...
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   const drawerContent = (
     <div className="space-y-6">
@@ -737,7 +808,8 @@ export function TerritorySplitMap() {
         </div>
         <div className="space-y-3">
           {repOrder.map((repId) => {
-            const rep = REP_INFO[repId];
+            const rep = territoryData.REP_INFO[repId];
+            if (!rep) return null;
             const isHighlighted = activeRep?.id === rep.id || selectedRep?.id === rep.id;
             const totalCounties = countiesByRep[repId]?.length ?? 0;
             const statesServed = statesByRep[repId].join(" • ");
