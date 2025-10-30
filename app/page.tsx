@@ -93,13 +93,13 @@ export default function WCubedLanding() {
 
   return (
     <PageWrapper>
-      {/* Hero Section - Full Screen Height minus header */}
-      <section className="relative h-[calc(100vh-4rem)] flex items-center overflow-hidden">
+      {/* Hero Section */}
+      <section className="relative flex items-center overflow-hidden py-12 md:py-16 lg:py-20">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-[#95C6EC]/5" />
         <div className="container mx-auto px-4 lg:px-6 relative w-full">
-          <div className="grid lg:grid-cols-2 gap-12 items-center h-full py-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
-              className="space-y-8 relative z-10"
+              className="space-y-6 relative z-10"
               initial={{ opacity: 0, x: -60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
@@ -109,24 +109,22 @@ export default function WCubedLanding() {
               </Badge>
               <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-[#1C4E80] leading-tight">
                 <HeroHeadline />
-                <span className="text-[#4986C8] block">
-                  {"serving "}
-                  <span className="inline-flex flex-wrap gap-3 align-baseline">
-                    <span className="whitespace-nowrap">UT</span>
-                    <span className="opacity-60">·</span>
-                    <span className="whitespace-nowrap">NV</span>
-                    <span className="opacity-60">·</span>
-                    <span className="whitespace-nowrap">ID</span>
-                    <span className="opacity-60">·</span>
-                    <span className="whitespace-nowrap">WY</span>
-                  </span>
+                <span className="text-2xl sm:text-3xl font-semibold tracking-wide text-[#4986C8] flex flex-wrap items-baseline gap-3 mt-2">
+                  <span>serving</span>
+                  <span className="whitespace-nowrap">UT</span>
+                  <span className="opacity-60">·</span>
+                  <span className="whitespace-nowrap">NV</span>
+                  <span className="opacity-60">·</span>
+                  <span className="whitespace-nowrap">ID</span>
+                  <span className="opacity-60">·</span>
+                  <span className="whitespace-nowrap">WY</span>
                 </span>
               </h1>
               <p className="text-xl lg:text-2xl text-muted-foreground max-w-lg leading-relaxed">
                 Your trusted partner for water treatment, pumping systems, and process equipment.
                 Delivering reliable solutions across the Mountain West for nearly four decades.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div className="flex flex-col sm:flex-row gap-4 pt-2">
                 <Link href="/contact">
                   <Button
                     size="lg"
@@ -147,11 +145,12 @@ export default function WCubedLanding() {
                 </Link>
               </div>
             </motion.div>
+
             <motion.div
               initial={{ opacity: 0, x: 60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative flex items-center justify-center h-full"
+              className="relative flex items-center justify-center"
             >
               {/* Clean, simple equipment showcase */}
               <div className="relative bg-gradient-to-br from-white to-slate-50 rounded-3xl p-12 shadow-2xl border max-w-2xl">
@@ -191,28 +190,10 @@ export default function WCubedLanding() {
             </motion.div>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-        >
-          <div className="flex flex-col items-center space-y-2">
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-              className="w-6 h-10 border-2 border-[#4986C8]/30 rounded-full flex justify-center"
-            >
-              <div className="w-1 h-3 bg-[#4986C8] rounded-full mt-2"></div>
-            </motion.div>
-          </div>
-        </motion.div>
       </section>
 
       {/* Credibility Bar */}
-      <section className="py-12 bg-[#1C4E80]">
+      <section className="pt-8 pb-12 bg-[#1C4E80]">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div
             className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center text-white"
@@ -665,47 +646,67 @@ export default function WCubedLanding() {
 }
 
 function HeroHeadline() {
-  const underlineClass = "underline decoration-[#4986C8] decoration-[3px] underline-offset-6";
-  const highlightClass =
-    "relative inline-flex items-center justify-center px-0.5 -mx-0.5 rounded-sm bg-[#95C6EC]/25";
-  const NB_HYPHEN = "\u2011";
-
-  const words: HeroHeadlineWord[] = [
-    {
-      segments: [{ text: "W", highlight: true }, { text: "ater," }],
-    },
-    {
-      segments: [
-        { text: "W", highlight: true },
-        { text: `aste${NB_HYPHEN}` },
-        { text: "w", highlight: true },
-        { text: "ater," },
-      ],
-    },
-    {
-      segments: [{ text: "Equipment" }],
-    },
-    {
-      segments: [{ text: "experts." }],
-    },
-  ];
+  const NB_HYPHEN = "\u2011"; // keep “Waste-water” together
 
   return (
     <span className="block">
       <span className="flex flex-wrap items-baseline gap-x-3 gap-y-2">
-        {words.map((word, index) => (
-          <HeroHeadlineWord
-            key={index}
-            word={word}
-            highlightClass={highlightClass}
-            underlineClass={underlineClass}
-          />
-        ))}
+        <WordWithAccent text="Water," />
+        <WordWithAccent text={`Waste${NB_HYPHEN}water,`} />
+        <span className="inline-flex items-baseline whitespace-nowrap">Equipment</span>
+        <span className="inline-flex items-baseline whitespace-nowrap">experts</span>
       </span>
     </span>
   );
 }
 
+/**
+ * Renders a word and adds a short accent underline under any leading 'W'/'w'.
+ * For hyphenated words (e.g., Waste-water) it accents the 'W' of each part.
+ * Uses #4986C8 for the accent, main text stays #1C4E80 (no recolor of the W).
+ */
+function WordWithAccent({ text }: { text: string }) {
+  const NB_HYPHEN = "\u2011";
+
+  // Split on NB hyphen but render the hyphen back between parts
+  const parts = text.split(NB_HYPHEN);
+
+  return (
+    <span className="inline-flex items-baseline whitespace-nowrap text-[#1C4E80]">
+      {parts.map((part, idx) => {
+        // keep trailing punctuation out of the accent logic (e.g., the comma in "Water,")
+        const match = part.match(/^([A-Za-z]+)([^A-Za-z]*)$/);
+        const word = match ? match[1] : part;
+        const trailing = match ? match[2] : "";
+
+        const startsWithW = /^[Ww]/.test(word);
+
+        return (
+          <span key={idx} className="inline-flex items-baseline">
+            {startsWithW ? (
+              <>
+                <span className="relative inline-block font-extrabold">
+                  <span>{word[0]}</span>
+                  {/* short accent underline just under the glyph */}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute left-[10%] right-[10%] -bottom-1 h-1 rounded-full"
+                    style={{ backgroundColor: "#4986C8" }}
+                  />
+                </span>
+                <span className="font-extrabold">{word.slice(1)}</span>
+              </>
+            ) : (
+              <span className="font-extrabold">{word}</span>
+            )}
+            <span className="font-extrabold">{trailing}</span>
+            {idx < parts.length - 1 && <span className="font-extrabold">{NB_HYPHEN}</span>}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
 type HeroHeadlineSegment = {
   text: string;
   highlight?: boolean;
