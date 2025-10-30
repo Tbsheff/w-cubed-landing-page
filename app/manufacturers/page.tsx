@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,12 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Search, ExternalLink, Grid, List } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useCallback, useMemo, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { PageWrapper } from "@/components/page-wrapper";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
   animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -30 },
   transition: { duration: 0.6 },
 };
 
@@ -160,16 +161,14 @@ export default function ManufacturersPage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   // Simple, reliable filtering without caching issues
-  const filteredManufacturers = useMemo(() => {
-    return manufacturers.filter((manufacturer) => {
-      const matchesSearch =
-        manufacturer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        manufacturer.description.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory =
-        selectedCategory === "All" || manufacturer.category === selectedCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [searchTerm, selectedCategory]);
+  const filteredManufacturers = manufacturers.filter((manufacturer) => {
+    const matchesSearch =
+      manufacturer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      manufacturer.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "All" || manufacturer.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   // Simple event handlers
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -242,6 +241,7 @@ export default function ManufacturersPage() {
                     key={category}
                     variant={selectedCategory === category ? "default" : "outline"}
                     size="sm"
+                    type="button"
                     onClick={() => handleCategoryChange(category)}
                     className={
                       selectedCategory === category
@@ -257,6 +257,7 @@ export default function ManufacturersPage() {
                 <Button
                   variant={viewMode === "grid" ? "default" : "outline"}
                   size="sm"
+                  type="button"
                   onClick={() => handleViewModeChange("grid")}
                   className={
                     viewMode === "grid" ? "bg-[#4986C8] hover:bg-[#4986C8]/90" : "bg-transparent"
@@ -267,6 +268,7 @@ export default function ManufacturersPage() {
                 <Button
                   variant={viewMode === "list" ? "default" : "outline"}
                   size="sm"
+                  type="button"
                   onClick={() => handleViewModeChange("list")}
                   className={
                     viewMode === "list" ? "bg-[#4986C8] hover:bg-[#4986C8]/90" : "bg-transparent"
@@ -289,100 +291,37 @@ export default function ManufacturersPage() {
             }
             variants={staggerContainer}
             initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
+            animate="animate"
           >
-            {filteredManufacturers.map((manufacturer, index) => (
-              <motion.div key={manufacturer.id} variants={fadeInUp}>
-                {viewMode === "grid" ? (
-                  <Card className="h-full hover:shadow-lg transition-shadow">
-                    <CardHeader className="text-center">
-                      <div className="h-20 flex items-center justify-center mb-4">
-                        {manufacturer.id === "veolia-suez" ? (
-                          <div className="flex items-center gap-4">
-                            <Image
-                              src="/manufacturers/veolia-capsule-logo.svg"
-                              alt="Veolia logo"
-                              width={100}
-                              height={70}
-                              className="max-h-24 w-auto object-contain"
-                            />
-                            <Image
-                              src="/manufacturers/suez-logo.png"
-                              alt="Suez logo"
-                              width={80}
-                              height={60}
-                              className="max-h-8 w-auto object-contain"
-                            />
-                          </div>
-                        ) : (
-                          <Image
-                            src={manufacturer.logo || "/placeholder.svg"}
-                            alt={`${manufacturer.name} logo`}
-                            width={200}
-                            height={120}
-                            className={`object-contain ${
-                              manufacturer.id === "pentair-fairbanks" ? "max-h-20" : "max-h-16"
-                            } w-auto`}
-                          />
-                        )}
-                      </div>
-                      <CardTitle className="text-xl text-[#1C4E80]">{manufacturer.name}</CardTitle>
-                      <Badge variant="secondary">{manufacturer.category}</Badge>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <CardDescription className="text-base">
-                        {manufacturer.description}
-                      </CardDescription>
-                      <div>
-                        <h4 className="font-semibold text-sm text-[#1C4E80] mb-2">Key Products:</h4>
-                        <div className="flex flex-wrap gap-1">
-                          {manufacturer.keyProducts.slice(0, 3).map((product, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs">
-                              {product}
-                            </Badge>
-                          ))}
-                          {manufacturer.keyProducts.length > 3 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{manufacturer.keyProducts.length - 3} more
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex justify-between items-center pt-4">
-                        <Link href={`/manufacturers/${manufacturer.id}`}>
-                          <Button variant="outline" size="sm" className="bg-transparent">
-                            Learn More
-                          </Button>
-                        </Link>
-                        <Button variant="ghost" size="sm" asChild>
-                          <a href={manufacturer.website} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="h-4 w-4" />
-                          </a>
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <Card className="hover:shadow-lg transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex flex-col md:flex-row gap-6">
-                        <div className="flex-shrink-0">
+            <AnimatePresence mode="popLayout">
+              {filteredManufacturers.map((manufacturer) => (
+                <motion.div
+                  key={manufacturer.id}
+                  variants={fadeInUp}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  layout
+                >
+                  {viewMode === "grid" ? (
+                    <Card className="h-full hover:shadow-lg transition-shadow">
+                      <CardHeader className="text-center">
+                        <div className="h-20 flex items-center justify-center mb-4">
                           {manufacturer.id === "veolia-suez" ? (
                             <div className="flex items-center gap-4">
                               <Image
                                 src="/manufacturers/veolia-capsule-logo.svg"
                                 alt="Veolia logo"
-                                width={120}
-                                height={80}
-                                className="h-18 w-auto object-contain"
+                                width={100}
+                                height={70}
+                                className="max-h-24 w-auto object-contain"
                               />
                               <Image
                                 src="/manufacturers/suez-logo.png"
                                 alt="Suez logo"
-                                width={100}
+                                width={80}
                                 height={60}
-                                className="h-16 w-auto object-contain"
+                                className="max-h-8 w-auto object-contain"
                               />
                             </div>
                           ) : (
@@ -392,34 +331,38 @@ export default function ManufacturersPage() {
                               width={200}
                               height={120}
                               className={`object-contain ${
-                                manufacturer.id === "pentair-fairbanks" ? "h-20" : "h-16"
+                                manufacturer.id === "pentair-fairbanks" ? "max-h-20" : "max-h-16"
                               } w-auto`}
                             />
                           )}
                         </div>
-                        <div className="flex-grow space-y-3">
-                          <div className="flex items-center gap-3">
-                            <h3 className="text-xl font-bold text-[#1C4E80]">
-                              {manufacturer.name}
-                            </h3>
-                            <Badge variant="secondary">{manufacturer.category}</Badge>
-                          </div>
-                          <p className="text-muted-foreground">{manufacturer.description}</p>
-                          <div>
-                            <span className="font-semibold text-sm text-[#1C4E80]">
-                              Specialty:{" "}
-                            </span>
-                            <span className="text-sm">{manufacturer.specialty}</span>
-                          </div>
+                        <CardTitle className="text-xl text-[#1C4E80]">
+                          {manufacturer.name}
+                        </CardTitle>
+                        <Badge variant="secondary">{manufacturer.category}</Badge>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <CardDescription className="text-base">
+                          {manufacturer.description}
+                        </CardDescription>
+                        <div>
+                          <h4 className="font-semibold text-sm text-[#1C4E80] mb-2">
+                            Key Products:
+                          </h4>
                           <div className="flex flex-wrap gap-1">
-                            {manufacturer.keyProducts.map((product, idx) => (
+                            {manufacturer.keyProducts.slice(0, 3).map((product, idx) => (
                               <Badge key={idx} variant="outline" className="text-xs">
                                 {product}
                               </Badge>
                             ))}
+                            {manufacturer.keyProducts.length > 3 && (
+                              <Badge variant="outline" className="text-xs">
+                                +{manufacturer.keyProducts.length - 3} more
+                              </Badge>
+                            )}
                           </div>
                         </div>
-                        <div className="flex flex-col gap-2">
+                        <div className="flex justify-between items-center pt-4">
                           <Link href={`/manufacturers/${manufacturer.id}`}>
                             <Button variant="outline" size="sm" className="bg-transparent">
                               Learn More
@@ -431,17 +374,92 @@ export default function ManufacturersPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <ExternalLink className="h-4 w-4 mr-2" />
-                              Visit Site
+                              <ExternalLink className="h-4 w-4" />
                             </a>
                           </Button>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </motion.div>
-            ))}
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <Card className="hover:shadow-lg transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex flex-col md:flex-row gap-6">
+                          <div className="flex-shrink-0">
+                            {manufacturer.id === "veolia-suez" ? (
+                              <div className="flex items-center gap-4">
+                                <Image
+                                  src="/manufacturers/veolia-capsule-logo.svg"
+                                  alt="Veolia logo"
+                                  width={120}
+                                  height={80}
+                                  className="h-18 w-auto object-contain"
+                                />
+                                <Image
+                                  src="/manufacturers/suez-logo.png"
+                                  alt="Suez logo"
+                                  width={100}
+                                  height={60}
+                                  className="h-16 w-auto object-contain"
+                                />
+                              </div>
+                            ) : (
+                              <Image
+                                src={manufacturer.logo || "/placeholder.svg"}
+                                alt={`${manufacturer.name} logo`}
+                                width={200}
+                                height={120}
+                                className={`object-contain ${
+                                  manufacturer.id === "pentair-fairbanks" ? "h-20" : "h-16"
+                                } w-auto`}
+                              />
+                            )}
+                          </div>
+                          <div className="flex-grow space-y-3">
+                            <div className="flex items-center gap-3">
+                              <h3 className="text-xl font-bold text-[#1C4E80]">
+                                {manufacturer.name}
+                              </h3>
+                              <Badge variant="secondary">{manufacturer.category}</Badge>
+                            </div>
+                            <p className="text-muted-foreground">{manufacturer.description}</p>
+                            <div>
+                              <span className="font-semibold text-sm text-[#1C4E80]">
+                                Specialty:{" "}
+                              </span>
+                              <span className="text-sm">{manufacturer.specialty}</span>
+                            </div>
+                            <div className="flex flex-wrap gap-1">
+                              {manufacturer.keyProducts.map((product, idx) => (
+                                <Badge key={idx} variant="outline" className="text-xs">
+                                  {product}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <Link href={`/manufacturers/${manufacturer.id}`}>
+                              <Button variant="outline" size="sm" className="bg-transparent">
+                                Learn More
+                              </Button>
+                            </Link>
+                            <Button variant="ghost" size="sm" asChild>
+                              <a
+                                href={manufacturer.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <ExternalLink className="h-4 w-4 mr-2" />
+                                Visit Site
+                              </a>
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </motion.div>
 
           {filteredManufacturers.length === 0 && (

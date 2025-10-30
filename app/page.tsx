@@ -108,7 +108,7 @@ export default function WCubedLanding() {
                 Serving the Mountain West Since 1986
               </Badge>
               <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-[#1C4E80] leading-tight">
-                Water-process equipment experts,
+                <HeroHeadline />
                 <span className="text-[#4986C8] block">
                   {"serving "}
                   <span className="inline-flex flex-wrap gap-3 align-baseline">
@@ -287,12 +287,13 @@ export default function WCubedLanding() {
                       alt={`${manufacturer.name} logo`}
                       width={120}
                       height={60}
-                      className={`object-contain cursor-pointer ${manufacturer.id === "pentair-fairbanks"
-                        ? "max-h-16"
-                        : manufacturer.id === "fournier"
-                          ? "max-h-10"
-                          : "max-h-12"
-                        } w-auto`}
+                      className={`object-contain cursor-pointer ${
+                        manufacturer.id === "pentair-fairbanks"
+                          ? "max-h-16"
+                          : manufacturer.id === "fournier"
+                            ? "max-h-10"
+                            : "max-h-12"
+                      } w-auto`}
                     />
                   )}
                 </Link>
@@ -620,8 +621,9 @@ export default function WCubedLanding() {
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-colors ${index === currentSlide ? "bg-[#4986C8]" : "bg-slate-300"
-                    }`}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    index === currentSlide ? "bg-[#4986C8]" : "bg-slate-300"
+                  }`}
                 />
               ))}
             </div>
@@ -659,5 +661,78 @@ export default function WCubedLanding() {
 
       {/* Footer */}
     </PageWrapper>
+  );
+}
+
+function HeroHeadline() {
+  const underlineClass = "underline decoration-[#4986C8] decoration-[3px] underline-offset-6";
+  const highlightClass =
+    "relative inline-flex items-center justify-center px-0.5 -mx-0.5 rounded-sm bg-[#95C6EC]/25";
+  const NB_HYPHEN = "\u2011";
+
+  const words: HeroHeadlineWord[] = [
+    {
+      segments: [{ text: "W", highlight: true }, { text: "ater," }],
+    },
+    {
+      segments: [
+        { text: "W", highlight: true },
+        { text: `aste${NB_HYPHEN}` },
+        { text: "w", highlight: true },
+        { text: "ater," },
+      ],
+    },
+    {
+      segments: [{ text: "Equipment" }],
+    },
+    {
+      segments: [{ text: "experts." }],
+    },
+  ];
+
+  return (
+    <span className="block">
+      <span className="flex flex-wrap items-baseline gap-x-3 gap-y-2">
+        {words.map((word, index) => (
+          <HeroHeadlineWord
+            key={index}
+            word={word}
+            highlightClass={highlightClass}
+            underlineClass={underlineClass}
+          />
+        ))}
+      </span>
+    </span>
+  );
+}
+
+type HeroHeadlineSegment = {
+  text: string;
+  highlight?: boolean;
+};
+
+type HeroHeadlineWord = {
+  segments: HeroHeadlineSegment[];
+};
+
+type HeroHeadlineWordProps = {
+  word: HeroHeadlineWord;
+  highlightClass: string;
+  underlineClass: string;
+};
+
+function HeroHeadlineWord({ word, highlightClass, underlineClass }: HeroHeadlineWordProps) {
+  return (
+    <span className="inline-flex items-baseline whitespace-nowrap">
+      {word.segments.map((segment, index) =>
+        segment.highlight ? (
+          <span key={`${segment.text}-${index}`} className={`${underlineClass} ${highlightClass}`}>
+            {segment.text}
+          </span>
+        ) : (
+          <span key={`${segment.text}-${index}`}>{segment.text}</span>
+        )
+      )}
+    </span>
   );
 }
