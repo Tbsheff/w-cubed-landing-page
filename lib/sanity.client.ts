@@ -5,5 +5,6 @@ export const sanityClient = createClient({
     projectId,
     dataset,
     apiVersion,
-    useCdn: true,
+    // Disable CDN to avoid stale/null responses during active authoring
+    useCdn: false,
 })
