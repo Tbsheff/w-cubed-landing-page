@@ -30,7 +30,7 @@ interface Manufacturer {
   id: string;
   name: string;
   logo: string;
-  category: string;
+  category: string | string[];
   description: string;
   keyProducts: string[];
   website: string;
@@ -43,7 +43,7 @@ const manufacturers: Manufacturer[] = [
     id: "ksb",
     name: "KSB",
     logo: "/manufacturers/ksb-logo.svg",
-    category: "Pumps & Mixers",
+    category: "Mixers",
     description:
       "Leading manufacturer of pumps, valves, and systems for water transport and treatment.",
     keyProducts: ["Submersible Motor Pumps", "Pump Mixing Systems", "Vertical Turbine Pumps"],
@@ -114,7 +114,7 @@ const manufacturers: Manufacturer[] = [
     id: "trillium-flow",
     name: "Trillium Flow Technologies",
     logo: "/manufacturers/Trillium-logo.png",
-    category: "Grit Removal",
+    category: ["Pumps"],
     description: "Specialized pumping and grit removal equipment for wastewater treatment.",
     keyProducts: ["Grit Collection Systems", "Screw Pumping", "Non-Clog Pumps"],
     website: "https://www.trilliumflow.com/",
@@ -134,7 +134,7 @@ const manufacturers: Manufacturer[] = [
     id: "pentair-fairbanks",
     name: "Pentair Fairbanks",
     logo: "/manufacturers/pentair-logo.png",
-    category: "Solids Handling Pumps",
+    category: "Pumps",
     description: "Submersible and solids handling pumps for wastewater applications.",
     keyProducts: ["Solids Handling Pumps", "Vortex Pumps", "Submersible Pumps"],
     website: "https://www.pentair.com/en-us/brands/fairbanks-nijhuis.html",
@@ -146,13 +146,13 @@ const manufacturers: Manufacturer[] = [
 
 const categories = [
   "All",
-  "Pumps & Mixers",
+  "Pumps",
+  "Mixers",
   "Blowers & Aeration",
   "Valves & Flow Control",
   "Dewatering",
   "Treatment Systems",
   "Grit Removal",
-  "Solids Handling Pumps",
 ];
 
 export default function ManufacturersPage() {
@@ -166,7 +166,10 @@ export default function ManufacturersPage() {
       manufacturer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       manufacturer.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory =
-      selectedCategory === "All" || manufacturer.category === selectedCategory;
+      selectedCategory === "All" ||
+      (Array.isArray(manufacturer.category)
+        ? manufacturer.category.includes(selectedCategory)
+        : manufacturer.category === selectedCategory);
     return matchesSearch && matchesCategory;
   });
 

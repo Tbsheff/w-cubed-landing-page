@@ -53,7 +53,7 @@ const STATE_CODES = {
 };
 
 const SERVED_COUNTIES: Record<string, Set<string>> = {
-  NV: new Set(["elko", "eureka", "white pine"]),
+  NV: new Set(["elko", "lander", "eureka", "white pine", "lincoln"]),
   ID: new Set([
     "ada",
     "adams",

@@ -281,6 +281,7 @@ export default function ContactPage() {
                             <SelectItem value="upgrade">System Upgrade</SelectItem>
                             <SelectItem value="maintenance">Maintenance Contract</SelectItem>
                             <SelectItem value="urgent-repair">Urgent Repair</SelectItem>
+                            <SelectItem value="parts">Parts</SelectItem>
                             <SelectItem value="consultation">Consultation/Design</SelectItem>
                             <SelectItem value="other">Other</SelectItem>
                           </SelectContent>
