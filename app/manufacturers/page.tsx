@@ -342,7 +342,9 @@ export default function ManufacturersPage() {
                         <CardTitle className="text-xl text-[#1C4E80]">
                           {manufacturer.name}
                         </CardTitle>
-                        <Badge variant="secondary">{manufacturer.category}</Badge>
+                        <div className="flex justify-center">
+                          <Badge variant="secondary">{Array.isArray(manufacturer.category) ? manufacturer.category.join(" • ") : manufacturer.category}</Badge>
+                        </div>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <CardDescription className="text-base">
@@ -422,7 +424,7 @@ export default function ManufacturersPage() {
                               <h3 className="text-xl font-bold text-[#1C4E80]">
                                 {manufacturer.name}
                               </h3>
-                              <Badge variant="secondary">{manufacturer.category}</Badge>
+                              <Badge variant="secondary">{Array.isArray(manufacturer.category) ? manufacturer.category.join(" • ") : manufacturer.category}</Badge>
                             </div>
                             <p className="text-muted-foreground">{manufacturer.description}</p>
                             <div>
