@@ -5,12 +5,18 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Search, Calendar, User, ArrowRight, Filter } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useMemo, useState } from "react"
 import { PageWrapper } from "@/components/page-wrapper"
-import SiteFooter from "@/components/site-footer"
 
 export type BlogListPost = {
     id: string
@@ -27,6 +33,8 @@ export type BlogListPost = {
 
 type BlogListClientProps = {
     posts: Array<BlogListPost>
+    categories?: string[]
+    authors?: string[]
 }
 
 const fadeInUp = {
@@ -43,15 +51,24 @@ const staggerContainer = {
     },
 }
 
-export default function BlogListClient({ posts }: BlogListClientProps) {
+export default function BlogListClient({ posts, categories = [], authors = [] }: BlogListClientProps) {
     const [searchTerm, setSearchTerm] = useState("")
     const [selectedCategory, setSelectedCategory] = useState("All")
+    const [selectedAuthor, setSelectedAuthor] = useState("All")
 
-    const categories = useMemo(() => {
+    const categoriesList = useMemo(() => {
         const cats = new Set(["All"])
         posts.forEach((p) => { if (p.category) cats.add(p.category) })
+        categories.filter(Boolean).forEach((c) => cats.add(c as string))
         return Array.from(cats)
-    }, [posts])
+    }, [posts, categories])
+
+    const authorsList = useMemo(() => {
+        const auths = new Set(["All"])
+        posts.forEach((p) => { if (p.author) auths.add(p.author) })
+        authors.forEach((a) => { if (a) auths.add(a) })
+        return Array.from(auths)
+    }, [posts, authors])
 
     const filteredPosts = posts.filter((post) => {
         const matchesSearch =
@@ -59,7 +76,8 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
             (post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
             post.tags?.some((t: string) => t.toLowerCase().includes(searchTerm.toLowerCase()))
         const matchesCategory = selectedCategory === "All" || post.category === selectedCategory
-        return matchesSearch && matchesCategory
+        const matchesAuthor = selectedAuthor === "All" || post.author === selectedAuthor
+        return matchesSearch && matchesCategory && matchesAuthor
     })
 
     const featuredPosts = filteredPosts.filter((post) => post.featured)
@@ -101,7 +119,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
 
                         {/* Category Filters */}
                         <div className="flex flex-wrap justify-center gap-2">
-                            {categories.map((category) => (
+                            {categoriesList.map((category) => (
                                 <Button
                                     key={category}
                                     variant={selectedCategory === category ? "default" : "outline"}
@@ -113,6 +131,20 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                                     {category}
                                 </Button>
                             ))}
+                        </div>
+                        <div className="flex justify-center gap-2">
+                            <Select value={selectedAuthor} onValueChange={setSelectedAuthor}>
+                                <SelectTrigger className="w-64 bg-white">
+                                    <SelectValue placeholder="Filter by author" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {authorsList.map((author) => (
+                                        <SelectItem key={author} value={author}>
+                                            {author}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                     </motion.div>
                 </div>
@@ -270,6 +302,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                                 onClick={() => {
                                     setSearchTerm("")
                                     setSelectedCategory("All")
+                                    setSelectedAuthor("All")
                                 }}
                                 className="mt-4 bg-transparent"
                             >
@@ -280,7 +313,6 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                 </div>
             </section>
 
-            <SiteFooter />
         </PageWrapper>
     )
 }

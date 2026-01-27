@@ -10,7 +10,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { useMemo, useState } from "react"
 import { PageWrapper } from "@/components/page-wrapper"
-import SiteFooter from "@/components/site-footer"
 
 export type ProjectsListItem = {
     id: string
@@ -235,12 +234,18 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
                             >
                                 Clear Filters
                             </Button>
+                            <div className="mt-4">
+                                <Link href="/contact">
+                                    <Button size="sm" className="bg-[#1FA9A4] hover:bg-[#1FA9A4]/90">
+                                        Discuss Your Project
+                                    </Button>
+                                </Link>
+                            </div>
                         </motion.div>
                     )}
                 </div>
             </section>
 
-            <SiteFooter />
         </PageWrapper>
     )
 }

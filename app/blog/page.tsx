@@ -1,6 +1,6 @@
 import BlogListClient from "./BlogListClient"
 import { sanityClient } from "@/lib/sanity.client"
-import { postsListQuery } from "@/lib/sanity.queries"
+import { postsListQuery, categoriesListQuery, authorsListQuery } from "@/lib/sanity.queries"
 import { urlForImage } from "@/lib/sanity.image"
 
 export const dynamic = 'force-static'
@@ -18,7 +18,11 @@ type PostsListResultItem = {
 }
 
 export default async function BlogPage() {
-  const result = await sanityClient.fetch<PostsListResultItem[]>(postsListQuery)
+  const [result, categoriesResult, authorsResult] = await Promise.all([
+    sanityClient.fetch<PostsListResultItem[]>(postsListQuery),
+    sanityClient.fetch<Array<{ title?: string }>>(categoriesListQuery),
+    sanityClient.fetch<Array<{ name?: string }>>(authorsListQuery),
+  ])
   const posts = result.map((p) => ({
     id: p.slug,
     title: p.title,
@@ -32,5 +36,12 @@ export default async function BlogPage() {
     featured: false,
   }))
 
-  return <BlogListClient posts={posts} />
+  const categories = categoriesResult
+    .map((c) => c.title)
+    .filter(Boolean) as string[]
+  const authors = authorsResult
+    .map((a) => a.name)
+    .filter(Boolean) as string[]
+
+  return <BlogListClient posts={posts} categories={categories} authors={authors} />
 }

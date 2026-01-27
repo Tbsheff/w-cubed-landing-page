@@ -3,7 +3,11 @@ import post from './post'
 import author from './author'
 import category from './category'
 import project from './project'
+import manufacturer from './manufacturer'
+import siteSettings from './siteSettings'
+import representative from './representative'
+import territoryInfo from './territoryInfo'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [post, author, category, project],
+  types: [post, author, category, project, manufacturer, siteSettings, representative, territoryInfo],
 }

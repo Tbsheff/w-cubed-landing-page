@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Mail, Minus, Phone, Plus, RefreshCcw, Search, X } from "lucide-react";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
+import type { RepCoverage } from "@/lib/types/territory";
 
 type ColorMode = "rep" | "state";
 
@@ -20,21 +21,19 @@ type CountyFeatureProperties = {
   county: string;
   state: string;
   stateName: string;
-  repId: RepId;
+  repSlug: string | null;
   fips: string;
   served: boolean;
 };
 
 type CountyFeature = Feature<Geometry | null, CountyFeatureProperties>;
 
-type RepId = "brad" | "austin";
-
 interface CountyMeta {
   id: string;
   county: string;
   state: string;
   stateName: string;
-  repId: RepId;
+  repSlug: string | null;
   center: [number, number];
   fips: string;
   served: boolean;
@@ -45,101 +44,14 @@ interface MapViewState {
   zoom: number;
 }
 
-const STATE_CODES = {
-  "16": { code: "ID", name: "Idaho", repId: "austin" as const },
-  "32": { code: "NV", name: "Nevada", repId: "brad" as const },
-  "49": { code: "UT", name: "Utah", repId: "brad" as const },
-  "56": { code: "WY", name: "Wyoming", repId: "austin" as const },
+const STATE_NAMES: Record<string, string> = {
+  UT: "Utah",
+  NV: "Nevada",
+  ID: "Idaho",
+  WY: "Wyoming",
 };
 
-const SERVED_COUNTIES: Record<string, Set<string>> = {
-  NV: new Set(["elko", "lander", "eureka", "white pine", "lincoln"]),
-  ID: new Set([
-    "ada",
-    "adams",
-    "bannock",
-    "bear lake",
-    "bingham",
-    "blaine",
-    "boise",
-    "bonneville",
-    "butte",
-    "camas",
-    "canyon",
-    "caribou",
-    "cassia",
-    "clark",
-    "custer",
-    "elmore",
-    "franklin",
-    "fremont",
-    "gem",
-    "gooding",
-    "idaho",
-    "jefferson",
-    "jerome",
-    "lemhi",
-    "lincoln",
-    "madison",
-    "minidoka",
-    "oneida",
-    "owyhee",
-    "payette",
-    "power",
-    "teton",
-    "twin falls",
-    "valley",
-    "washington",
-  ]),
-  WY: new Set([
-    "park",
-    "hot springs",
-    "fremont",
-    "sweetwater",
-    "teton",
-    "lincoln",
-    "sublette",
-    "uinta",
-  ]),
-};
-
-const REP_INFO: Record<
-  RepId,
-  { id: RepId; name: string; email: string; phone: string; photo?: string }
-> = {
-  brad: {
-    id: "brad",
-    name: "Brad Gwinnup",
-    email: "Bradg@wcubedinc.com",
-    phone: "801-232-8241",
-    photo: "/placeholder.svg?height=160&width=160&text=Brad+Gwinnup",
-  },
-  austin: {
-    id: "austin",
-    name: "Austin Gwinnup",
-    email: "Austing@wcubedinc.com",
-    phone: "801-803-8558",
-    photo: "/placeholder.svg?height=160&width=160&text=Austin+Gwinnup",
-  },
-};
-
-const isCountyServed = (stateCode: string, countyName: string) => {
-  if (stateCode === "UT") {
-    return true;
-  }
-
-  const servedSet = SERVED_COUNTIES[stateCode];
-  if (!servedSet) {
-    return false;
-  }
-
-  return servedSet.has(countyName.trim().toLowerCase());
-};
-
-const REP_COLORS: Record<RepId, string> = {
-  brad: "#1C4E80",
-  austin: "#4986C8",
-};
+const COLOR_PALETTE = ["#1C4E80", "#4986C8", "#2F5C9C", "#5E7FC4", "#1FA9A4"];
 
 const STATE_COLORS: Record<string, string> = {
   UT: "#1C4E80",
@@ -170,7 +82,19 @@ const cloneViewState = (state: MapViewState): MapViewState => ({
   zoom: state.zoom,
 });
 
-export function TerritorySplitMap() {
+type TerritorySplitMapProps = {
+  representatives?: RepCoverage[];
+};
+
+const normalizeState = (value?: string | null) =>
+  value ? value.trim().toUpperCase() : "";
+
+const normalizeCounty = (value?: string | null) =>
+  value ? value.trim().toLowerCase() : "";
+
+const defaultStates = ["UT", "NV", "ID", "WY"];
+
+export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapWrapperRef = useRef<HTMLDivElement | null>(null);
   const [isInView, setIsInView] = useState(false);
@@ -185,6 +109,65 @@ export function TerritorySplitMap() {
   const [viewState, setViewState] = useState<MapViewState>(DEFAULT_VIEW);
   const lastUserView = useRef<MapViewState>(DEFAULT_VIEW);
   const [tooltip, setTooltip] = useState<{ content: string; x: number; y: number } | null>(null);
+
+  const reps = useMemo(() => {
+    return (representatives || []).map((rep) => ({
+      ...rep,
+      servedStates: (rep.servedStates || []).map(normalizeState).filter(Boolean),
+      servedCounties: (rep.servedCounties || []).map((c) => ({
+        state: normalizeState(c.state),
+        county: normalizeCounty(c.county),
+      })),
+    }));
+  }, [representatives]);
+
+  const repBySlug = useMemo(() => {
+    return reps.reduce<Record<string, RepCoverage>>((acc, rep) => {
+      acc[rep.slug] = rep;
+      return acc;
+    }, {});
+  }, [reps]);
+
+  const allowedStates = useMemo(() => {
+    const set = new Set<string>();
+    reps.forEach((rep) => {
+      rep.servedStates.forEach((s) => set.add(s));
+      rep.servedCounties.forEach((c) => {
+        if (c.state) set.add(c.state);
+      });
+    });
+    return set.size ? Array.from(set) : defaultStates;
+  }, [reps]);
+
+  const repColorMap = useMemo(() => {
+    const map = new Map<string, string>();
+    const sorted = [...reps].sort((a, b) => a.slug.localeCompare(b.slug));
+    sorted.forEach((rep, index) => {
+      map.set(rep.slug, COLOR_PALETTE[index % COLOR_PALETTE.length]);
+    });
+    return map;
+  }, [reps]);
+
+  const determineRepForCounty = useCallback(
+    (stateCode: string, countyName: string) => {
+      const countyNormalized = normalizeCounty(countyName);
+      const stateNormalized = normalizeState(stateCode);
+      for (const rep of reps) {
+        if (rep.servedStates.includes(stateNormalized)) {
+          return rep.slug;
+        }
+        if (
+          rep.servedCounties.some(
+            (c) => c.state === stateNormalized && c.county === countyNormalized
+          )
+        ) {
+          return rep.slug;
+        }
+      }
+      return null;
+    },
+    [reps]
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -243,6 +226,8 @@ export function TerritorySplitMap() {
 
       if (!isMounted) return;
 
+      const allowed = new Set(allowedStates.map(normalizeState));
+
       const filtered = countyCollection.features
         .map((featureItem) => {
           if (!featureItem.geometry) {
@@ -252,7 +237,16 @@ export function TerritorySplitMap() {
           const idValue = String(featureItem.id ?? "");
           const normalized = idValue.padStart(5, "0");
           const stateCode = normalized.slice(0, 2);
-          if (!(stateCode in STATE_CODES)) {
+          const stateAlpha = stateCode === "49"
+            ? "UT"
+            : stateCode === "32"
+              ? "NV"
+              : stateCode === "16"
+                ? "ID"
+                : stateCode === "56"
+                  ? "WY"
+                  : "";
+          if (!stateAlpha || !allowed.has(stateAlpha)) {
             return null;
           }
 
@@ -261,9 +255,10 @@ export function TerritorySplitMap() {
             return null;
           }
 
-          const stateEntry = STATE_CODES[stateCode as keyof typeof STATE_CODES];
-          const id = `${stateEntry.code}:${countyName}`;
-          const served = isCountyServed(stateEntry.code, countyName);
+          const id = `${stateAlpha}:${countyName}`;
+
+          const repSlug = determineRepForCounty(stateAlpha, countyName);
+          const served = Boolean(repSlug);
 
           const nextFeature: CountyFeature = {
             type: "Feature",
@@ -271,9 +266,9 @@ export function TerritorySplitMap() {
             properties: {
               id,
               county: countyName,
-              state: stateEntry.code,
-              stateName: stateEntry.name,
-              repId: stateEntry.repId,
+              state: stateAlpha,
+              stateName: STATE_NAMES[stateAlpha] || stateAlpha,
+              repSlug,
               fips: normalized,
               served,
             },
@@ -291,7 +286,7 @@ export function TerritorySplitMap() {
     return () => {
       isMounted = false;
     };
-  }, [geographies.length, isInView]);
+  }, [allowedStates, determineRepForCounty, geographies.length, isInView]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -308,42 +303,48 @@ export function TerritorySplitMap() {
 
     return geographies.map((featureItem) => {
       const center = geoCentroid(featureItem) as [number, number];
+      const repSlug = determineRepForCounty(
+        featureItem.properties.state,
+        featureItem.properties.county
+      );
+      const served = Boolean(repSlug);
 
       return {
         id: featureItem.properties.id,
         county: featureItem.properties.county,
         state: featureItem.properties.state,
         stateName: featureItem.properties.stateName,
-        repId: featureItem.properties.repId,
+        repSlug,
         center,
         fips: featureItem.properties.fips,
-        served: featureItem.properties.served,
+        served,
       };
     });
-  }, [geographies]);
+  }, [determineRepForCounty, geographies]);
 
   const countiesByRep = useMemo(() => {
-    return countiesMeta.reduce<Record<RepId, CountyMeta[]>>(
-      (acc, county) => {
-        if (!county.served) {
-          return acc;
-        }
-        acc[county.repId] = [...(acc[county.repId] ?? []), county];
+    return countiesMeta.reduce<Record<string, CountyMeta[]>>((acc, county) => {
+      if (!county.served || !county.repSlug) {
         return acc;
-      },
-      { brad: [], austin: [] }
-    );
+      }
+      acc[county.repSlug] = [...(acc[county.repSlug] ?? []), county];
+      return acc;
+    }, {});
   }, [countiesMeta]);
 
   const statesByRep = useMemo(() => {
-    const result: Record<RepId, string[]> = { brad: [], austin: [] };
-    Object.values(STATE_CODES).forEach(({ repId, name }) => {
-      if (!result[repId].includes(name)) {
-        result[repId].push(name);
-      }
+    const result: Record<string, string[]> = {};
+    reps.forEach((rep) => {
+      rep.servedStates.forEach((stateCode) => {
+        const name = STATE_NAMES[stateCode] || stateCode;
+        result[rep.slug] = result[rep.slug] || [];
+        if (!result[rep.slug].includes(name)) {
+          result[rep.slug].push(name);
+        }
+      });
     });
     return result;
-  }, []);
+  }, [reps]);
 
   const selectedCounty = useMemo(() => {
     if (!selectedCountyId) return null;
@@ -356,12 +357,8 @@ export function TerritorySplitMap() {
   }, [countiesMeta, hoveredCountyId]);
 
   const activeCounty = selectedCounty ?? hoveredCounty;
-  const activeRep = activeCounty
-    ? REP_INFO[activeCounty.repId]
-    : selectedCounty
-      ? REP_INFO[selectedCounty.repId]
-      : null;
-  const selectedRep = selectedCounty ? REP_INFO[selectedCounty.repId] : null;
+  const activeRep = activeCounty?.repSlug ? repBySlug[activeCounty.repSlug] : selectedCounty?.repSlug ? repBySlug[selectedCounty.repSlug] : null;
+  const selectedRep = selectedCounty?.repSlug ? repBySlug[selectedCounty.repSlug] : null;
 
   const filteredSearchResults = useMemo(() => {
     if (!debouncedSearch) {
@@ -382,7 +379,9 @@ export function TerritorySplitMap() {
       return [];
     }
 
-    const repCounties = countiesByRep[selectedCounty.repId] ?? [];
+    const repCounties = selectedCounty.repSlug
+      ? countiesByRep[selectedCounty.repSlug] ?? []
+      : [];
 
     if (!countyListFilter.trim()) {
       return repCounties.sort((a, b) => a.county.localeCompare(b.county));
@@ -525,10 +524,13 @@ export function TerritorySplitMap() {
         };
       }
 
+      const repColor = county.properties.repSlug
+        ? repColorMap.get(county.properties.repSlug)
+        : undefined;
       const fillColor =
         colorMode === "rep"
-          ? REP_COLORS[county.properties.repId]
-          : STATE_COLORS[county.properties.state];
+          ? repColor || "#94A3B8"
+          : STATE_COLORS[county.properties.state] || "#94A3B8";
       const isSelected = county.properties.id === selectedCountyId;
       const isHovered = county.properties.id === hoveredCountyId;
 
@@ -560,15 +562,16 @@ export function TerritorySplitMap() {
         },
       };
     },
-    [colorMode, hoveredCountyId, selectedCountyId]
+    [colorMode, hoveredCountyId, repColorMap, selectedCountyId]
   );
 
   const handleMapMouseMove = useCallback(
     (event: ReactMouseEvent<SVGPathElement, globalThis.MouseEvent>, county: CountyFeature) => {
+      const rep = county.properties.repSlug ? repBySlug[county.properties.repSlug] : null;
       setTooltip({
         content: county.properties.served
           ? `${county.properties.county} County • ${county.properties.state} • ${
-              REP_INFO[county.properties.repId].name
+              rep?.name ?? "Representative"
             }`
           : `${county.properties.county} County • ${county.properties.state} • Not currently served`,
         x: event.clientX + TOOLTIP_OFFSET.x,
@@ -580,7 +583,7 @@ export function TerritorySplitMap() {
         setHoveredCountyId(null);
       }
     },
-    [handleHoverCounty]
+    [handleHoverCounty, repBySlug]
   );
 
   const handleMapMouseLeave = useCallback(() => {
@@ -623,7 +626,10 @@ export function TerritorySplitMap() {
     setSearchQuery("");
   }, []);
 
-  const repOrder: RepId[] = ["brad", "austin"];
+  const orderedReps = useMemo(
+    () => [...reps].sort((a, b) => a.name.localeCompare(b.name)),
+    [reps]
+  );
 
   const drawerContent = (
     <div className="space-y-6">
@@ -736,15 +742,15 @@ export function TerritorySplitMap() {
           </p>
         </div>
         <div className="space-y-3">
-          {repOrder.map((repId) => {
-            const rep = REP_INFO[repId];
-            const isHighlighted = activeRep?.id === rep.id || selectedRep?.id === rep.id;
-            const totalCounties = countiesByRep[repId]?.length ?? 0;
-            const statesServed = statesByRep[repId].join(" • ");
+          {orderedReps.map((rep) => {
+            const isHighlighted =
+              activeRep?.slug === rep.slug || selectedRep?.slug === rep.slug;
+            const totalCounties = countiesByRep[rep.slug]?.length ?? 0;
+            const statesServed = (statesByRep[rep.slug] || []).join(" • ");
 
             return (
               <div
-                key={rep.id}
+                key={rep.slug}
                 className={clsx(
                   "flex items-start gap-3 rounded-xl border p-4 transition-colors",
                   isHighlighted
@@ -752,9 +758,9 @@ export function TerritorySplitMap() {
                     : "border-[#1C4E80]/10 bg-background"
                 )}
               >
-                {rep.photo ? (
+                {rep.photoUrl ? (
                   <Image
-                    src={rep.photo}
+                    src={rep.photoUrl}
                     alt={rep.name}
                     width={56}
                     height={56}
@@ -776,21 +782,27 @@ export function TerritorySplitMap() {
                         {totalCounties ? `${totalCounties} counties` : "Loading counties"}
                       </Badge>
                     </div>
-                    <p className="text-xs text-muted-foreground">Serving {statesServed}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {statesServed ? `Serving ${statesServed}` : "Coverage not specified"}
+                    </p>
                   </div>
                   <div className="flex flex-col gap-1 text-xs text-[#1C4E80]">
-                    <a
-                      href={`mailto:${rep.email}`}
-                      className="inline-flex items-center gap-1 hover:underline"
-                    >
-                      <Mail className="h-3.5 w-3.5" /> {rep.email}
-                    </a>
-                    <a
-                      href={`tel:${rep.phone}`}
-                      className="inline-flex items-center gap-1 hover:underline"
-                    >
-                      <Phone className="h-3.5 w-3.5" /> {rep.phone}
-                    </a>
+                    {rep.email && (
+                      <a
+                        href={`mailto:${rep.email}`}
+                        className="inline-flex items-center gap-1 hover:underline"
+                      >
+                        <Mail className="h-3.5 w-3.5" /> {rep.email}
+                      </a>
+                    )}
+                    {rep.phone && (
+                      <a
+                        href={`tel:${rep.phone}`}
+                        className="inline-flex items-center gap-1 hover:underline"
+                      >
+                        <Phone className="h-3.5 w-3.5" /> {rep.phone}
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
@@ -828,7 +840,7 @@ export function TerritorySplitMap() {
             <summary className="flex cursor-pointer items-center justify-between px-3 py-2 font-medium">
               Counties served by this representative
               <span className="text-xs text-[#1C4E80]/80">
-                {(countiesByRep[selectedCounty.repId] ?? []).length}
+                {(selectedCounty.repSlug ? countiesByRep[selectedCounty.repSlug] ?? [] : []).length}
               </span>
             </summary>
             <div className="border-t border-[#1C4E80]/10">
@@ -843,7 +855,9 @@ export function TerritorySplitMap() {
                 <div className="max-h-44 space-y-1 overflow-y-auto">
                   {(filteredCountyList.length
                     ? filteredCountyList
-                    : (countiesByRep[selectedCounty.repId] ?? [])
+                    : selectedCounty.repSlug
+                      ? countiesByRep[selectedCounty.repSlug] ?? []
+                      : []
                   ).map((county) => (
                     <button
                       key={county.id}

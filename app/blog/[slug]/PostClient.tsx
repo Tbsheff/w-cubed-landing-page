@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useMemo } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -33,6 +34,18 @@ const fadeInUp = {
 }
 
 export default function PostClient({ post }: PostClientProps) {
+    const shareUrl = useMemo(() => {
+        if (typeof window !== "undefined") return window.location.href
+        return `https://wcubedinc.com/blog/${post.slug}`
+    }, [post.slug])
+    const encodedTitle = encodeURIComponent(post.title)
+    const encodedUrl = encodeURIComponent(shareUrl)
+    const mailtoHref = `mailto:?subject=${encodedTitle}&body=${encodedUrl}`
+    const telHref = "tel:+18012328241"
+    const fbHref = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`
+    const twitterHref = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`
+    const linkedInHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`
+
     const date = post.date ? new Date(post.date) : undefined
     const tags = post.tags || post.categories || []
 
@@ -158,13 +171,17 @@ export default function PostClient({ post }: PostClientProps) {
                                                     <h3 className="text-lg font-semibold text-[#123D6A]">{post.authorName}</h3>
                                                 )}
                                                 <div className="flex space-x-2 mt-4">
-                                                    <Button variant="outline" size="sm" className="bg-transparent">
+                                                    <Button asChild variant="outline" size="sm" className="bg-transparent">
+                                                        <a href={mailtoHref}>
                                                         <Mail className="h-4 w-4 mr-2" />
                                                         Email
+                                                        </a>
                                                     </Button>
-                                                    <Button variant="outline" size="sm" className="bg-transparent">
+                                                    <Button asChild variant="outline" size="sm" className="bg-transparent">
+                                                        <a href={telHref}>
                                                         <Phone className="h-4 w-4 mr-2" />
                                                         Call
+                                                        </a>
                                                     </Button>
                                                 </div>
                                             </div>
@@ -188,17 +205,23 @@ export default function PostClient({ post }: PostClientProps) {
                                             Share Article
                                         </h3>
                                         <div className="flex flex-col space-y-2">
-                                            <Button variant="outline" size="sm" className="justify-start bg-transparent">
+                                            <Button asChild variant="outline" size="sm" className="justify-start bg-transparent">
+                                                <a href={fbHref} target="_blank" rel="noopener noreferrer">
                                                 <Facebook className="h-4 w-4 mr-2" />
                                                 Facebook
+                                                </a>
                                             </Button>
-                                            <Button variant="outline" size="sm" className="justify-start bg-transparent">
+                                            <Button asChild variant="outline" size="sm" className="justify-start bg-transparent">
+                                                <a href={twitterHref} target="_blank" rel="noopener noreferrer">
                                                 <Twitter className="h-4 w-4 mr-2" />
                                                 Twitter
+                                                </a>
                                             </Button>
-                                            <Button variant="outline" size="sm" className="justify-start bg-transparent">
+                                            <Button asChild variant="outline" size="sm" className="justify-start bg-transparent">
+                                                <a href={linkedInHref} target="_blank" rel="noopener noreferrer">
                                                 <Linkedin className="h-4 w-4 mr-2" />
                                                 LinkedIn
+                                                </a>
                                             </Button>
                                         </div>
                                     </Card>
