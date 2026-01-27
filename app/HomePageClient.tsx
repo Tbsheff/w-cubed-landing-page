@@ -769,33 +769,3 @@ function WordWithAccent({ text }: { text: string }) {
     </span>
   );
 }
-type HeroHeadlineSegment = {
-  text: string;
-  highlight?: boolean;
-};
-
-type HeroHeadlineWord = {
-  segments: HeroHeadlineSegment[];
-};
-
-type HeroHeadlineWordProps = {
-  word: HeroHeadlineWord;
-  highlightClass: string;
-  underlineClass: string;
-};
-
-function HeroHeadlineWord({ word, highlightClass, underlineClass }: HeroHeadlineWordProps) {
-  return (
-    <span className="inline-flex items-baseline whitespace-nowrap">
-      {word.segments.map((segment, index) =>
-        segment.highlight ? (
-          <span key={`${segment.text}-${index}`} className={`${underlineClass} ${highlightClass}`}>
-            {segment.text}
-          </span>
-        ) : (
-          <span key={`${segment.text}-${index}`}>{segment.text}</span>
-        )
-      )}
-    </span>
-  );
-}

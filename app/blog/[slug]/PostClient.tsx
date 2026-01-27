@@ -206,19 +206,19 @@ export default function PostClient({ post }: PostClientProps) {
                                         </h3>
                                         <div className="flex flex-col space-y-2">
                                             <Button asChild variant="outline" size="sm" className="justify-start bg-transparent">
-                                                <a href={fbHref} target="_blank" rel="noreferrer">
+                                                <a href={fbHref} target="_blank" rel="noopener noreferrer">
                                                 <Facebook className="h-4 w-4 mr-2" />
                                                 Facebook
                                                 </a>
                                             </Button>
                                             <Button asChild variant="outline" size="sm" className="justify-start bg-transparent">
-                                                <a href={twitterHref} target="_blank" rel="noreferrer">
+                                                <a href={twitterHref} target="_blank" rel="noopener noreferrer">
                                                 <Twitter className="h-4 w-4 mr-2" />
                                                 Twitter
                                                 </a>
                                             </Button>
                                             <Button asChild variant="outline" size="sm" className="justify-start bg-transparent">
-                                                <a href={linkedInHref} target="_blank" rel="noreferrer">
+                                                <a href={linkedInHref} target="_blank" rel="noopener noreferrer">
                                                 <Linkedin className="h-4 w-4 mr-2" />
                                                 LinkedIn
                                                 </a>

@@ -322,8 +322,8 @@ export default function ManufacturersClient({ manufacturers }: Props) {
               Our experienced team can help you select the right manufacturer and equipment for your
               specific needs.
             </p>
-            <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90">
-              Contact Your Rep
+            <Button asChild size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90">
+              <Link href="/contact">Contact Your Rep</Link>
             </Button>
           </motion.div>
         </div>

@@ -1,9 +1,16 @@
 import HomePageClient from "./HomePageClient"
 import { sanityClient } from "@/lib/sanity.client"
-import { manufacturersListQuery, siteSettingsQuery } from "@/lib/sanity.queries"
+import { siteSettingsQuery } from "@/lib/sanity.queries"
 import { urlForImage } from "@/lib/sanity.image"
 
 export const dynamic = "force-static"
+
+type ManufacturerStripItem = {
+  slug: string
+  name: string
+  logo?: any
+  logoUrl?: string | null
+}
 
 type SiteSettingsResult = {
   heroBadge?: string | null
@@ -13,6 +20,7 @@ type SiteSettingsResult = {
   primaryCta?: { label?: string | null; href?: string | null } | null
   secondaryCta?: { label?: string | null; href?: string | null } | null
   stats?: Array<{ value?: string | null; label?: string | null; detail?: string | null }>
+  manufacturerStrip?: ManufacturerStripItem[] | null
   highlights?: Array<{
     title?: string | null
     description?: string | null
@@ -22,23 +30,13 @@ type SiteSettingsResult = {
   }>
 }
 
-type ManufacturerResult = {
-  slug: string
-  name: string
-  logo?: any
-  logoUrl?: string | null
-}
-
 export default async function Page() {
-  const [data, manufacturerResults] = await Promise.all([
-    sanityClient.fetch<SiteSettingsResult | null>(siteSettingsQuery),
-    sanityClient.fetch<ManufacturerResult[]>(manufacturersListQuery),
-  ])
+  const data = await sanityClient.fetch<SiteSettingsResult | null>(siteSettingsQuery)
 
   if (!data) throw new Error("CMS siteSettings missing")
 
   const manufacturers =
-    manufacturerResults?.map((m) => {
+    data.manufacturerStrip?.map((m) => {
       if (!m.slug) throw new Error("CMS manufacturer missing slug")
       return {
         id: m.slug,
@@ -74,16 +72,14 @@ export default async function Page() {
   if (!manufacturers.length) throw new Error("CMS manufacturers strip missing")
   if (!highlights.length) throw new Error("CMS highlights missing")
 
-  const hero = data
-    ? {
-        badge: data.heroBadge,
-        title: data.heroTitle,
-        description: data.heroDescription,
-        heroImage: data.heroImage ? urlForImage(data.heroImage).width(900).height(700).fit("max").url() : null,
-        primaryCta: data.primaryCta,
-        secondaryCta: data.secondaryCta,
-      }
-    : null
+  const hero = {
+    badge: data.heroBadge,
+    title: data.heroTitle,
+    description: data.heroDescription,
+    heroImage: data.heroImage ? urlForImage(data.heroImage).width(900).height(700).fit("max").url() : null,
+    primaryCta: data.primaryCta,
+    secondaryCta: data.secondaryCta,
+  }
 
   return (
     <HomePageClient

@@ -136,7 +136,11 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
             ) : (
               <div className="space-y-4">
                 {keyProducts.map((product, index) => {
-                  const isHeader = product.includes("<b>")
+                  // Check if this looks like a header (starts with bold tag pattern)
+                  // Strip any HTML tags for safety and check if it was meant to be a header
+                  const strippedProduct = product.replace(/<[^>]*>/g, '')
+                  const isHeader = product.includes("<b>") || product.includes("<strong>")
+                  
                   if (isHeader) {
                     return (
                       <motion.div
@@ -146,10 +150,9 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
                         transition={{ duration: 0.6, delay: index * 0.05 }}
                         viewport={{ once: true }}
                       >
-                        <h3
-                          className="text-xl font-bold text-[#1C4E80] mt-8 mb-4 first:mt-0"
-                          dangerouslySetInnerHTML={{ __html: product }}
-                        />
+                        <h3 className="text-xl font-bold text-[#1C4E80] mt-8 mb-4 first:mt-0">
+                          {strippedProduct}
+                        </h3>
                       </motion.div>
                     )
                   }
@@ -164,7 +167,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
                     >
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardContent className="p-6">
-                          <p className="text-[#123D6A] font-medium leading-relaxed">{product}</p>
+                          <p className="text-[#123D6A] font-medium leading-relaxed">{strippedProduct}</p>
                         </CardContent>
                       </Card>
                     </motion.div>

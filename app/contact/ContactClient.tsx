@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -209,12 +208,14 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                                   {rep.phone}
                                 </a>
                               )}
-                              <a
-                                href={`mailto:${rep.email}`}
-                                className="text-xs text-muted-foreground hover:text-[#4986C8]"
-                              >
-                                Email
-                              </a>
+                              {rep.email && (
+                                <a
+                                  href={`mailto:${rep.email}`}
+                                  className="text-xs text-muted-foreground hover:text-[#4986C8]"
+                                >
+                                  Email
+                                </a>
+                              )}
                             </div>
                           </div>
                         ))}

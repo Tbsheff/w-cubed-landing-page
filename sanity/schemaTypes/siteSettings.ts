@@ -14,11 +14,13 @@ export default defineType({
       name: 'heroTitle',
       title: 'Hero Title',
       type: 'string',
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'heroDescription',
       title: 'Hero Description',
       type: 'text',
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'heroImage',
