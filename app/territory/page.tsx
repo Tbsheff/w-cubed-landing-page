@@ -1,6 +1,8 @@
 import TerritoryClient from "./TerritoryClient"
 import { sanityClient } from "@/lib/sanity.client"
-import { territoryInfoQuery } from "@/lib/sanity.queries"
+import { territoryInfoQuery, representativesQuery } from "@/lib/sanity.queries"
+import { normalizeReps } from "@/lib/territory-normalize"
+import type { RepCoverage, TerritoryInfo as TerritoryInfoType } from "@/lib/types/territory"
 
 export const dynamic = "force-static"
 
@@ -12,14 +14,20 @@ type TerritoryInfoResult = {
 }
 
 export default async function TerritoryPage() {
-  const territoryInfo = await sanityClient.fetch<TerritoryInfoResult | null>(territoryInfoQuery)
+  const [territoryInfo, repsRaw] = await Promise.all([
+    sanityClient.fetch<TerritoryInfoResult | null>(territoryInfoQuery),
+    sanityClient.fetch(representativesQuery),
+  ])
 
   if (!territoryInfo) {
     throw new Error("CMS territoryInfo missing")
   }
 
+  const reps: RepCoverage[] = normalizeReps(repsRaw || [])
+
   return (
     <TerritoryClient
+      representatives={reps}
       heroTitle={territoryInfo?.heroTitle}
       heroSubtitle={territoryInfo?.heroSubtitle}
       primaryCta={territoryInfo?.primaryCta}

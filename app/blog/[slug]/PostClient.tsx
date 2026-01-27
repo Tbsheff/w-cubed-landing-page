@@ -173,14 +173,14 @@ export default function PostClient({ post }: PostClientProps) {
                                                 <div className="flex space-x-2 mt-4">
                                                     <Button asChild variant="outline" size="sm" className="bg-transparent">
                                                         <a href={mailtoHref}>
-                                                            <Mail className="h-4 w-4 mr-2" />
-                                                            Email
+                                                        <Mail className="h-4 w-4 mr-2" />
+                                                        Email
                                                         </a>
                                                     </Button>
                                                     <Button asChild variant="outline" size="sm" className="bg-transparent">
                                                         <a href={telHref}>
-                                                            <Phone className="h-4 w-4 mr-2" />
-                                                            Call
+                                                        <Phone className="h-4 w-4 mr-2" />
+                                                        Call
                                                         </a>
                                                     </Button>
                                                 </div>
@@ -207,20 +207,20 @@ export default function PostClient({ post }: PostClientProps) {
                                         <div className="flex flex-col space-y-2">
                                             <Button asChild variant="outline" size="sm" className="justify-start bg-transparent">
                                                 <a href={fbHref} target="_blank" rel="noreferrer">
-                                                    <Facebook className="h-4 w-4 mr-2" />
-                                                    Facebook
+                                                <Facebook className="h-4 w-4 mr-2" />
+                                                Facebook
                                                 </a>
                                             </Button>
                                             <Button asChild variant="outline" size="sm" className="justify-start bg-transparent">
                                                 <a href={twitterHref} target="_blank" rel="noreferrer">
-                                                    <Twitter className="h-4 w-4 mr-2" />
-                                                    Twitter
+                                                <Twitter className="h-4 w-4 mr-2" />
+                                                Twitter
                                                 </a>
                                             </Button>
                                             <Button asChild variant="outline" size="sm" className="justify-start bg-transparent">
                                                 <a href={linkedInHref} target="_blank" rel="noreferrer">
-                                                    <Linkedin className="h-4 w-4 mr-2" />
-                                                    LinkedIn
+                                                <Linkedin className="h-4 w-4 mr-2" />
+                                                LinkedIn
                                                 </a>
                                             </Button>
                                         </div>

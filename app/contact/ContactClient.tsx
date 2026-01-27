@@ -17,6 +17,7 @@ import { Phone, Mail, Clock } from "lucide-react";
 import Link from "next/link";
 import { PageWrapper } from "@/components/page-wrapper";
 import { territoryRepresentatives } from "@/lib/representatives";
+import type { RepCoverage, TerritoryInfo as TerritoryInfoType } from "@/lib/types/territory";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
@@ -57,22 +58,9 @@ const contactMethods = [
 
 const quickContactMethods = contactMethods.slice(0, 2);
 
-type Representative = {
-  name: string;
-  role?: string;
-  phone?: string;
-  email?: string;
-};
-
-type TerritoryInfo = {
-  heroTitle?: string | null;
-  heroSubtitle?: string | null;
-  businessHours?: Array<{ label?: string | null; value?: string | null }> | null;
-};
-
 type Props = {
-  representatives?: Representative[] | null;
-  territoryInfo?: TerritoryInfo | null;
+  representatives?: RepCoverage[] | null;
+  territoryInfo?: TerritoryInfoType | null;
 };
 
 const defaultBusinessHours = [
@@ -82,7 +70,7 @@ const defaultBusinessHours = [
 ];
 
 export default function ContactPage({ representatives, territoryInfo }: Props) {
-  const repsData =
+  const repsData: Array<RepCoverage | (typeof territoryRepresentatives)[number]> =
     representatives && representatives.length > 0 ? representatives : territoryRepresentatives;
   const hours =
     territoryInfo?.businessHours && territoryInfo.businessHours.length > 0

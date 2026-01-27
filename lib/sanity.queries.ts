@@ -117,11 +117,18 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0]{
 
 export const representativesQuery = groq`*[_type == "representative"]|order(coalesce(order, 9999) asc, name asc){
   name,
+  "slug": slug.current,
   role,
   phone,
   email,
   states,
-  regions
+  regions,
+  servedStates,
+  servedCounties[]{
+    state,
+    county
+  },
+  photo
 }`
 
 export const territoryInfoQuery = groq`*[_type == "territoryInfo"][0]{

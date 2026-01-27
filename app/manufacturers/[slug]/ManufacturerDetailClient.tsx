@@ -98,10 +98,10 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
 
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <Link href="/contact">
-                <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90 px-8 py-3">
-                  <Phone className="mr-2 h-4 w-4" />
-                  Contact Rep
-                </Button>
+              <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90 px-8 py-3">
+                <Phone className="mr-2 h-4 w-4" />
+                Contact Rep
+              </Button>
               </Link>
               {manufacturer.website && (
                 <Button

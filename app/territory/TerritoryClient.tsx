@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PageWrapper } from "@/components/page-wrapper";
 import { TerritorySplitMap } from "@/components/territory-split-map";
+import type { RepCoverage } from "@/lib/types/territory";
 import Link from "next/link";
 
 const fadeInUp = {
@@ -18,6 +19,7 @@ type TerritoryProps = {
   heroSubtitle?: string | null;
   primaryCta?: { label?: string | null; href?: string | null } | null;
   secondaryCta?: { label?: string | null; href?: string | null } | null;
+  representatives?: RepCoverage[];
 };
 
 export default function TerritoryPage({
@@ -25,6 +27,7 @@ export default function TerritoryPage({
   heroSubtitle = "Our experienced representatives provide personalized service across Utah, Nevada, Idaho, and Wyoming. Find your local representative and discover the counties we serve.",
   primaryCta = { label: "Find Your Representative", href: "/contact" },
   secondaryCta = { label: "View All Products", href: "/manufacturers" },
+  representatives = [],
 }: TerritoryProps) {
   return (
     <PageWrapper>
@@ -46,7 +49,7 @@ export default function TerritoryPage({
         </div>
       </section>
 
-      <TerritorySplitMap />
+      <TerritorySplitMap representatives={representatives} />
 
       {/* CTA Section */}
       <section className="py-20 bg-[#1C4E80]">
