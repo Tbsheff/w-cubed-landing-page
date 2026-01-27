@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -21,20 +21,51 @@ const navItems = [
 export function SiteHeader() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showLogo, setShowLogo] = useState(false);
+
+  // Show logo in header when scrolled past hero section
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show logo when scrolled more than 400px (past the large hero logo)
+      setShowLogo(window.scrollY > 400);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <div className="container mx-auto px-4 lg:px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2" aria-label="W-Cubed home">
-          <Image
-            src="/logo.png"
-            alt="W-Cubed"
-            width={200}
-            height={48}
-            className="h-10 w-auto"
-            priority
-          />
-        </Link>
+        <div className="flex items-center gap-3">
+          <AnimatePresence>
+            {showLogo && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-2 sm:gap-3"
+              >
+                <Link href="/" className="flex items-center" aria-label="W-Cubed home">
+                  <Image
+                    src="/logo.png"
+                    alt="W-Cubed"
+                    width={200}
+                    height={48}
+                    className="h-8 sm:h-10 w-auto"
+                    priority
+                  />
+                </Link>
+                <div className="bg-[#1C4E80]/10 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full">
+                  <span className="text-[8px] sm:text-[10px] font-semibold text-[#1C4E80] uppercase tracking-wide whitespace-nowrap">
+                    Veteran Owned & Operated
+                  </span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6">

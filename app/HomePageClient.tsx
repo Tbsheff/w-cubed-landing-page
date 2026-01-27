@@ -149,22 +149,40 @@ export default function WCubedLanding({
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <section className="relative flex items-center overflow-hidden py-12 md:py-16 lg:py-20">
+      <section className="relative flex items-center overflow-hidden py-8 md:py-12 lg:py-20">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-[#95C6EC]/5" />
         <div className="container mx-auto px-4 lg:px-6 relative w-full">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-6 md:gap-12 items-start">
             <motion.div
-              className="space-y-6 relative z-10"
+              className="space-y-4 md:space-y-6 relative z-10"
               initial={{ opacity: 0, x: -60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              {heroData.badge && (
-                <Badge variant="outline" className="border-[#1C4E80]/30 text-[#1C4E80]">
-                  {heroData.badge}
-                </Badge>
-              )}
-              <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-[#1C4E80] leading-tight">
+              {/* Large Logo with Veteran Badge */}
+              <div className="flex flex-col items-center lg:items-start gap-6 lg:gap-8 mb-8 lg:mb-12">
+                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
+                  <Image
+                    src="/logo.png"
+                    alt="W-Cubed"
+                    width={550}
+                    height={132}
+                    className="h-auto w-auto max-w-[280px] sm:max-w-[350px] lg:max-w-[450px]"
+                    priority
+                  />
+                  <div className="bg-[#1C4E80]/10 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full">
+                    <span className="text-[10px] sm:text-xs font-semibold text-[#1C4E80] uppercase tracking-wide whitespace-nowrap">
+                      Veteran Owned & Operated
+                    </span>
+                  </div>
+                </div>
+                {heroData.badge && (
+                  <Badge variant="outline" className="border-[#1C4E80]/30 text-[#1C4E80]">
+                    {heroData.badge}
+                  </Badge>
+                )}
+              </div>
+              <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-[#1C4E80] leading-tight mt-8">
                 {heroData.title ? (
                   heroData.title
                 ) : (
@@ -216,10 +234,10 @@ export default function WCubedLanding({
               initial={{ opacity: 0, x: 60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative flex items-center justify-center"
+              className="relative flex items-center justify-center mt-4 md:mt-20 lg:mt-40"
             >
               {/* Clean, simple equipment showcase */}
-              <div className="relative bg-gradient-to-br from-white to-slate-50 rounded-3xl p-12 shadow-2xl border max-w-2xl">
+              <div className="relative bg-gradient-to-br from-white to-slate-50 rounded-3xl p-6 md:p-12 shadow-2xl border max-w-2xl w-full">
                 <Image
                   src={heroImageSrc}
                   alt="Industrial Water Equipment"
@@ -716,7 +734,7 @@ function HeroHeadline() {
         <WordWithAccent text="Water," />
         <WordWithAccent text={`Waste${NB_HYPHEN}water,`} />
         <span className="inline-flex items-baseline whitespace-nowrap">Equipment</span>
-        <span className="inline-flex items-baseline whitespace-nowrap">experts</span>
+        <span className="inline-flex items-baseline whitespace-nowrap">Experts</span>
       </span>
     </span>
   );
@@ -748,13 +766,9 @@ function WordWithAccent({ text }: { text: string }) {
             {startsWithW ? (
               <>
                 <span className="relative inline-block font-extrabold">
-                  <span>{word[0]}</span>
-                  {/* short accent underline just under the glyph */}
-                  <span
-                    aria-hidden="true"
-                    className="pointer-events-none absolute left-[10%] right-[10%] -bottom-1 h-1 rounded-full"
-                    style={{ backgroundColor: "#4986C8" }}
-                  />
+                  <span className="inline-block" style={{ borderBottom: '4px solid #4986C8', paddingBottom: '2px' }}>
+                    {word[0]}
+                  </span>
                 </span>
                 <span className="font-extrabold">{word.slice(1)}</span>
               </>
