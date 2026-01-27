@@ -1,6 +1,7 @@
 # W-Cubed Landing Page
 
-A modern, responsive landing page for W-Cubed - Mountain West's premier water equipment representative, built with Next.js 14, TypeScript, and Tailwind CSS.
+A modern, responsive landing page for W-Cubed - Mountain West's premier water
+equipment representative, built with Next.js 14, TypeScript, and Tailwind CSS.
 
 ## Features
 
@@ -23,22 +24,33 @@ A modern, responsive landing page for W-Cubed - Mountain West's premier water eq
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/Tbsheff/w-cubed-landing-page.git
 cd w-cubed-landing-page
 ```
 
 2. Install dependencies:
+
 ```bash
 pnpm install
 ```
 
-3. Set up environment variables (if needed):
+3. Set up environment variables:
+
 ```bash
 cp .env.example .env.local
 ```
 
+Then edit `.env.local` and fill in the required values:
+
+- `NEXT_PUBLIC_SANITY_PROJECT_ID` - Your Sanity project ID
+- `NEXT_PUBLIC_SANITY_DATASET` - Your Sanity dataset (e.g., `production`)
+- `NEXT_PUBLIC_SANITY_API_VERSION` - Sanity API version (default: `2025-09-15`)
+- `REVALIDATE_SECRET` - Secret for on-demand revalidation webhooks
+
 4. Run the development server:
+
 ```bash
 pnpm dev
 ```
@@ -47,14 +59,14 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 
 ## Available Scripts
 
-| Script | Description |
-|--------|------------|
-| `pnpm dev` | Start the development server |
-| `pnpm build` | Build the production application |
-| `pnpm start` | Start the production server |
-| `pnpm lint` | Run ESLint for code quality |
-| `pnpm typecheck` | Run TypeScript type checking |
-| `pnpm clean` | Remove build cache and node_modules |
+| Script           | Description                         |
+| ---------------- | ----------------------------------- |
+| `pnpm dev`       | Start the development server        |
+| `pnpm build`     | Build the production application    |
+| `pnpm start`     | Start the production server         |
+| `pnpm lint`      | Run ESLint for code quality         |
+| `pnpm typecheck` | Run TypeScript type checking        |
+| `pnpm clean`     | Remove build cache and node_modules |
 
 ## Project Structure
 
@@ -74,6 +86,35 @@ w-cubed/
 └── sanity/              # Sanity CMS configuration
 ```
 
+## Deployment
+
+### Required Environment Variables
+
+For production builds, you **must** set the following environment variables in
+your deployment platform (e.g., Vercel, Netlify):
+
+**Required:**
+
+- `NEXT_PUBLIC_SANITY_PROJECT_ID` - Your Sanity project ID
+- `NEXT_PUBLIC_SANITY_DATASET` - Your Sanity dataset (e.g., `production`)
+
+**Optional:**
+
+- `NEXT_PUBLIC_SANITY_API_VERSION` - Sanity API version (defaults to
+  `2025-09-15` if not set)
+- `REVALIDATE_SECRET` - Secret for on-demand revalidation webhooks (required for
+  webhook-based revalidation)
+
+### Vercel Deployment
+
+1. Connect your repository to Vercel
+2. Add the required environment variables in Project Settings → Environment
+   Variables
+3. Deploy
+
+The build will fail if `NEXT_PUBLIC_SANITY_PROJECT_ID` or
+`NEXT_PUBLIC_SANITY_DATASET` are not set.
+
 ## CI/CD
 
 This project uses GitHub Actions for continuous integration:
@@ -85,16 +126,19 @@ This project uses GitHub Actions for continuous integration:
 ### CI Pipeline
 
 The CI pipeline runs on:
+
 - Pull requests to `main`
 - Pushes to `main`
 
 It performs:
+
 1. TypeScript type checking (`pnpm typecheck`)
 2. ESLint linting (`pnpm lint`)
 
 ## Technology Stack
 
 ### Frontend
+
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
@@ -103,11 +147,13 @@ It performs:
 - **Forms**: React Hook Form with Zod validation
 
 ### Content Management
+
 - **CMS**: Sanity v4
 - **Image Handling**: Sanity Image URL builder
 - **Content Queries**: GROQ
 
 ### Development Tools
+
 - **Package Manager**: pnpm
 - **Linting**: ESLint with Next.js configuration
 - **Type Checking**: TypeScript strict mode
