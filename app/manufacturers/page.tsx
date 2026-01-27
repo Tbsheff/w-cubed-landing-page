@@ -37,4 +37,3 @@ export default async function ManufacturersPage() {
 
   return <ManufacturersClient manufacturers={manufacturers} />
 }
-
