@@ -7,8 +7,8 @@ type RawRep = {
   role?: string | null
   phone?: string | null
   email?: string | null
-  servedStates?: (string | null | undefined)[]
-  servedCounties?: Array<ServedCounty | null | undefined>
+  servedStates?: (string | null | undefined)[] | null
+  servedCounties?: Array<{ state?: string | null; county?: string | null }> | null
   photo?: any
   photoUrl?: string | null
 }
