@@ -1,9 +1,126 @@
 {"_type":"siteSettings","_id":"siteSettings-singleton","heroBadge":"Serving the Mountain West Since 1986","heroTitle":"Water, Waste‑water, Equipment experts","heroDescription":"Your trusted partner for water treatment, pumping systems, and process equipment. Delivering reliable solutions across the Mountain West for nearly four decades.","primaryCta":{"label":"Get Project Quote","href":"/contact"},"secondaryCta":{"label":"Browse Equipment","href":"/manufacturers"},"stats":[{"value":"38+","label":"Years in Business","detail":"Serving the Mountain West since 1986"},{"value":"10+","label":"Trusted Manufacturers","detail":"Premium equipment partnerships"},{"value":"4-State","label":"Coverage Area","detail":"Utah, Nevada, Idaho, and Wyoming"}],"manufacturerStrip":[{"_type":"reference","_ref":"manufacturer-ksb"},{"_type":"reference","_ref":"manufacturer-kaeser"},{"_type":"reference","_ref":"manufacturer-pratt"},{"_type":"reference","_ref":"manufacturer-hydro-gate"},{"_type":"reference","_ref":"manufacturer-fournier"},{"_type":"reference","_ref":"manufacturer-edi"},{"_type":"reference","_ref":"manufacturer-veolia-suez"},{"_type":"reference","_ref":"manufacturer-trillium-flow"},{"_type":"reference","_ref":"manufacturer-kusters-zima"},{"_type":"reference","_ref":"manufacturer-pentair-fairbanks"}],"highlights":[{"title":"Municipal Water Treatment Facilities","description":"Successfully designed and installed pumping systems for municipal water and wastewater treatment plants across our four-state territory.","category":"Municipal","states":["UT","NV","ID","WY"],"image":null},{"title":"Industrial Plant Solutions","description":"Custom water-process equipment solutions for manufacturing facilities, mines, and processing plants throughout the Mountain West.","category":"Industrial","states":["UT","ID"],"image":null},{"title":"Commercial & Infrastructure","description":"Reliable pumping and treatment systems for commercial developments, resorts, and infrastructure projects.","category":"Commercial","states":["NV","WY"],"image":null}]}
 {"_type":"territoryInfo","_id":"territoryInfo-singleton","heroTitle":"Four-State Coverage Area","heroSubtitle":"Our experienced representatives provide personalized service across Utah, Nevada, Idaho, and Wyoming. Find your local representative and discover the counties we serve.","primaryCta":{"label":"Find Your Representative","href":"/contact"},"secondaryCta":{"label":"View All Products","href":"/manufacturers"},"coverageBlurb":"Serving Utah, Nevada, Idaho, and Wyoming with dedicated regional reps.","businessHours":[{"label":"Monday - Friday","value":"8:00 AM - 5:00 PM MT"},{"label":"Saturday","value":"By Appointment"},{"label":"Sunday","value":"Closed"}]}
-{"_type":"representative","_id":"rep-brad-gwinnup","name":"Brad Gwinnup","slug":{"_type":"slug","current":"brad-gwinnup"},"role":"Utah, Nevada","phone":"801-232-8241","email":"Bradg@wcubedinc.com","states":["Utah","Nevada"],"servedStates":["UT","NV"],"servedCounties":[],"regions":"President","order":1}
-{"_type":"representative","_id":"rep-austin-gwinnup","name":"Austin Gwinnup","slug":{"_type":"slug","current":"austin-gwinnup"},"role":"Idaho, Wyoming","phone":"801-803-8558","email":"Austing@wcubedinc.com","states":["Idaho","Wyoming"],"servedStates":["ID","WY"],"servedCounties":[],"regions":"Sales Representative","order":2}
-{"_type":"representative","_id":"rep-cason-gwinnup","name":"Cason Gwinnup","slug":{"_type":"slug","current":"cason-gwinnup"},"role":"Aftermarket Sales","phone":"801-664-2438","email":"Casong@wcubedinc.com","states":["All Territories"],"servedStates":["UT","NV","ID","WY"],"servedCounties":[],"regions":"Application Engineer/Project Manager","order":3}
-{"_type":"representative","_id":"rep-robert-haws","name":"Robert Haws","slug":{"_type":"slug","current":"robert-haws"},"role":"Parts","phone":"385-270-6128","email":"Roberth@wcubedinc.com","states":["All Territories"],"servedStates":["UT","NV","ID","WY"],"servedCounties":[],"regions":"Application Engineer/Project Manager","order":4}
+{"_type":"state","_id":"state-ut","name":"Utah","code":"UT","order":1}
+{"_type":"state","_id":"state-nv","name":"Nevada","code":"NV","order":2}
+{"_type":"state","_id":"state-id","name":"Idaho","code":"ID","order":3}
+{"_type":"state","_id":"state-wy","name":"Wyoming","code":"WY","order":4}
+{"_type":"county","_id":"county-ut-beaver","name":"Beaver","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-box-elder","name":"Box Elder","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-cache","name":"Cache","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-carbon","name":"Carbon","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-daggett","name":"Daggett","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-davis","name":"Davis","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-duchesne","name":"Duchesne","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-emery","name":"Emery","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-garfield","name":"Garfield","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-grand","name":"Grand","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-iron","name":"Iron","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-juab","name":"Juab","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-kane","name":"Kane","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-millard","name":"Millard","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-morgan","name":"Morgan","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-piute","name":"Piute","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-rich","name":"Rich","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-salt-lake","name":"Salt Lake","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-san-juan","name":"San Juan","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-sanpete","name":"Sanpete","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-sevier","name":"Sevier","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-summit","name":"Summit","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-tooele","name":"Tooele","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-uintah","name":"Uintah","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-utah","name":"Utah","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-wasatch","name":"Wasatch","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-washington","name":"Washington","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-wayne","name":"Wayne","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-ut-weber","name":"Weber","state":{"_type":"reference","_ref":"state-ut"}}
+{"_type":"county","_id":"county-nv-carson-city","name":"Carson City","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-churchill","name":"Churchill","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-clark","name":"Clark","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-douglas","name":"Douglas","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-elko","name":"Elko","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-esmeralda","name":"Esmeralda","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-eureka","name":"Eureka","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-humboldt","name":"Humboldt","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-lander","name":"Lander","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-lincoln","name":"Lincoln","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-lyon","name":"Lyon","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-mineral","name":"Mineral","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-nye","name":"Nye","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-pershing","name":"Pershing","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-storey","name":"Storey","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-washoe","name":"Washoe","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-nv-white-pine","name":"White Pine","state":{"_type":"reference","_ref":"state-nv"}}
+{"_type":"county","_id":"county-id-ada","name":"Ada","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-adams","name":"Adams","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-bannock","name":"Bannock","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-bear-lake","name":"Bear Lake","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-benewah","name":"Benewah","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-bingham","name":"Bingham","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-blaine","name":"Blaine","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-boise","name":"Boise","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-bonner","name":"Bonner","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-bonneville","name":"Bonneville","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-boundary","name":"Boundary","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-butte","name":"Butte","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-camas","name":"Camas","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-canyon","name":"Canyon","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-caribou","name":"Caribou","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-cassia","name":"Cassia","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-clark","name":"Clark","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-clearwater","name":"Clearwater","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-custer","name":"Custer","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-elmore","name":"Elmore","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-franklin","name":"Franklin","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-fremont","name":"Fremont","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-gem","name":"Gem","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-gooding","name":"Gooding","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-idaho","name":"Idaho","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-jefferson","name":"Jefferson","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-jerome","name":"Jerome","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-kootenai","name":"Kootenai","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-latah","name":"Latah","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-lemhi","name":"Lemhi","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-lewis","name":"Lewis","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-lincoln","name":"Lincoln","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-madison","name":"Madison","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-minidoka","name":"Minidoka","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-nez-perce","name":"Nez Perce","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-oneida","name":"Oneida","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-owyhee","name":"Owyhee","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-payette","name":"Payette","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-power","name":"Power","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-shoshone","name":"Shoshone","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-teton","name":"Teton","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-twin-falls","name":"Twin Falls","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-valley","name":"Valley","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-id-washington","name":"Washington","state":{"_type":"reference","_ref":"state-id"}}
+{"_type":"county","_id":"county-wy-albany","name":"Albany","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-big-horn","name":"Big Horn","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-campbell","name":"Campbell","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-carbon","name":"Carbon","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-converse","name":"Converse","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-crook","name":"Crook","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-fremont","name":"Fremont","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-goshen","name":"Goshen","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-hot-springs","name":"Hot Springs","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-johnson","name":"Johnson","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-laramie","name":"Laramie","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-lincoln","name":"Lincoln","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-natrona","name":"Natrona","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-niobrara","name":"Niobrara","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-park","name":"Park","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-platte","name":"Platte","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-sheridan","name":"Sheridan","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-sublette","name":"Sublette","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-sweetwater","name":"Sweetwater","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-teton","name":"Teton","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-uinta","name":"Uinta","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-washakie","name":"Washakie","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"county","_id":"county-wy-weston","name":"Weston","state":{"_type":"reference","_ref":"state-wy"}}
+{"_type":"representative","_id":"rep-brad-gwinnup","name":"Brad Gwinnup","slug":{"_type":"slug","current":"brad-gwinnup"},"role":"Utah, Nevada","phone":"801-232-8241","email":"Bradg@wcubedinc.com","servedStates":[{"_type":"reference","_ref":"state-ut"},{"_type":"reference","_ref":"state-nv"}],"servedCounties":[],"regions":"President","order":1}
+{"_type":"representative","_id":"rep-austin-gwinnup","name":"Austin Gwinnup","slug":{"_type":"slug","current":"austin-gwinnup"},"role":"Idaho, Wyoming","phone":"801-803-8558","email":"Austing@wcubedinc.com","servedStates":[{"_type":"reference","_ref":"state-id"},{"_type":"reference","_ref":"state-wy"}],"servedCounties":[],"regions":"Sales Representative","order":2}
+{"_type":"representative","_id":"rep-cason-gwinnup","name":"Cason Gwinnup","slug":{"_type":"slug","current":"cason-gwinnup"},"role":"Aftermarket Sales","phone":"801-664-2438","email":"Casong@wcubedinc.com","servedStates":[{"_type":"reference","_ref":"state-ut"},{"_type":"reference","_ref":"state-nv"},{"_type":"reference","_ref":"state-id"},{"_type":"reference","_ref":"state-wy"}],"servedCounties":[],"regions":"Application Engineer/Project Manager","order":3}
+{"_type":"representative","_id":"rep-robert-haws","name":"Robert Haws","slug":{"_type":"slug","current":"robert-haws"},"role":"Parts","phone":"385-270-6128","email":"Roberth@wcubedinc.com","servedStates":[{"_type":"reference","_ref":"state-ut"},{"_type":"reference","_ref":"state-nv"},{"_type":"reference","_ref":"state-id"},{"_type":"reference","_ref":"state-wy"}],"servedCounties":[],"regions":"Application Engineer/Project Manager","order":4}
 {"_type":"manufacturer","_id":"manufacturer-ksb","name":"KSB","slug":{"_type":"slug","current":"ksb"},"category":"Pumps & Mixers","description":"Leading manufacturer of pumps, valves, and systems for water transport and treatment.","specialty":"Municipal & Industrial Pumping & Mixing","keyProducts":["Submersible Motor Pumps","Pump Mixing Systems","Vertical Turbine Pumps"],"website":"https://www.ksb.com/en-us/product/product-catalog","featured":false,"order":1}
 {"_type":"manufacturer","_id":"manufacturer-kaeser","name":"Kaeser Blowers","slug":{"_type":"slug","current":"kaeser"},"category":"Blowers & Aeration","description":"Premium compressed air systems and blowers for water treatment applications.","specialty":"Compressed Air & Blower Systems","keyProducts":["Rotary Lobe Blowers","Rotary Screw Blowers","Turbo Blowers"],"website":"https://us.kaeser.com/products-and-solutions/blowers/","featured":false,"order":2}
 {"_type":"manufacturer","_id":"manufacturer-pratt","name":"Pratt Valves","slug":{"_type":"slug","current":"pratt"},"category":"Valves & Flow Control","description":"Comprehensive valve solutions for water and wastewater applications.","specialty":"Water & Wastewater Valves","keyProducts":["Butterfly Valves","Gate Valves","Check Valves"],"website":"https://www.henrypratt.com/products/","featured":false,"order":3}
