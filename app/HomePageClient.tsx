@@ -124,16 +124,12 @@ const defaultHero: HeroContent = {
   secondaryCta: { label: "Browse Equipment", href: "/manufacturers" },
 };
 
-export default function WCubedLanding({
-  hero,
-  stats,
-  manufacturers,
-  highlights,
-}: HomePageProps) {
+export default function WCubedLanding({ hero, stats, manufacturers, highlights }: HomePageProps) {
   const heroData = { ...defaultHero, ...(hero || {}) };
   const heroImageSrc: string = heroData.heroImage ?? "/hero-image.png";
   const statsData = stats && stats.length ? stats : defaultStats;
-  const manufacturersData = manufacturers && manufacturers.length ? manufacturers : defaultManufacturers;
+  const manufacturersData =
+    manufacturers && manufacturers.length ? manufacturers : defaultManufacturers;
   const projectHighlights = highlights && highlights.length ? highlights : defaultHighlights;
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -183,11 +179,7 @@ export default function WCubedLanding({
                 )}
               </div>
               <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-[#1C4E80] leading-tight mt-8">
-                {heroData.title ? (
-                  heroData.title
-                ) : (
-                  <HeroHeadline />
-                )}
+                {heroData.title ? heroData.title : <HeroHeadline />}
                 <span className="text-2xl sm:text-3xl font-semibold tracking-wide text-[#4986C8] flex flex-wrap items-baseline gap-3 mt-2">
                   <span>serving</span>
                   <span className="whitespace-nowrap">UT</span>
@@ -615,47 +607,49 @@ export default function WCubedLanding({
                   const imageSrc = project.image ?? "/placeholder.svg";
                   const states = project.states ?? [];
                   return (
-                  <div key={index} className="w-full flex-shrink-0 px-4">
-                    <Card className="max-w-2xl mx-auto overflow-hidden">
-                      <div className="md:flex">
-                        <div className="md:w-1/2">
-                          <Image
+                    <div key={index} className="w-full flex-shrink-0 px-4">
+                      <Card className="max-w-2xl mx-auto overflow-hidden">
+                        <div className="md:flex">
+                          <div className="md:w-1/2">
+                            <Image
                               src={imageSrc}
-                            alt={project.title}
-                            width={300}
-                            height={200}
-                            className="w-full h-48 md:h-full object-cover"
-                          />
-                        </div>
-                        <div className="md:w-1/2 p-6">
-                          <Badge variant="secondary" className="mb-3">
-                            {project.category}
-                          </Badge>
-                          <CardTitle className="text-xl mb-3 text-[#123D6A]">
-                            {project.title}
-                          </CardTitle>
-                          <CardDescription className="mb-4">{project.description}</CardDescription>
-                          <div className="flex items-center justify-between gap-4">
-                            <div className="flex gap-1">
-                              {states.map((state, idx) => (
-                                <Badge key={idx} variant="outline" className="text-xs">
-                                  {state}
-                                </Badge>
-                              ))}
+                              alt={project.title}
+                              width={300}
+                              height={200}
+                              className="w-full h-48 md:h-full object-cover"
+                            />
+                          </div>
+                          <div className="md:w-1/2 p-6">
+                            <Badge variant="secondary" className="mb-3">
+                              {project.category}
+                            </Badge>
+                            <CardTitle className="text-xl mb-3 text-[#123D6A]">
+                              {project.title}
+                            </CardTitle>
+                            <CardDescription className="mb-4">
+                              {project.description}
+                            </CardDescription>
+                            <div className="flex items-center justify-between gap-4">
+                              <div className="flex gap-1">
+                                {states.map((state, idx) => (
+                                  <Badge key={idx} variant="outline" className="text-xs">
+                                    {state}
+                                  </Badge>
+                                ))}
+                              </div>
+                              <Link href="/manufacturers">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-[#4986C8] border-[#4986C8] hover:bg-[#4986C8] hover:text-white bg-transparent"
+                                >
+                                  View Solutions
+                                </Button>
+                              </Link>
                             </div>
-                            <Link href="/manufacturers">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="text-[#4986C8] border-[#4986C8] hover:bg-[#4986C8] hover:text-white bg-transparent"
-                              >
-                                View Solutions
-                              </Button>
-                            </Link>
                           </div>
                         </div>
-                      </div>
-                    </Card>
+                      </Card>
                     </div>
                   );
                 })}
@@ -766,7 +760,10 @@ function WordWithAccent({ text }: { text: string }) {
             {startsWithW ? (
               <>
                 <span className="relative inline-block font-extrabold">
-                  <span className="inline-block" style={{ borderBottom: '4px solid #4986C8', paddingBottom: '2px' }}>
+                  <span
+                    className="inline-block"
+                    style={{ borderBottom: "4px solid #4986C8", paddingBottom: "2px" }}
+                  >
                     {word[0]}
                   </span>
                 </span>
