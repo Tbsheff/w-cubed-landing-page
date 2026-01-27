@@ -1,0 +1,9 @@
+name = "w-cubed-landing-page"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = ".vercel/output/static"
+
+[env.production]
+vars = { NODE_ENV = "production" }
+
+# Enable Node.js compatibility for certain libraries
+compatibility_flags = ["nodejs_compat"]
