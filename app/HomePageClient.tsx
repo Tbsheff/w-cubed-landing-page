@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PageWrapper } from "@/components/page-wrapper";
 import { territoryRepresentatives } from "@/lib/representatives";
 
@@ -99,11 +99,11 @@ const defaultHighlights: HighlightItem[] = [
     states: ["UT", "ID"],
   },
   {
-    title: "Commercial & Infrastructure",
+    title: "Pretreatment & Infrastructure",
     description:
-      "Reliable pumping and treatment systems for commercial developments, resorts, and infrastructure projects.",
-    image: "/placeholder.svg?height=200&width=300&text=Commercial+Project",
-    category: "Commercial",
+      "Reliable pumping and treatment systems for pretreatment facilities, resorts, and infrastructure projects.",
+    image: "/placeholder.svg?height=200&width=300&text=Pretreatment+Project",
+    category: "Pretreatment",
     states: ["NV", "WY"],
   },
 ];
@@ -133,6 +133,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
   const projectHighlights = highlights && highlights.length ? highlights : defaultHighlights;
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [manufacturerSlide, setManufacturerSlide] = useState(0);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % projectHighlights.length);
@@ -141,6 +142,22 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + projectHighlights.length) % projectHighlights.length);
   };
+
+  const nextManufacturer = () => {
+    setManufacturerSlide((prev) => (prev + 1) % Math.ceil(manufacturersData.length / 5));
+  };
+
+  const prevManufacturer = () => {
+    setManufacturerSlide((prev) => (prev - 1 + Math.ceil(manufacturersData.length / 5)) % Math.ceil(manufacturersData.length / 5));
+  };
+
+  // Auto-rotate manufacturer carousel every 8 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setManufacturerSlide((prev) => (prev + 1) % Math.ceil(manufacturersData.length / 5));
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [manufacturersData.length]);
 
   return (
     <PageWrapper>
@@ -289,66 +306,105 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
         </div>
       </section>
 
-      {/* Manufacturer Logo Strip */}
-      <section id="manufacturers" className="py-16 bg-slate-50">
+      {/* Manufacturer Logo Carousel */}
+      <section id="manufacturers" className="py-24 bg-slate-50">
         <div className="container mx-auto px-4 lg:px-6">
-          <motion.div className="text-center space-y-4 mb-12" {...fadeInUp}>
-            <h2 className="text-2xl font-bold text-[#123D6A]">Trusted Manufacturing Partners</h2>
-            <p className="text-muted-foreground">
+          <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
+            <h2 className="text-3xl font-bold text-[#123D6A]">Trusted Manufacturing Partners</h2>
+            <p className="text-lg text-muted-foreground">
               We represent industry-leading manufacturers of water-process equipment
             </p>
           </motion.div>
 
-          <motion.div
-            className="flex flex-wrap justify-center items-center gap-8 md:gap-12"
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-          >
-            {manufacturersData.map((manufacturer) => (
-              <motion.div
-                key={manufacturer.id}
-                variants={fadeInUp}
-                className="grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
+          <div className="relative">
+            <motion.div
+              className="overflow-hidden"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <div
+                className="flex transition-transform duration-700 ease-in-out"
+                style={{ transform: `translateX(-${manufacturerSlide * 100}%)` }}
               >
-                <Link href={`/manufacturers/${manufacturer.id}`}>
-                  {manufacturer.id === "veolia-suez" ? (
-                    <div className="flex items-center gap-3 cursor-pointer">
-                      <Image
-                        src="/manufacturers/veolia-capsule-logo.svg"
-                        alt="Veolia logo"
-                        width={100}
-                        height={70}
-                        className="h-12 w-auto object-contain"
-                      />
-                      <Image
-                        src="/manufacturers/suez-logo.png"
-                        alt="Suez logo"
-                        width={80}
-                        height={60}
-                        className="h-8 w-auto object-contain"
-                      />
+                {Array.from({ length: Math.ceil(manufacturersData.length / 5) }).map((_, slideIndex) => (
+                  <div key={slideIndex} className="w-full flex-shrink-0">
+                    <div className="flex justify-center items-center gap-12 md:gap-16 lg:gap-20 px-6">
+                      {manufacturersData
+                        .slice(slideIndex * 5, slideIndex * 5 + 5)
+                        .map((manufacturer) => (
+                          <motion.div
+                            key={manufacturer.id}
+                            className="hover:scale-105 transition-all duration-300 hover:drop-shadow-lg flex items-center justify-center"
+                            whileHover={{ y: -5 }}
+                          >
+                            <Link href={`/manufacturers/${manufacturer.id}`}>
+                              {manufacturer.id === "veolia-suez" ? (
+                                <div className="flex items-center gap-3 cursor-pointer">
+                                  <Image
+                                    src="/manufacturers/veolia-capsule-logo.svg"
+                                    alt="Veolia logo"
+                                    width={120}
+                                    height={80}
+                                    className="h-16 w-auto object-contain"
+                                  />
+                                  <Image
+                                    src="/manufacturers/suez-logo.png"
+                                    alt="Suez logo"
+                                    width={100}
+                                    height={70}
+                                    className="h-12 w-auto object-contain"
+                                  />
+                                </div>
+                              ) : (
+                                <Image
+                                  src={manufacturer.logo}
+                                  alt={`${manufacturer.name} logo`}
+                                  width={180}
+                                  height={90}
+                                  className="object-contain cursor-pointer max-h-16 w-auto"
+                                />
+                              )}
+                            </Link>
+                          </motion.div>
+                        ))}
                     </div>
-                  ) : (
-                    <Image
-                      src={manufacturer.logo}
-                      alt={`${manufacturer.name} logo`}
-                      width={120}
-                      height={60}
-                      className={`object-contain cursor-pointer ${
-                        manufacturer.id === "pentair-fairbanks"
-                          ? "max-h-16"
-                          : manufacturer.id === "fournier"
-                            ? "max-h-10"
-                            : "max-h-12"
-                      } w-auto`}
-                    />
-                  )}
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Navigation arrows */}
+            <button
+              onClick={prevManufacturer}
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-slate-50 transition-colors z-10"
+              aria-label="Previous manufacturers"
+            >
+              <ChevronLeft className="h-6 w-6 text-[#123D6A]" />
+            </button>
+            <button
+              onClick={nextManufacturer}
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-slate-50 transition-colors z-10"
+              aria-label="Next manufacturers"
+            >
+              <ChevronRight className="h-6 w-6 text-[#123D6A]" />
+            </button>
+
+            {/* Dot indicators */}
+            <div className="flex justify-center mt-8 space-x-2">
+              {Array.from({ length: Math.ceil(manufacturersData.length / 5) }).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setManufacturerSlide(index)}
+                  className={`w-2.5 h-2.5 rounded-full transition-all ${
+                    index === manufacturerSlide ? "bg-[#4986C8] w-8" : "bg-slate-300"
+                  }`}
+                  aria-label={`Go to manufacturer slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -422,7 +478,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Comprehensive water treatment and process equipment solutions for municipal,
-              industrial, and commercial applications
+              industrial, and pretreatment applications
             </p>
           </motion.div>
 
@@ -442,7 +498,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               {
                 icon: Package,
                 title: "Pumping Systems",
-                description: "High-efficiency pumps for all water applications",
+                description: "High-efficiency pumps and local control panels for pumping applications",
               },
               {
                 icon: Wrench,
