@@ -166,10 +166,10 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <section className="relative flex items-center overflow-hidden py-8 md:py-12 lg:py-20">
+      <section className="relative flex items-center overflow-hidden py-12 md:py-16 lg:py-24">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-brand-light/5" />
         <div className="container mx-auto px-4 lg:px-6 relative w-full">
-          <div className="grid lg:grid-cols-2 gap-6 md:gap-12 items-start">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
             <motion.div
               className="space-y-4 md:space-y-6 relative z-10"
               initial={{ opacity: 0, x: -60 }}
@@ -177,14 +177,14 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               transition={{ duration: 0.8 }}
             >
               {/* Large Logo with Veteran Badge */}
-              <div className="flex flex-col items-center lg:items-start gap-6 lg:gap-8 mb-8 lg:mb-12">
+              <div className="flex flex-col items-center lg:items-start gap-6 lg:gap-8 mb-6 lg:mb-10">
                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
                   <Image
                     src="/logo.png"
                     alt="W-Cubed"
                     width={550}
                     height={132}
-                    className="h-auto w-auto max-w-[280px] sm:max-w-[350px] lg:max-w-[450px]"
+                    className="h-auto w-auto max-w-[260px] sm:max-w-[320px] lg:max-w-[400px]"
                     priority
                   />
                   <div className="bg-brand/10 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full">
@@ -335,14 +335,14 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                 {Array.from({ length: Math.ceil(manufacturersData.length / 5) }).map(
                   (_, slideIndex) => (
                     <div key={slideIndex} className="w-full flex-shrink-0">
-                      <div className="flex justify-center items-center gap-12 md:gap-16 lg:gap-20 px-6">
+                      <div className="flex justify-center items-center gap-8 md:gap-10 lg:gap-12 px-6">
                         {manufacturersData
                           .slice(slideIndex * 5, slideIndex * 5 + 5)
                           .map((manufacturer) => (
                             <motion.div
                               key={manufacturer.id}
-                              className="hover:scale-105 transition-all duration-300 hover:drop-shadow-lg flex items-center justify-center"
-                              whileHover={{ y: -5 }}
+                              className="hover:scale-102 transition-all duration-300 hover:drop-shadow-md flex items-center justify-center"
+                              whileHover={{ y: -3 }}
                             >
                               <Link href={`/manufacturers/${manufacturer.id}`}>
                                 {manufacturer.id === "veolia-suez" ? (
@@ -384,27 +384,27 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             {/* Navigation arrows */}
             <button
               onClick={prevManufacturer}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-slate-50 transition-colors z-10"
+              className="absolute -left-4 lg:-left-12 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-slate-50 transition-colors z-10"
               aria-label="Previous manufacturers"
             >
               <ChevronLeft className="h-6 w-6 text-brand-deep" />
             </button>
             <button
               onClick={nextManufacturer}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-slate-50 transition-colors z-10"
+              className="absolute -right-4 lg:-right-12 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-slate-50 transition-colors z-10"
               aria-label="Next manufacturers"
             >
               <ChevronRight className="h-6 w-6 text-brand-deep" />
             </button>
 
             {/* Dot indicators */}
-            <div className="flex justify-center mt-8 space-x-2">
+            <div className="flex justify-center mt-8 space-x-3">
               {Array.from({ length: Math.ceil(manufacturersData.length / 5) }).map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setManufacturerSlide(index)}
-                  className={`w-2.5 h-2.5 rounded-full transition-all ${
-                    index === manufacturerSlide ? "bg-brand-accent w-8" : "bg-slate-300"
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    index === manufacturerSlide ? "bg-brand-accent" : "bg-slate-300"
                   }`}
                   aria-label={`Go to manufacturer slide ${index + 1}`}
                 />
