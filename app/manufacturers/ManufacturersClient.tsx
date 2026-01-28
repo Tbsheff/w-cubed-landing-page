@@ -73,13 +73,13 @@ export default function ManufacturersClient({ manufacturers }: Props) {
     <PageWrapper>
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-[#95C6EC]/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-brand-light/5" />
         <div className="container mx-auto px-4 lg:px-6 relative">
           <motion.div className="text-center space-y-6 max-w-4xl mx-auto" {...fadeInUp}>
-            <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
+            <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Partners
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-[#1C4E80]">
+            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand">
               Trusted Manufacturing Partners
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -117,7 +117,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                     onClick={() => setSelectedCategory(category)}
                     className={
                       selectedCategory === category
-                        ? "bg-[#4986C8] hover:bg-[#4986C8]/90"
+                        ? "bg-brand-accent hover:bg-brand-accent/90"
                         : "bg-transparent"
                     }
                   >
@@ -132,7 +132,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                   type="button"
                   onClick={() => setViewMode("grid")}
                   className={
-                    viewMode === "grid" ? "bg-[#4986C8] hover:bg-[#4986C8]/90" : "bg-transparent"
+                    viewMode === "grid" ? "bg-brand-accent hover:bg-brand-accent/90" : "bg-transparent"
                   }
                 >
                   <Grid className="h-4 w-4" />
@@ -143,7 +143,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                   type="button"
                   onClick={() => setViewMode("list")}
                   className={
-                    viewMode === "list" ? "bg-[#4986C8] hover:bg-[#4986C8]/90" : "bg-transparent"
+                    viewMode === "list" ? "bg-brand-accent hover:bg-brand-accent/90" : "bg-transparent"
                   }
                 >
                   <List className="h-4 w-4" />
@@ -190,7 +190,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                               className="object-contain max-h-20 w-auto"
                             />
                           </div>
-                          <CardTitle className="text-xl text-[#1C4E80]">
+                          <CardTitle className="text-xl text-brand">
                             {manufacturer.name}
                           </CardTitle>
                           {manufacturer.category && (
@@ -203,7 +203,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                           </CardDescription>
                           {manufacturer.keyProducts && manufacturer.keyProducts.length > 0 && (
                             <div>
-                              <h4 className="font-semibold text-sm text-[#1C4E80] mb-2">
+                              <h4 className="font-semibold text-sm text-brand mb-2">
                                 Key Products:
                               </h4>
                               <div className="flex flex-wrap gap-1">
@@ -256,7 +256,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                             </div>
                             <div className="flex-grow space-y-3">
                               <div className="flex items-center gap-3">
-                                <h3 className="text-xl font-bold text-[#1C4E80]">
+                                <h3 className="text-xl font-bold text-brand">
                                   {manufacturer.name}
                                 </h3>
                                 {manufacturer.category && (
@@ -266,7 +266,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                               <p className="text-muted-foreground">{manufacturer.description}</p>
                               {manufacturer.specialty && (
                                 <div>
-                                  <span className="font-semibold text-sm text-[#1C4E80]">
+                                  <span className="font-semibold text-sm text-brand">
                                     Specialty:{" "}
                                   </span>
                                   <span className="text-sm">{manufacturer.specialty}</span>
@@ -330,7 +330,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-[#123D6A]">
+      <section className="py-20 bg-brand-deep">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
             <h2 className="text-3xl lg:text-4xl font-bold">Need Help Choosing Equipment?</h2>
@@ -338,7 +338,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
               Our experienced team can help you select the right manufacturer and equipment for your
               specific needs.
             </p>
-            <Button asChild size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90">
+            <Button asChild size="lg" className="bg-brand-accent hover:bg-brand-accent/90">
               <Link href="/contact">Contact Your Rep</Link>
             </Button>
           </motion.div>

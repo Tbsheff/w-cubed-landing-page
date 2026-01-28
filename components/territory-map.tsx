@@ -90,7 +90,7 @@ export function TerritoryMap() {
 
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="bg-[#1FA9A4] hover:bg-[#1FA9A4]/90">Find Your Rep</Button>
+          <Button className="bg-brand-accent hover:bg-brand-accent/90">Find Your Rep</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -132,7 +132,7 @@ export function TerritoryMap() {
               <label className="text-sm font-medium">Brief Message</label>
               <Textarea placeholder="Tell us about your water-process equipment needs..." rows={3} />
             </div>
-            <Button className="w-full bg-[#1FA9A4] hover:bg-[#1FA9A4]/90">Contact My Rep</Button>
+            <Button className="w-full bg-brand-accent hover:bg-brand-accent/90">Contact My Rep</Button>
           </form>
         </DialogContent>
       </Dialog>

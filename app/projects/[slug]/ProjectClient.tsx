@@ -39,7 +39,7 @@ export default function ProjectClient({ project }: ProjectClientProps) {
             <section className="py-6 bg-slate-50">
                 <div className="container mx-auto px-4 lg:px-6">
                     <motion.div className="flex items-center space-x-2 text-sm" {...fadeInUp}>
-                        <Link href="/projects" className="flex items-center text-[#1FA9A4] hover:underline">
+                        <Link href="/projects" className="flex items-center text-brand-accent hover:underline">
                             <ArrowLeft className="h-4 w-4 mr-1" />
                             Back to Projects
                         </Link>
@@ -53,13 +53,13 @@ export default function ProjectClient({ project }: ProjectClientProps) {
                     <div className="max-w-4xl mx-auto">
                         <motion.div className="space-y-6" {...fadeInUp}>
                             {tags.length > 0 && (
-                                <Badge variant="outline" className="border-[#1FA9A4]/30 text-[#123D6A] flex items-center gap-1">
+                                <Badge variant="outline" className="border-brand-accent/30 text-brand-deep flex items-center gap-1">
                                     <MapPin className="h-3 w-3" />
                                     {tags[0]}
                                 </Badge>
                             )}
 
-                            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-[#123D6A]">{project.title}</h1>
+                            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-brand-deep">{project.title}</h1>
 
                             {project.excerpt && <p className="text-xl text-muted-foreground">{project.excerpt}</p>}
 
@@ -120,7 +120,7 @@ export default function ProjectClient({ project }: ProjectClientProps) {
                     <div className="max-w-4xl mx-auto">
                         <div className="grid lg:grid-cols-4 gap-12">
                             <motion.div
-                                className="lg:col-span-3 prose prose-lg max-w-none prose-headings:text-[#123D6A] prose-a:text-[#1FA9A4] prose-blockquote:border-l-[#1FA9A4] prose-blockquote:bg-slate-50 prose-blockquote:p-4 prose-blockquote:rounded-r-lg"
+                                className="lg:col-span-3 prose prose-lg max-w-none prose-headings:text-brand-deep prose-a:text-brand-accent prose-blockquote:border-l-brand-accent prose-blockquote:bg-slate-50 prose-blockquote:p-4 prose-blockquote:rounded-r-lg"
                                 initial={{ opacity: 0, x: -30 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.8 }}
@@ -141,7 +141,7 @@ export default function ProjectClient({ project }: ProjectClientProps) {
                             >
                                 <div className="sticky top-24 space-y-8">
                                     <Card className="p-6">
-                                        <h3 className="font-semibold text-[#123D6A] mb-4">
+                                        <h3 className="font-semibold text-brand-deep mb-4">
                                             Project Details
                                         </h3>
                                         {tags.length > 0 && (
@@ -157,12 +157,12 @@ export default function ProjectClient({ project }: ProjectClientProps) {
 
                                     <Card className="p-6">
                                         <Link href="/contact">
-                                            <Button className="w-full bg-[#1FA9A4] hover:bg-[#1FA9A4]/90">
+                                            <Button className="w-full bg-brand-accent hover:bg-brand-accent/90">
                                                 Request Info
                                             </Button>
                                         </Link>
                                         <div className="flex justify-center mt-3">
-                                            <Link href="/projects" className="text-sm text-muted-foreground hover:text-[#1FA9A4] flex items-center">
+                                            <Link href="/projects" className="text-sm text-muted-foreground hover:text-brand-accent flex items-center">
                                                 Back to projects
                                                 <ArrowRight className="h-3 w-3 ml-1" />
                                             </Link>

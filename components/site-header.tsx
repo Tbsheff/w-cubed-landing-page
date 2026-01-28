@@ -64,8 +64,8 @@ export function SiteHeader() {
                     priority
                   />
                 </Link>
-                <div className="bg-[#1C4E80]/10 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full">
-                  <span className="text-[8px] sm:text-[10px] font-semibold text-[#1C4E80] uppercase tracking-wide whitespace-nowrap">
+                <div className="bg-brand/10 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full">
+                  <span className="text-[8px] sm:text-[10px] font-semibold text-brand uppercase tracking-wide whitespace-nowrap">
                     Veteran Owned & Operated
                   </span>
                 </div>
@@ -82,12 +82,12 @@ export function SiteHeader() {
               href={item.path}
               className={cn(
                 "relative text-sm font-medium transition-colors",
-                pathname === item.path ? "text-[#4986C8]" : "hover:text-[#4986C8]"
+                pathname === item.path ? "text-brand-accent" : "hover:text-brand-accent"
               )}
             >
               {item.name}
               {pathname === item.path && (
-                <span className="absolute left-0 right-0 bottom-[-1px] h-[2px] bg-[#4986C8]" />
+                <span className="absolute left-0 right-0 bottom-[-1px] h-[2px] bg-brand-accent" />
               )}
             </Link>
           ))}
@@ -106,7 +106,7 @@ export function SiteHeader() {
         </div>
 
         <div className="hidden md:block">
-          <Button className="bg-[#4986C8] hover:bg-[#4986C8]/90">
+          <Button className="bg-brand-accent hover:bg-brand-accent/90">
             <Link href="/contact">Contact Your Rep</Link>
           </Button>
         </div>
@@ -131,15 +131,15 @@ export function SiteHeader() {
                     className={cn(
                       "text-sm font-medium transition-colors p-2 rounded-md",
                       pathname === item.path
-                        ? "text-[#4986C8] bg-[#4986C8]/10"
-                        : "hover:text-[#4986C8] hover:bg-[#4986C8]/5"
+                        ? "text-brand-accent bg-brand-accent/10"
+                        : "hover:text-brand-accent hover:bg-brand-accent/5"
                     )}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.name}
                   </Link>
                 ))}
-                <Button className="bg-[#4986C8] hover:bg-[#4986C8]/90 mt-2">
+                <Button className="bg-brand-accent hover:bg-brand-accent/90 mt-2">
                   <Link href="/contact">Contact Your Rep</Link>
                 </Button>
               </nav>

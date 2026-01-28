@@ -633,9 +633,9 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
 
   const drawerContent = (
     <div className="space-y-6">
-      <div className="rounded-xl border border-[#1C4E80]/15 bg-[#1C4E80]/5 p-4">
+      <div className="rounded-xl border border-brand/15 bg-brand/5 p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <span className="text-sm font-semibold text-[#1C4E80]">Color by</span>
+          <span className="text-sm font-semibold text-brand">Color by</span>
           <div className="flex items-center gap-2" role="radiogroup" aria-label="Color counties by">
             {(
               [
@@ -651,10 +651,10 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                 onClick={() => setColorMode(item.value)}
                 aria-pressed={colorMode === item.value}
                 className={clsx(
-                  "rounded-full border-[#1C4E80]/30 px-3",
+                  "rounded-full border-brand/30 px-3",
                   colorMode === item.value
-                    ? "bg-[#1C4E80] text-white hover:bg-[#1C4E80]/90"
-                    : "bg-white/70 text-[#1C4E80] hover:bg-[#1C4E80]/10"
+                    ? "bg-brand text-white hover:bg-brand/90"
+                    : "bg-white/70 text-brand hover:bg-brand/10"
                 )}
               >
                 {item.label}
@@ -671,7 +671,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
               size="sm"
               onClick={() => handleStateChipClick(state.code)}
               aria-label={`Zoom to ${state.name}`}
-              className="border-[#1C4E80]/20 bg-white/70 text-[#1C4E80] hover:bg-[#1C4E80]/10"
+              className="border-brand/20 bg-white/70 text-brand hover:bg-brand/10"
             >
               {state.code}
             </Button>
@@ -685,20 +685,20 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
             aria-label="Search county"
             className="bg-white pr-12"
           />
-          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#1C4E80]" />
+          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand" />
           {searchQuery && (
             <button
               type="button"
               onClick={clearSearch}
               aria-label="Clear search"
-              className="absolute inset-y-0 right-8 flex items-center text-[#4986C8]"
+              className="absolute inset-y-0 right-8 flex items-center text-brand-accent"
             >
               <X className="h-4 w-4" />
             </button>
           )}
         </form>
         {debouncedSearch && filteredSearchResults.length > 0 && (
-          <div className="mt-3 rounded-lg border border-[#1C4E80]/10 bg-white shadow-sm">
+          <div className="mt-3 rounded-lg border border-brand/10 bg-white shadow-sm">
             <ul
               role="listbox"
               aria-label="County search results"
@@ -708,7 +708,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                 <li key={county.id}>
                   <button
                     type="button"
-                    className="flex w-full items-center justify-between gap-4 px-3 py-2 text-left hover:bg-[#1C4E80]/5 focus:bg-[#1C4E80]/10 focus:outline-none"
+                    className="flex w-full items-center justify-between gap-4 px-3 py-2 text-left hover:bg-brand/5 focus:bg-brand/10 focus:outline-none"
                     onClick={() => {
                       handleSelectCounty(county.id);
                       setSearchQuery("");
@@ -718,10 +718,10 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                     onFocus={() => handleHoverCounty(county.id)}
                     onBlur={() => handleHoverCounty(null)}
                   >
-                    <span className="text-sm font-medium text-[#1C4E80]">
+                    <span className="text-sm font-medium text-brand">
                       {county.county} County
                     </span>
-                    <Badge variant="outline" className="border-[#1C4E80]/20 text-xs text-[#1C4E80]">
+                    <Badge variant="outline" className="border-brand/20 text-xs text-brand">
                       {county.state}
                     </Badge>
                   </button>
@@ -734,7 +734,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
 
       <div className="space-y-3">
         <div className="flex flex-col gap-1">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-[#1C4E80]">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-brand">
             Representative coverage
           </h3>
           <p className="text-xs text-muted-foreground">
@@ -754,8 +754,8 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                 className={clsx(
                   "flex items-start gap-3 rounded-xl border p-4 transition-colors",
                   isHighlighted
-                    ? "border-[#1C4E80] bg-[#1C4E80]/5"
-                    : "border-[#1C4E80]/10 bg-background"
+                    ? "border-brand bg-brand/5"
+                    : "border-brand/10 bg-background"
                 )}
               >
                 {rep.photoUrl ? (
@@ -767,17 +767,17 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                     className="h-14 w-14 flex-shrink-0 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-[#1C4E80]/10 text-base font-semibold text-[#1C4E80]">
+                  <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-brand/10 text-base font-semibold text-brand">
                     {rep.name.slice(0, 1)}
                   </div>
                 )}
                 <div className="flex-1 space-y-2">
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="text-sm font-semibold text-[#1C4E80]">{rep.name}</p>
+                      <p className="text-sm font-semibold text-brand">{rep.name}</p>
                       <Badge
                         variant="outline"
-                        className="border-[#1C4E80]/20 text-xs text-[#1C4E80]"
+                        className="border-brand/20 text-xs text-brand"
                       >
                         {totalCounties ? `${totalCounties} counties` : "Loading counties"}
                       </Badge>
@@ -786,7 +786,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                       {statesServed ? `Serving ${statesServed}` : "Coverage not specified"}
                     </p>
                   </div>
-                  <div className="flex flex-col gap-1 text-xs text-[#1C4E80]">
+                  <div className="flex flex-col gap-1 text-xs text-brand">
                     {rep.email && (
                       <a
                         href={`mailto:${rep.email}`}
@@ -812,14 +812,14 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       </div>
 
       {selectedCounty && (
-        <div className="space-y-4 rounded-xl border border-[#1C4E80]/20 bg-white p-4 shadow-sm">
+        <div className="space-y-4 rounded-xl border border-brand/20 bg-white p-4 shadow-sm">
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-semibold text-[#1C4E80]">
+                <h3 className="text-lg font-semibold text-brand">
                   {selectedCounty.county} County
                 </h3>
-                <Badge variant="outline" className="border-[#1C4E80]/20 text-xs text-[#1C4E80]">
+                <Badge variant="outline" className="border-brand/20 text-xs text-brand">
                   {selectedCounty.state}
                 </Badge>
               </div>
@@ -829,21 +829,21 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
               type="button"
               variant="ghost"
               size="sm"
-              className="h-8 px-2 text-[#1C4E80] hover:bg-[#1C4E80]/10"
+              className="h-8 px-2 text-brand hover:bg-brand/10"
               onClick={resetSelection}
             >
               <RefreshCcw className="mr-2 h-4 w-4" /> Reset
             </Button>
           </div>
 
-          <details className="rounded-lg border border-dashed border-[#1C4E80]/20 bg-[#1C4E80]/5 text-sm text-[#1C4E80]">
+          <details className="rounded-lg border border-dashed border-brand/20 bg-brand/5 text-sm text-brand">
             <summary className="flex cursor-pointer items-center justify-between px-3 py-2 font-medium">
               Counties served by this representative
-              <span className="text-xs text-[#1C4E80]/80">
+              <span className="text-xs text-brand/80">
                 {(selectedCounty.repSlug ? countiesByRep[selectedCounty.repSlug] ?? [] : []).length}
               </span>
             </summary>
-            <div className="border-t border-[#1C4E80]/10">
+            <div className="border-t border-brand/10">
               <div className="p-3">
                 <Input
                   value={countyListFilter}
@@ -863,8 +863,8 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                       key={county.id}
                       type="button"
                       className={clsx(
-                        "flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-[#1C4E80]/10 focus:bg-[#1C4E80]/10 focus:outline-none",
-                        county.id === selectedCountyId ? "bg-[#1C4E80]/15" : ""
+                        "flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-brand/10 focus:bg-brand/10 focus:outline-none",
+                        county.id === selectedCountyId ? "bg-brand/15" : ""
                       )}
                       onClick={() => handleSelectCounty(county.id, { animate: false })}
                       onMouseEnter={() => handleHoverCounty(county.id)}
@@ -875,7 +875,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                       <span>{county.county} County</span>
                       <Badge
                         variant="outline"
-                        className="border-[#1C4E80]/20 text-xs text-[#1C4E80]"
+                        className="border-brand/20 text-xs text-brand"
                       >
                         {county.state}
                       </Badge>
@@ -894,10 +894,10 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     <section ref={containerRef} className="relative py-16">
       <div className="container mx-auto px-4 lg:px-6">
         <div className="mb-10 max-w-2xl">
-          <Badge variant="outline" className="border-[#1C4E80]/30 text-[#1C4E80]">
+          <Badge variant="outline" className="border-brand/30 text-brand">
             Interactive Coverage
           </Badge>
-          <h2 className="mt-3 text-3xl font-bold text-[#1C4E80] md:text-4xl">
+          <h2 className="mt-3 text-3xl font-bold text-brand md:text-4xl">
             County-level Territory Explorer
           </h2>
           <p className="mt-2 text-lg text-muted-foreground">
@@ -994,7 +994,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
 
               {tooltip && (
                 <div
-                  className="pointer-events-none fixed z-50 rounded-md border border-[#1C4E80]/40 bg-[#1C4E80] px-3 py-1 text-xs font-medium text-white shadow-lg"
+                  className="pointer-events-none fixed z-50 rounded-md border border-brand/40 bg-brand px-3 py-1 text-xs font-medium text-white shadow-lg"
                   style={{ left: tooltip.x, top: tooltip.y }}
                 >
                   {tooltip.content}

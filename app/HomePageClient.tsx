@@ -167,7 +167,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
     <PageWrapper>
       {/* Hero Section */}
       <section className="relative flex items-center overflow-hidden py-8 md:py-12 lg:py-20">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-[#95C6EC]/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-brand-light/5" />
         <div className="container mx-auto px-4 lg:px-6 relative w-full">
           <div className="grid lg:grid-cols-2 gap-6 md:gap-12 items-start">
             <motion.div
@@ -187,21 +187,21 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                     className="h-auto w-auto max-w-[280px] sm:max-w-[350px] lg:max-w-[450px]"
                     priority
                   />
-                  <div className="bg-[#1C4E80]/10 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full">
-                    <span className="text-[10px] sm:text-xs font-semibold text-[#1C4E80] uppercase tracking-wide whitespace-nowrap">
+                  <div className="bg-brand/10 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full">
+                    <span className="text-[10px] sm:text-xs font-semibold text-brand uppercase tracking-wide whitespace-nowrap">
                       Veteran Owned & Operated
                     </span>
                   </div>
                 </div>
                 {heroData.badge && (
-                  <Badge variant="outline" className="border-[#1C4E80]/30 text-[#1C4E80]">
+                  <Badge variant="outline" className="border-brand/30 text-brand">
                     {heroData.badge}
                   </Badge>
                 )}
               </div>
-              <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-[#1C4E80] leading-tight mt-8">
+              <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-brand leading-tight mt-8">
                 <HeroHeadline />
-                <span className="text-2xl sm:text-3xl font-semibold tracking-wide text-[#4986C8] flex flex-wrap items-baseline gap-3 mt-2">
+                <span className="text-2xl sm:text-3xl font-semibold tracking-wide text-brand-accent flex flex-wrap items-baseline gap-3 mt-2">
                   <span>serving</span>
                   <span className="whitespace-nowrap">UT</span>
                   <span className="opacity-60">·</span>
@@ -222,7 +222,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                   <Link href={heroData.primaryCta.href}>
                     <Button
                       size="lg"
-                      className="bg-[#4986C8] hover:bg-[#4986C8]/90 text-lg px-8 py-4"
+                      className="bg-brand-accent hover:bg-brand-accent/90 text-lg px-8 py-4"
                     >
                       {heroData.primaryCta.label}
                       <ArrowRight className="ml-2 h-5 w-5" />
@@ -234,7 +234,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                     <Button
                       size="lg"
                       variant="outline"
-                      className="border-[#1C4E80] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white bg-transparent text-lg px-8 py-4"
+                      className="border-brand text-brand hover:bg-brand hover:text-white bg-transparent text-lg px-8 py-4"
                     >
                       {heroData.secondaryCta.label}
                     </Button>
@@ -262,11 +262,11 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                 {/* Simple floating badges */}
                 <div className="absolute -top-6 -left-6 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border">
                   <div className="flex items-center space-x-3">
-                    <div className="bg-[#4986C8]/10 p-3 rounded-full">
-                      <Droplets className="h-6 w-6 text-[#4986C8]" />
+                    <div className="bg-brand-accent/10 p-3 rounded-full">
+                      <Droplets className="h-6 w-6 text-brand-accent" />
                     </div>
                     <div>
-                      <div className="font-bold text-lg text-[#1C4E80]">38+ Years</div>
+                      <div className="font-bold text-lg text-brand">38+ Years</div>
                       <div className="text-sm text-muted-foreground">Experience</div>
                     </div>
                   </div>
@@ -274,11 +274,11 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
 
                 <div className="absolute -bottom-6 -right-6 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border">
                   <div className="flex items-center space-x-3">
-                    <div className="bg-[#95C6EC]/20 p-3 rounded-full">
-                      <CheckCircle className="h-6 w-6 text-[#1C4E80]" />
+                    <div className="bg-brand-light/20 p-3 rounded-full">
+                      <CheckCircle className="h-6 w-6 text-brand" />
                     </div>
                     <div>
-                      <div className="font-bold text-lg text-[#1C4E80]">4 States</div>
+                      <div className="font-bold text-lg text-brand">4 States</div>
                       <div className="text-sm text-muted-foreground">Coverage Area</div>
                     </div>
                   </div>
@@ -290,7 +290,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
       </section>
 
       {/* Credibility Bar */}
-      <section className="pt-8 pb-12 bg-[#1C4E80]">
+      <section className="pt-8 pb-12 bg-brand">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div
             className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center text-white"
@@ -301,7 +301,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
           >
             {statsData.map((stat) => (
               <motion.div key={stat.label} variants={fadeInUp} className="space-y-2">
-                <div className="text-4xl font-bold text-[#4986C8]">{stat.value}</div>
+                <div className="text-4xl font-bold text-brand-accent">{stat.value}</div>
                 <div className="text-lg">{stat.label}</div>
                 {stat.detail && <div className="text-sm opacity-80">{stat.detail}</div>}
               </motion.div>
@@ -314,7 +314,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
       <section id="manufacturers" className="py-24 bg-slate-50">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <h2 className="text-3xl font-bold text-[#123D6A]">Trusted Manufacturing Partners</h2>
+            <h2 className="text-3xl font-bold text-brand-deep">Trusted Manufacturing Partners</h2>
             <p className="text-lg text-muted-foreground">
               We represent industry-leading manufacturers of water-process equipment
             </p>
@@ -387,14 +387,14 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-slate-50 transition-colors z-10"
               aria-label="Previous manufacturers"
             >
-              <ChevronLeft className="h-6 w-6 text-[#123D6A]" />
+              <ChevronLeft className="h-6 w-6 text-brand-deep" />
             </button>
             <button
               onClick={nextManufacturer}
               className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-slate-50 transition-colors z-10"
               aria-label="Next manufacturers"
             >
-              <ChevronRight className="h-6 w-6 text-[#123D6A]" />
+              <ChevronRight className="h-6 w-6 text-brand-deep" />
             </button>
 
             {/* Dot indicators */}
@@ -404,7 +404,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                   key={index}
                   onClick={() => setManufacturerSlide(index)}
                   className={`w-2.5 h-2.5 rounded-full transition-all ${
-                    index === manufacturerSlide ? "bg-[#4986C8] w-8" : "bg-slate-300"
+                    index === manufacturerSlide ? "bg-brand-accent w-8" : "bg-slate-300"
                   }`}
                   aria-label={`Go to manufacturer slide ${index + 1}`}
                 />
@@ -425,10 +425,10 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
+              <Badge variant="outline" className="border-brand-accent/30 text-brand">
                 Our Story
               </Badge>
-              <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
+              <h2 className="text-3xl lg:text-4xl font-bold text-brand">
                 From Garage to Industry Leader
               </h2>
               <p className="text-lg text-muted-foreground">
@@ -445,11 +445,11 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               </p>
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-[#4986C8]">38+</div>
+                  <div className="text-3xl font-bold text-brand-accent">38+</div>
                   <div className="text-sm text-muted-foreground">Years Experience</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-[#4986C8]">4</div>
+                  <div className="text-3xl font-bold text-brand-accent">4</div>
                   <div className="text-sm text-muted-foreground">States Served</div>
                 </div>
               </div>
@@ -476,10 +476,10 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
       <section id="services" className="py-20 bg-slate-50">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
+            <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Expertise
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
+            <h2 className="text-3xl lg:text-4xl font-bold text-brand">
               Water-Process Solutions
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -519,12 +519,12 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               },
             ].map((service, index) => (
               <motion.div key={index} variants={fadeInUp}>
-                <Card className="h-full hover:shadow-lg transition-shadow border-l-4 border-l-[#4986C8]">
+                <Card className="h-full hover:shadow-lg transition-shadow border-l-4 border-l-brand-accent">
                   <CardHeader>
-                    <div className="bg-[#4986C8]/10 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                      <service.icon className="h-6 w-6 text-[#4986C8]" />
+                    <div className="bg-brand-accent/10 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                      <service.icon className="h-6 w-6 text-brand-accent" />
                     </div>
-                    <CardTitle className="text-xl text-[#1C4E80]">{service.title}</CardTitle>
+                    <CardTitle className="text-xl text-brand">{service.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <CardDescription className="text-base">{service.description}</CardDescription>
@@ -540,10 +540,10 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
       <section id="territory" className="py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
+            <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Get In Touch
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
+            <h2 className="text-3xl lg:text-4xl font-bold text-brand">
               Meet Your Territory Team
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -571,8 +571,8 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                         className="rounded-full object-cover"
                       />
                     </div>
-                    <CardTitle className="text-xl text-[#1C4E80]">{rep.name}</CardTitle>
-                    <CardDescription className="text-[#4986C8] font-medium">
+                    <CardTitle className="text-xl text-brand">{rep.name}</CardTitle>
+                    <CardDescription className="text-brand-accent font-medium">
                       {rep.title}
                     </CardDescription>
                     <Badge variant="secondary" className="mt-2 mx-auto">
@@ -590,12 +590,12 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                       </div>
                     </div>
                     <div className="space-y-2 text-sm">
-                      <div className="flex items-center justify-center gap-2 text-[#1C4E80]">
-                        <Phone className="h-4 w-4 text-[#4986C8]" />
+                      <div className="flex items-center justify-center gap-2 text-brand">
+                        <Phone className="h-4 w-4 text-brand-accent" />
                         <span>{rep.phone}</span>
                       </div>
-                      <div className="flex items-center justify-center gap-2 text-[#1C4E80]">
-                        <Mail className="h-4 w-4 text-[#4986C8]" />
+                      <div className="flex items-center justify-center gap-2 text-brand">
+                        <Mail className="h-4 w-4 text-brand-accent" />
                         <span>{rep.email}</span>
                       </div>
                     </div>
@@ -629,7 +629,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               <Button
                 variant="outline"
                 size="lg"
-                className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white"
+                className="border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-white"
               >
                 Explore Territory Coverage
               </Button>
@@ -642,10 +642,10 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
       <section id="projects" className="py-20 bg-slate-50">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
+            <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Expertise
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
+            <h2 className="text-3xl lg:text-4xl font-bold text-brand">
               Project Types We Serve
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -686,7 +686,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                             <Badge variant="secondary" className="mb-3">
                               {project.category}
                             </Badge>
-                            <CardTitle className="text-xl mb-3 text-[#123D6A]">
+                            <CardTitle className="text-xl mb-3 text-brand-deep">
                               {project.title}
                             </CardTitle>
                             <CardDescription className="mb-4">
@@ -704,7 +704,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className="text-[#4986C8] border-[#4986C8] hover:bg-[#4986C8] hover:text-white bg-transparent"
+                                  className="text-brand-accent border-brand-accent hover:bg-brand-accent hover:text-white bg-transparent"
                                 >
                                   View Solutions
                                 </Button>
@@ -724,13 +724,13 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               onClick={prevSlide}
               className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-slate-50 transition-colors"
             >
-              <ChevronLeft className="h-6 w-6 text-[#123D6A]" />
+              <ChevronLeft className="h-6 w-6 text-brand-deep" />
             </button>
             <button
               onClick={nextSlide}
               className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-slate-50 transition-colors"
             >
-              <ChevronRight className="h-6 w-6 text-[#123D6A]" />
+              <ChevronRight className="h-6 w-6 text-brand-deep" />
             </button>
 
             {/* Dots indicator */}
@@ -740,7 +740,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                   key={index}
                   onClick={() => setCurrentSlide(index)}
                   className={`w-3 h-3 rounded-full transition-colors ${
-                    index === currentSlide ? "bg-[#4986C8]" : "bg-slate-300"
+                    index === currentSlide ? "bg-brand-accent" : "bg-slate-300"
                   }`}
                 />
               ))}
@@ -759,7 +759,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               <Button
                 variant="outline"
                 size="lg"
-                className="border-[#1C4E80] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white bg-transparent"
+                className="border-brand text-brand hover:bg-brand hover:text-white bg-transparent"
               >
                 View All Manufacturers
               </Button>
@@ -768,7 +768,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               <Button
                 variant="outline"
                 size="lg"
-                className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white bg-transparent"
+                className="border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-white bg-transparent"
               >
                 Discuss Your Project
               </Button>
@@ -800,7 +800,7 @@ function HeroHeadline() {
 /**
  * Renders a word and adds a short accent underline under any leading 'W'/'w'.
  * For hyphenated words (e.g., Waste-water) it accents the 'W' of each part.
- * Uses #4986C8 for the accent, main text stays #1C4E80 (no recolor of the W).
+ * Uses brand-accent for the accent, main text stays brand (no recolor of the W).
  */
 function WordWithAccent({ text }: { text: string }) {
   const NB_HYPHEN = "\u2011";
@@ -809,7 +809,7 @@ function WordWithAccent({ text }: { text: string }) {
   const parts = text.split(NB_HYPHEN);
 
   return (
-    <span className="inline-flex items-baseline whitespace-nowrap text-[#1C4E80]">
+    <span className="inline-flex items-baseline whitespace-nowrap text-brand">
       {parts.map((part, idx) => {
         // keep trailing punctuation out of the accent logic (e.g., the comma in "Water,")
         const match = part.match(/^([A-Za-z]+)([^A-Za-z]*)$/);
@@ -825,7 +825,7 @@ function WordWithAccent({ text }: { text: string }) {
                 <span className="relative inline-block font-extrabold">
                   <span
                     className="inline-block"
-                    style={{ borderBottom: "4px solid #4986C8", paddingBottom: "2px" }}
+                    style={{ borderBottom: "4px solid rgb(var(--brand-accent))", paddingBottom: "2px" }}
                   >
                     {word[0]}
                   </span>

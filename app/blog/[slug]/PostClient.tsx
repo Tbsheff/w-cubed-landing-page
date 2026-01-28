@@ -55,7 +55,7 @@ export default function PostClient({ post }: PostClientProps) {
             <section className="py-6 bg-slate-50">
                 <div className="container mx-auto px-4 lg:px-6">
                     <motion.div className="flex items-center space-x-2 text-sm" {...fadeInUp}>
-                        <Link href="/blog" className="flex items-center text-[#1FA9A4] hover:underline">
+                        <Link href="/blog" className="flex items-center text-brand-accent hover:underline">
                             <ArrowLeft className="h-4 w-4 mr-1" />
                             Back to Blog
                         </Link>
@@ -69,12 +69,12 @@ export default function PostClient({ post }: PostClientProps) {
                     <div className="max-w-4xl mx-auto">
                         <motion.div className="space-y-6" {...fadeInUp}>
                             {tags.length > 0 && (
-                                <Badge variant="outline" className="border-[#1FA9A4]/30 text-[#123D6A]">
+                                <Badge variant="outline" className="border-brand-accent/30 text-brand-deep">
                                     {tags[0]}
                                 </Badge>
                             )}
 
-                            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-[#123D6A]">{post.title}</h1>
+                            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-brand-deep">{post.title}</h1>
 
                             {post.excerpt && <p className="text-xl text-muted-foreground">{post.excerpt}</p>}
 
@@ -142,7 +142,7 @@ export default function PostClient({ post }: PostClientProps) {
                         <div className="grid lg:grid-cols-4 gap-12">
                             {/* Main Content */}
                             <motion.div
-                                className="lg:col-span-3 prose prose-lg max-w-none prose-headings:text-[#123D6A] prose-a:text-[#1FA9A4] prose-blockquote:border-l-[#1FA9A4] prose-blockquote:bg-slate-50 prose-blockquote:p-4 prose-blockquote:rounded-r-lg"
+                                className="lg:col-span-3 prose prose-lg max-w-none prose-headings:text-brand-deep prose-a:text-brand-accent prose-blockquote:border-l-brand-accent prose-blockquote:bg-slate-50 prose-blockquote:p-4 prose-blockquote:rounded-r-lg"
                                 initial={{ opacity: 0, x: -30 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.8 }}
@@ -168,7 +168,7 @@ export default function PostClient({ post }: PostClientProps) {
                                             )}
                                             <div className="flex-1">
                                                 {post.authorName && (
-                                                    <h3 className="text-lg font-semibold text-[#123D6A]">{post.authorName}</h3>
+                                                    <h3 className="text-lg font-semibold text-brand-deep">{post.authorName}</h3>
                                                 )}
                                                 <div className="flex space-x-2 mt-4">
                                                     <Button asChild variant="outline" size="sm" className="bg-transparent">
@@ -200,7 +200,7 @@ export default function PostClient({ post }: PostClientProps) {
                                 <div className="sticky top-24 space-y-8">
                                     {/* Share */}
                                     <Card className="p-6">
-                                        <h3 className="font-semibold text-[#123D6A] mb-4 flex items-center">
+                                        <h3 className="font-semibold text-brand-deep mb-4 flex items-center">
                                             <Share2 className="h-5 w-5 mr-2" />
                                             Share Article
                                         </h3>
@@ -227,13 +227,13 @@ export default function PostClient({ post }: PostClientProps) {
                                     </Card>
 
                                     {/* Contact CTA */}
-                                    <Card className="p-7 lg:p-8 bg-[#1FA9A4]/5 border-[#1FA9A4]/20">
+                                    <Card className="p-7 lg:p-8 bg-brand-accent/5 border-brand-accent/20">
                                         <div className="flex flex-col gap-4">
-                                            <h3 className="text-xl font-semibold text-[#123D6A] leading-snug">Need Expert Advice?</h3>
+                                            <h3 className="text-xl font-semibold text-brand-deep leading-snug">Need Expert Advice?</h3>
                                             <p className="text-[15px] leading-7 text-muted-foreground">
                                                 Our team can help you optimize your water treatment systems for maximum efficiency.
                                             </p>
-                                            <Button size="lg" className="w-full bg-[#1FA9A4] hover:bg-[#1FA9A4]/90 text-base text-white">Contact Our Experts</Button>
+                                            <Button size="lg" className="w-full bg-brand-accent hover:bg-brand-accent/90 text-base text-white">Contact Our Experts</Button>
                                         </div>
                                     </Card>
                                 </div>
@@ -249,7 +249,7 @@ export default function PostClient({ post }: PostClientProps) {
                     <div className="container mx-auto px-4 lg:px-6">
                         <div className="max-w-4xl mx-auto">
                             <motion.div className="text-center space-y-4 mb-12" {...fadeInUp}>
-                                <h2 className="text-3xl font-bold text-[#123D6A]">Related Articles</h2>
+                                <h2 className="text-3xl font-bold text-brand-deep">Related Articles</h2>
                                 <p className="text-muted-foreground">Continue reading</p>
                             </motion.div>
 
@@ -273,7 +273,7 @@ export default function PostClient({ post }: PostClientProps) {
                                                 />
                                             )}
                                             <CardHeader>
-                                                <CardTitle className="text-lg text-[#123D6A] hover:text-[#1FA9A4] transition-colors">
+                                                <CardTitle className="text-lg text-brand-deep hover:text-brand-accent transition-colors">
                                                     <Link href={`/blog/${relatedPost.id}`}>{relatedPost.title}</Link>
                                                 </CardTitle>
                                             </CardHeader>
@@ -295,7 +295,7 @@ export default function PostClient({ post }: PostClientProps) {
             )}
 
             {/* CTA Section */}
-            <section className="py-20 bg-[#123D6A]">
+            <section className="py-20 bg-brand-deep">
                 <div className="container mx-auto px-4 lg:px-6">
                     <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
                         <h2 className="text-3xl lg:text-4xl font-bold">Ready to Optimize Your Systems?</h2>
@@ -303,14 +303,14 @@ export default function PostClient({ post }: PostClientProps) {
                             Contact our team to discuss how we can help improve your water treatment efficiency and reduce costs.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Button size="lg" className="bg-[#1FA9A4] hover:bg-[#1FA9A4]/90">
+                            <Button size="lg" className="bg-brand-accent hover:bg-brand-accent/90">
                                 <Phone className="mr-2 h-4 w-4" />
                                 Contact Your Rep
                             </Button>
                             <Button
                                 size="lg"
                                 variant="outline"
-                                className="border-white text-white hover:bg-white hover:text-[#123D6A] bg-transparent"
+                                className="border-white text-white hover:bg-white hover:text-brand-deep bg-transparent"
                             >
                                 <Mail className="mr-2 h-4 w-4" />
                                 Request Consultation

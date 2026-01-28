@@ -41,7 +41,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
           <motion.div className="flex items-center space-x-2 text-sm" {...fadeInUp}>
             <Link
               href="/manufacturers"
-              className="flex items-center text-[#4986C8] hover:underline"
+              className="flex items-center text-brand-accent hover:underline"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back to Manufacturers
@@ -65,7 +65,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
               </div>
             )}
 
-            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-[#1C4E80] mb-2">
+            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-brand mb-2">
               {manufacturer.name}
             </h1>
 
@@ -73,7 +73,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
               <div className="mb-4 text-center">
                 <Badge
                   variant="outline"
-                  className="border-[#4986C8]/30 text-[#4986C8] bg-blue-50 px-3 py-1 inline-block"
+                  className="border-brand-accent/30 text-brand-accent bg-blue-50 px-3 py-1 inline-block"
                 >
                   {manufacturer.category}
                 </Badge>
@@ -93,15 +93,15 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
             )}
 
             {manufacturer.territoryNote && (
-              <div className="bg-[#4986C8]/10 border border-[#4986C8]/30 rounded-lg p-4 mx-auto mb-6 max-w-2xl">
-                <p className="text-[#1C4E80] font-semibold">Territory Note</p>
-                <p className="text-[#123D6A] text-sm">{manufacturer.territoryNote}</p>
+              <div className="bg-brand-accent/10 border border-brand-accent/30 rounded-lg p-4 mx-auto mb-6 max-w-2xl">
+                <p className="text-brand font-semibold">Territory Note</p>
+                <p className="text-brand-deep text-sm">{manufacturer.territoryNote}</p>
               </div>
             )}
 
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <Link href="/contact">
-                <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90 px-8 py-3">
+                <Button size="lg" className="bg-brand-accent hover:bg-brand-accent/90 px-8 py-3">
                   <Phone className="mr-2 h-4 w-4" />
                   Contact Rep
                 </Button>
@@ -110,7 +110,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="bg-transparent border-2 border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white px-8 py-3 font-medium"
+                  className="bg-transparent border-2 border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-white px-8 py-3 font-medium"
                   asChild
                 >
                   <a href={manufacturer.website} target="_blank" rel="noopener noreferrer">
@@ -128,7 +128,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
         <div className="container mx-auto px-4 lg:px-6">
           <div className="max-w-6xl mx-auto">
             <motion.div className="text-center space-y-4 mb-12" {...fadeInUp}>
-              <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">Key Products</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold text-brand">Key Products</h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
                 Product highlights from {manufacturer.name}
               </p>
@@ -153,7 +153,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
                         transition={{ duration: 0.6, delay: index * 0.05 }}
                         viewport={{ once: true }}
                       >
-                        <h3 className="text-xl font-bold text-[#1C4E80] mt-8 mb-4 first:mt-0">
+                        <h3 className="text-xl font-bold text-brand mt-8 mb-4 first:mt-0">
                           {strippedProduct}
                         </h3>
                       </motion.div>
@@ -170,7 +170,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
                     >
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardContent className="p-6">
-                          <p className="text-[#123D6A] font-medium leading-relaxed">
+                          <p className="text-brand-deep font-medium leading-relaxed">
                             {strippedProduct}
                           </p>
                         </CardContent>
@@ -186,7 +186,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
 
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4 lg:px-6">
-          <Card className="p-6 md:p-10 bg-[#123D6A] text-white">
+          <Card className="p-6 md:p-10 bg-brand-deep text-white">
             <CardHeader className="px-0">
               <CardTitle className="text-2xl md:text-3xl">
                 Need help with {manufacturer.name} equipment?
@@ -198,7 +198,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link href="/contact">
-                  <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90">
+                  <Button size="lg" className="bg-brand-accent hover:bg-brand-accent/90">
                     Contact Your Rep
                   </Button>
                 </Link>
@@ -206,7 +206,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-white text-white hover:bg-white hover:text-[#123D6A] bg-transparent"
+                    className="border-white text-white hover:bg-white hover:text-brand-deep bg-transparent"
                     asChild
                   >
                     <a href={manufacturer.website} target="_blank" rel="noopener noreferrer">

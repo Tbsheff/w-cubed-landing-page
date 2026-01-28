@@ -87,13 +87,13 @@ export default function BlogListClient({ posts, categories = [], authors = [] }:
         <PageWrapper>
             {/* Hero Section */}
             <section className="relative py-20 lg:py-32 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-[#1FA9A4]/5" />
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-brand-accent/5" />
                 <div className="container mx-auto px-4 lg:px-6 relative">
                     <motion.div className="text-center space-y-6 max-w-4xl mx-auto" {...fadeInUp}>
-                        <Badge variant="outline" className="border-[#1FA9A4]/30 text-[#123D6A]">
+                        <Badge variant="outline" className="border-brand-accent/30 text-brand-deep">
                             Insights & Updates
                         </Badge>
-                        <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-[#123D6A]">W-Cubed Blog</h1>
+                        <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand-deep">W-Cubed Blog</h1>
                         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                             Industry insights, project updates, and technical information about water-process equipment from our team
                             of experts.
@@ -125,7 +125,7 @@ export default function BlogListClient({ posts, categories = [], authors = [] }:
                                     variant={selectedCategory === category ? "default" : "outline"}
                                     size="sm"
                                     onClick={() => setSelectedCategory(category)}
-                                    className={selectedCategory === category ? "bg-[#1FA9A4] hover:bg-[#1FA9A4]/90" : "bg-transparent"}
+                                    className={selectedCategory === category ? "bg-brand-accent hover:bg-brand-accent/90" : "bg-transparent"}
                                 >
                                     <Filter className="h-4 w-4 mr-2" />
                                     {category}
@@ -155,7 +155,7 @@ export default function BlogListClient({ posts, categories = [], authors = [] }:
                 <section className="py-20 bg-background">
                     <div className="container mx-auto px-4 lg:px-6">
                         <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-                            <h2 className="text-3xl lg:text-4xl font-bold text-[#123D6A]">Featured Articles</h2>
+                            <h2 className="text-3xl lg:text-4xl font-bold text-brand-deep">Featured Articles</h2>
                             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Our most popular and impactful content</p>
                         </motion.div>
 
@@ -179,7 +179,7 @@ export default function BlogListClient({ posts, categories = [], authors = [] }:
                                                     className="w-full h-64 object-cover"
                                                 />
                                             )}
-                                            <Badge className="absolute top-4 left-4 bg-[#1FA9A4]">Featured</Badge>
+                                            <Badge className="absolute top-4 left-4 bg-brand-accent">Featured</Badge>
                                         </div>
                                         <CardHeader>
                                             <div className="flex items-center space-x-4 text-sm text-muted-foreground mb-2">
@@ -195,7 +195,7 @@ export default function BlogListClient({ posts, categories = [], authors = [] }:
                                                 )}
                                                 {post.category && <Badge variant="secondary">{post.category}</Badge>}
                                             </div>
-                                            <CardTitle className="text-xl text-[#123D6A] hover:text-[#1FA9A4] transition-colors">
+                                            <CardTitle className="text-xl text-brand-deep hover:text-brand-accent transition-colors">
                                                 <Link href={`/blog/${post.id}`}>{post.title}</Link>
                                             </CardTitle>
                                         </CardHeader>
@@ -232,7 +232,7 @@ export default function BlogListClient({ posts, categories = [], authors = [] }:
             <section className="py-20 bg-slate-50">
                 <div className="container mx-auto px-4 lg:px-6">
                     <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-                        <h2 className="text-3xl lg:text-4xl font-bold text-[#123D6A]">Latest Articles</h2>
+                        <h2 className="text-3xl lg:text-4xl font-bold text-brand-deep">Latest Articles</h2>
                     </motion.div>
 
                     <motion.div
@@ -268,7 +268,7 @@ export default function BlogListClient({ posts, categories = [], authors = [] }:
                                                 <span>{post.date ? new Date(post.date).toLocaleDateString() : ''}</span>
                                             </div>
                                         </div>
-                                        <CardTitle className="text-lg text-[#123D6A] hover:text-[#1FA9A4] transition-colors">
+                                        <CardTitle className="text-lg text-brand-deep hover:text-brand-accent transition-colors">
                                             <Link href={`/blog/${post.id}`}>{post.title}</Link>
                                         </CardTitle>
                                     </CardHeader>

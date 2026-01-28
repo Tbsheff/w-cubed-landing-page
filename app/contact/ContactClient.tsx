@@ -39,8 +39,8 @@ const contactMethods = [
     details: "+1 (801) 555-0199",
     description: "General inquiries and appointments",
     action: "tel:+18015550199",
-    color: "bg-[#1C4E80]/10",
-    iconColor: "text-[#1C4E80]",
+    color: "bg-brand/10",
+    iconColor: "text-brand",
     cta: "Call Now",
   },
   {
@@ -49,8 +49,8 @@ const contactMethods = [
     details: "info@wcubedinc.com",
     description: "Send us details about your project",
     action: "mailto:info@wcubedinc.com",
-    color: "bg-[#4986C8]/10",
-    iconColor: "text-[#4986C8]",
+    color: "bg-brand-accent/10",
+    iconColor: "text-brand-accent",
     cta: "Email Now",
   },
 ];
@@ -84,10 +84,10 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
     <PageWrapper>
       {/* Hero Section */}
       <section className="relative py-10 lg:py-14 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-[#95C6EC]/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-brand-light/5" />
         <div className="container mx-auto px-4 lg:px-6 relative">
           <motion.div className="max-w-4xl mx-auto text-center space-y-4" {...fadeInUp}>
-            <h1 className="text-3xl lg:text-5xl font-bold tracking-tight text-[#1C4E80]">
+            <h1 className="text-3xl lg:text-5xl font-bold tracking-tight text-brand">
               {heroTitle}
             </h1>
             <p className="text-lg lg:text-xl text-muted-foreground">{heroSubtitle}</p>
@@ -105,7 +105,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <div className="h-1 w-24 rounded-full bg-[#4986C8]/60" />
+            <div className="h-1 w-24 rounded-full bg-brand-accent/60" />
           </motion.div>
 
           <div className="grid gap-12 mt-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1.6fr)] items-start">
@@ -116,7 +116,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
               whileInView="animate"
               viewport={{ once: true }}
             >
-              <h2 className="text-2xl lg:text-3xl font-semibold text-[#1C4E80]">Ways to Connect</h2>
+              <h2 className="text-2xl lg:text-3xl font-semibold text-brand">Ways to Connect</h2>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto lg:mx-0">
                 Start the conversation using the project form or reach your local representative
                 right away.
@@ -138,11 +138,11 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                 viewport={{ once: true }}
               >
                 <motion.div variants={fadeInUp} className="h-full">
-                  <Card className="border-[#4986C8]/20 bg-white h-full flex flex-col">
+                  <Card className="border-brand-accent/20 bg-white h-full flex flex-col">
                     <CardContent className="p-6 space-y-4 flex-1">
                       <div className="flex items-center gap-3">
-                        <Phone className="h-5 w-5 text-[#4986C8]" />
-                        <h3 className="font-semibold text-[#1C4E80]">
+                        <Phone className="h-5 w-5 text-brand-accent" />
+                        <h3 className="font-semibold text-brand">
                           Contact Your Representative
                         </h3>
                       </div>
@@ -154,17 +154,17 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                         {repsData.map((rep) => (
                           <div
                             key={`${rep.email}-${rep.name}`}
-                            className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#4986C8]/10 p-3"
+                            className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-brand-accent/10 p-3"
                           >
                             <div>
-                              <p className="text-sm font-medium text-[#1C4E80]">{rep.name}</p>
+                              <p className="text-sm font-medium text-brand">{rep.name}</p>
                               <p className="text-xs text-muted-foreground">{rep.role}</p>
                             </div>
                             <div className="flex items-center gap-3">
                               {rep.phone && (
                                 <a
                                   href={`tel:${rep.phone}`}
-                                  className="text-sm font-semibold text-[#4986C8] hover:text-[#1C4E80]"
+                                  className="text-sm font-semibold text-brand-accent hover:text-brand"
                                 >
                                   {rep.phone}
                                 </a>
@@ -172,7 +172,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                               {rep.email && (
                                 <a
                                   href={`mailto:${rep.email}`}
-                                  className="text-xs text-muted-foreground hover:text-[#4986C8]"
+                                  className="text-xs text-muted-foreground hover:text-brand-accent"
                                 >
                                   Email
                                 </a>
@@ -183,7 +183,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       </div>
                       <Link
                         href="/territory"
-                        className="inline-flex text-sm font-semibold text-[#4986C8] hover:text-[#1C4E80]"
+                        className="inline-flex text-sm font-semibold text-brand-accent hover:text-brand"
                       >
                         View full territory coverage
                       </Link>
@@ -201,7 +201,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
               >
                 {quickContactMethods.map((method) => (
                   <motion.div key={method.title} variants={fadeInUp}>
-                    <Card className="h-full border-[#4986C8]/20 bg-white">
+                    <Card className="h-full border-brand-accent/20 bg-white">
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">
                           <div
@@ -211,7 +211,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                           </div>
                           <div className="space-y-2 text-left">
                             <div>
-                              <p className="font-semibold text-[#1C4E80]">{method.title}</p>
+                              <p className="font-semibold text-brand">{method.title}</p>
                               <p className="text-sm text-muted-foreground">{method.details}</p>
                             </div>
                             <p className="text-xs text-muted-foreground leading-relaxed">
@@ -219,7 +219,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                             </p>
                             <a
                               href={method.action}
-                              className="inline-flex text-sm font-semibold text-[#4986C8] hover:text-[#1C4E80]"
+                              className="inline-flex text-sm font-semibold text-brand-accent hover:text-brand"
                             >
                               {method.cta}
                             </a>
@@ -241,7 +241,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
             >
               <Card className="p-6 flex-1 flex flex-col">
                 <CardHeader className="px-0 pt-0">
-                  <CardTitle className="text-[#1C4E80]">Project Contact Form</CardTitle>
+                  <CardTitle className="text-brand">Project Contact Form</CardTitle>
                   <CardDescription>
                     Provide details about your project and we&apos;ll get you connected with the
                     right solutions.
@@ -251,31 +251,31 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                   <form className="flex h-full flex-col gap-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-medium text-[#1C4E80]">First Name *</label>
+                        <label className="text-sm font-medium text-brand">First Name *</label>
                         <Input placeholder="John" required />
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-[#1C4E80]">Last Name *</label>
+                        <label className="text-sm font-medium text-brand">Last Name *</label>
                         <Input placeholder="Doe" required />
                       </div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-medium text-[#1C4E80]">Email *</label>
+                        <label className="text-sm font-medium text-brand">Email *</label>
                         <Input type="email" placeholder="john@company.com" required />
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-[#1C4E80]">Phone</label>
+                        <label className="text-sm font-medium text-brand">Phone</label>
                         <Input type="tel" placeholder="(801) 555-1234" />
                       </div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-medium text-[#1C4E80]">Company</label>
+                        <label className="text-sm font-medium text-brand">Company</label>
                         <Input placeholder="Your Company Name" />
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-[#1C4E80]">Location *</label>
+                        <label className="text-sm font-medium text-brand">Location *</label>
                         <Select required>
                           <SelectTrigger>
                             <SelectValue placeholder="Select your state" />
@@ -292,7 +292,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-medium text-[#1C4E80]">Project Type</label>
+                        <label className="text-sm font-medium text-brand">Project Type</label>
                         <Select>
                           <SelectTrigger>
                             <SelectValue placeholder="Select project type" />
@@ -309,7 +309,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                         </Select>
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-[#1C4E80]">
+                        <label className="text-sm font-medium text-brand">
                           Equipment Category
                         </label>
                         <Select>
@@ -330,7 +330,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       </div>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-[#1C4E80]">Timeline</label>
+                      <label className="text-sm font-medium text-brand">Timeline</label>
                       <Select>
                         <SelectTrigger>
                           <SelectValue placeholder="When do you need this completed?" />
@@ -346,7 +346,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       </Select>
                     </div>
                     <div className="flex-1">
-                      <label className="text-sm font-medium text-[#1C4E80]">
+                      <label className="text-sm font-medium text-brand">
                         Project Message *
                       </label>
                       <Textarea
@@ -359,7 +359,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       * Required fields. By submitting this form, you agree to be contacted by
                       W-Cubed regarding your project inquiry.
                     </div>
-                    <Button className="w-full bg-[#4986C8] hover:bg-[#4986C8]/90">
+                    <Button className="w-full bg-brand-accent hover:bg-brand-accent/90">
                       Submit Project Inquiry
                     </Button>
                   </form>
@@ -375,11 +375,11 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <Card className="p-6 bg-white border-[#4986C8]/20">
+            <Card className="p-6 bg-white border-brand-accent/20">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center gap-3">
-                  <Clock className="h-5 w-5 text-[#4986C8]" />
-                  <h3 className="font-semibold text-[#1C4E80]">Business Hours</h3>
+                  <Clock className="h-5 w-5 text-brand-accent" />
+                  <h3 className="font-semibold text-brand">Business Hours</h3>
                 </div>
                 <div className="grid gap-2 text-sm md:grid-cols-3 md:gap-4 flex-1">
                   {hours.map((hour) => (
@@ -402,7 +402,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-[#1C4E80]">
+      <section className="py-20 bg-brand">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
             <h2 className="text-3xl lg:text-4xl font-bold">Ready to Start Your Project?</h2>
@@ -412,7 +412,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/manufacturers">
-                <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90">
+                <Button size="lg" className="bg-brand-accent hover:bg-brand-accent/90">
                   View Our Products
                 </Button>
               </Link>
@@ -420,7 +420,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-[#1C4E80] bg-transparent"
+                  className="border-white text-white hover:bg-white hover:text-brand bg-transparent"
                 >
                   Find Your Representative
                 </Button>

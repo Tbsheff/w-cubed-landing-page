@@ -62,6 +62,12 @@ const config: Config = {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
+  			},
+  			brand: {
+  				DEFAULT: 'rgb(var(--brand) / <alpha-value>)',
+  				deep: 'rgb(var(--brand-deep) / <alpha-value>)',
+  				accent: 'rgb(var(--brand-accent) / <alpha-value>)',
+  				light: 'rgb(var(--brand-light) / <alpha-value>)'
   			}
   		},
   		borderRadius: {
