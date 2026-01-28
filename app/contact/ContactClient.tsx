@@ -36,9 +36,9 @@ const contactMethods = [
   {
     icon: Phone,
     title: "Office Number",
-    details: "+1 (801) 555-0199",
+    details: "+1 (801) 466-3819",
     description: "General inquiries and appointments",
-    action: "tel:+18015550199",
+    action: "tel:+18014663819",
     color: "bg-brand/10",
     iconColor: "text-brand",
     cta: "Call Now",
@@ -46,9 +46,9 @@ const contactMethods = [
   {
     icon: Mail,
     title: "Office Email",
-    details: "info@wcubedinc.com",
+    details: "Shared@wcubedinc.com",
     description: "Send us details about your project",
-    action: "mailto:info@wcubedinc.com",
+    action: "mailto:Shared@wcubedinc.com",
     color: "bg-brand-accent/10",
     iconColor: "text-brand-accent",
     cta: "Email Now",

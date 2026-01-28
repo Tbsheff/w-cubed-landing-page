@@ -16,8 +16,7 @@ export function SiteFooter() {
             </p>
             <div className="text-sm text-slate-400">
               <p>Salt Lake City, Utah</p>
-              <p>Phone: (801) 232-8241</p>
-              <p>Fax: (801) 664-2439</p>
+              <p>Phone: (801) 466-3819</p>
             </div>
           </div>
           <div>
@@ -59,16 +58,16 @@ export function SiteFooter() {
             <h3 className="font-semibold mb-4">Connect</h3>
             <ul className="space-y-2 text-slate-300">
               <li>
-                <a href="tel:+18012328241" className="hover:text-brand-accent transition-colors">
-                  (801) 232-8241
+                <a href="tel:+18014663819" className="hover:text-brand-accent transition-colors">
+                  (801) 466-3819
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:Bradg@wcubedinc.com"
+                  href="mailto:Shared@wcubedinc.com"
                   className="hover:text-brand-accent transition-colors"
                 >
-                  Bradg@wcubedinc.com
+                  Shared@wcubedinc.com
                 </a>
               </li>
             </ul>
