@@ -179,7 +179,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                 )}
               </div>
               <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-[#1C4E80] leading-tight mt-8">
-                {heroData.title ? heroData.title : <HeroHeadline />}
+                <HeroHeadline />
                 <span className="text-2xl sm:text-3xl font-semibold tracking-wide text-[#4986C8] flex flex-wrap items-baseline gap-3 mt-2">
                   <span>serving</span>
                   <span className="whitespace-nowrap">UT</span>
@@ -726,7 +726,7 @@ function HeroHeadline() {
     <span className="block">
       <span className="flex flex-wrap items-baseline gap-x-3 gap-y-2">
         <WordWithAccent text="Water," />
-        <WordWithAccent text={`Waste${NB_HYPHEN}water,`} />
+        <WordWithAccent text={`Waste${NB_HYPHEN}Water,`} />
         <span className="inline-flex items-baseline whitespace-nowrap">Equipment</span>
         <span className="inline-flex items-baseline whitespace-nowrap">Experts</span>
       </span>
