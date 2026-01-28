@@ -224,7 +224,8 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                             {manufacturer.website && (
                               <Button variant="ghost" size="sm" asChild>
                                 <a href={manufacturer.website} target="_blank" rel="noopener noreferrer">
-                                  <ExternalLink className="h-4 w-4" />
+                                  <ExternalLink className="h-4 w-4 mr-2" />
+                                  Visit Website
                                 </a>
                               </Button>
                             )}
@@ -285,7 +286,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                                 <Button variant="ghost" size="sm" asChild>
                                   <a href={manufacturer.website} target="_blank" rel="noopener noreferrer">
                                     <ExternalLink className="h-4 w-4 mr-2" />
-                                    Visit Site
+                                    Visit Website
                                   </a>
                                 </Button>
                               )}

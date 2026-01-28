@@ -1,45 +1,48 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Image from "next/image"
-import Link from "next/link"
-import { ArrowLeft, ExternalLink, Phone } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { PageWrapper } from "@/components/page-wrapper"
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft, ExternalLink, Phone } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageWrapper } from "@/components/page-wrapper";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.6 },
-}
+};
 
 export type ManufacturerDetail = {
-  name: string
-  slug: string
-  logo?: string | null
-  category?: string | null
-  description?: string | null
-  keyProducts?: string[]
-  website?: string | null
-  specialty?: string | null
-  territoryNote?: string | null
-}
+  name: string;
+  slug: string;
+  logo?: string | null;
+  category?: string | null;
+  description?: string | null;
+  keyProducts?: string[];
+  website?: string | null;
+  specialty?: string | null;
+  territoryNote?: string | null;
+};
 
 type Props = {
-  manufacturer: ManufacturerDetail
-}
+  manufacturer: ManufacturerDetail;
+};
 
 export default function ManufacturerDetailClient({ manufacturer }: Props) {
-  const keyProducts = manufacturer.keyProducts || []
+  const keyProducts = manufacturer.keyProducts || [];
 
   return (
     <PageWrapper>
       <section className="py-6 bg-slate-50">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="flex items-center space-x-2 text-sm" {...fadeInUp}>
-            <Link href="/manufacturers" className="flex items-center text-[#4986C8] hover:underline">
+            <Link
+              href="/manufacturers"
+              className="flex items-center text-[#4986C8] hover:underline"
+            >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back to Manufacturers
             </Link>
@@ -98,10 +101,10 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
 
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <Link href="/contact">
-              <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90 px-8 py-3">
-                <Phone className="mr-2 h-4 w-4" />
-                Contact Rep
-              </Button>
+                <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90 px-8 py-3">
+                  <Phone className="mr-2 h-4 w-4" />
+                  Contact Rep
+                </Button>
               </Link>
               {manufacturer.website && (
                 <Button
@@ -138,9 +141,9 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
                 {keyProducts.map((product, index) => {
                   // Check if this looks like a header (starts with bold tag pattern)
                   // Strip any HTML tags for safety and check if it was meant to be a header
-                  const strippedProduct = product.replace(/<[^>]*>/g, '')
-                  const isHeader = product.includes("<b>") || product.includes("<strong>")
-                  
+                  const strippedProduct = product.replace(/<[^>]*>/g, "");
+                  const isHeader = product.includes("<b>") || product.includes("<strong>");
+
                   if (isHeader) {
                     return (
                       <motion.div
@@ -154,7 +157,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
                           {strippedProduct}
                         </h3>
                       </motion.div>
-                    )
+                    );
                   }
 
                   return (
@@ -167,11 +170,13 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
                     >
                       <Card className="hover:shadow-lg transition-shadow">
                         <CardContent className="p-6">
-                          <p className="text-[#123D6A] font-medium leading-relaxed">{strippedProduct}</p>
+                          <p className="text-[#123D6A] font-medium leading-relaxed">
+                            {strippedProduct}
+                          </p>
                         </CardContent>
                       </Card>
                     </motion.div>
-                  )
+                  );
                 })}
               </div>
             )}
@@ -192,11 +197,18 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
                 Our team can guide you to the right products and specifications for your project.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
-                    <Link href="/contact">
-                      <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90">Contact Your Rep</Button>
-                    </Link>
+                <Link href="/contact">
+                  <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90">
+                    Contact Your Rep
+                  </Button>
+                </Link>
                 {manufacturer.website && (
-                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-[#123D6A] bg-transparent" asChild>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-white text-white hover:bg-white hover:text-[#123D6A] bg-transparent"
+                    asChild
+                  >
                     <a href={manufacturer.website} target="_blank" rel="noopener noreferrer">
                       Visit Website
                     </a>
@@ -208,6 +220,5 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
         </div>
       </section>
     </PageWrapper>
-  )
+  );
 }
-

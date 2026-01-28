@@ -35,7 +35,7 @@ const staggerContainer = {
 const contactMethods = [
   {
     icon: Phone,
-    title: "Call Us",
+    title: "Office Number",
     details: "+1 (801) 555-0199",
     description: "General inquiries and appointments",
     action: "tel:+18015550199",
@@ -45,7 +45,7 @@ const contactMethods = [
   },
   {
     icon: Mail,
-    title: "Email Us",
+    title: "Office Email",
     details: "info@wcubedinc.com",
     description: "Send us details about your project",
     action: "mailto:info@wcubedinc.com",
@@ -131,45 +131,6 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
               viewport={{ once: true }}
             >
               <motion.div
-                className="grid sm:grid-cols-2 gap-4"
-                variants={staggerContainer}
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true }}
-              >
-                {quickContactMethods.map((method) => (
-                  <motion.div key={method.title} variants={fadeInUp}>
-                    <Card className="h-full border-[#4986C8]/20 bg-white">
-                      <CardContent className="p-6">
-                        <div className="flex items-start gap-4">
-                          <div
-                            className={`${method.color} w-12 h-12 rounded-full flex items-center justify-center`}
-                          >
-                            <method.icon className={`h-6 w-6 ${method.iconColor}`} />
-                          </div>
-                          <div className="space-y-2 text-left">
-                            <div>
-                              <p className="font-semibold text-[#1C4E80]">{method.title}</p>
-                              <p className="text-sm text-muted-foreground">{method.details}</p>
-                            </div>
-                            <p className="text-xs text-muted-foreground leading-relaxed">
-                              {method.description}
-                            </p>
-                            <a
-                              href={method.action}
-                              className="inline-flex text-sm font-semibold text-[#4986C8] hover:text-[#1C4E80]"
-                            >
-                              {method.cta}
-                            </a>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </motion.div>
-
-              <motion.div
                 className="flex-1"
                 variants={staggerContainer}
                 initial="initial"
@@ -229,6 +190,45 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                     </CardContent>
                   </Card>
                 </motion.div>
+              </motion.div>
+
+              <motion.div
+                className="grid sm:grid-cols-2 gap-4"
+                variants={staggerContainer}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true }}
+              >
+                {quickContactMethods.map((method) => (
+                  <motion.div key={method.title} variants={fadeInUp}>
+                    <Card className="h-full border-[#4986C8]/20 bg-white">
+                      <CardContent className="p-6">
+                        <div className="flex items-start gap-4">
+                          <div
+                            className={`${method.color} w-12 h-12 rounded-full flex items-center justify-center`}
+                          >
+                            <method.icon className={`h-6 w-6 ${method.iconColor}`} />
+                          </div>
+                          <div className="space-y-2 text-left">
+                            <div>
+                              <p className="font-semibold text-[#1C4E80]">{method.title}</p>
+                              <p className="text-sm text-muted-foreground">{method.details}</p>
+                            </div>
+                            <p className="text-xs text-muted-foreground leading-relaxed">
+                              {method.description}
+                            </p>
+                            <a
+                              href={method.action}
+                              className="inline-flex text-sm font-semibold text-[#4986C8] hover:text-[#1C4E80]"
+                            >
+                              {method.cta}
+                            </a>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
               </motion.div>
             </motion.div>
 
