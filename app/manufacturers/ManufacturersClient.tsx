@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { AnimatePresence, motion } from "framer-motion"
-import { useMemo, useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { Search, ExternalLink, Grid, List } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { PageWrapper } from "@/components/page-wrapper"
+import { AnimatePresence, motion } from "framer-motion";
+import { useMemo, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Search, ExternalLink, Grid, List } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { PageWrapper } from "@/components/page-wrapper";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -30 },
   transition: { duration: 0.6 },
-}
+};
 
 const staggerContainer = {
   animate: {
@@ -24,49 +24,50 @@ const staggerContainer = {
       staggerChildren: 0.1,
     },
   },
-}
+};
 
 export type ManufacturerListItem = {
-  id: string
-  name: string
-  logo?: string | null
-  category?: string | null
-  description?: string | null
-  keyProducts?: string[]
-  website?: string | null
-  specialty?: string | null
-  territoryNote?: string | null
-}
+  id: string;
+  name: string;
+  logo?: string | null;
+  category?: string | null;
+  description?: string | null;
+  keyProducts?: string[];
+  website?: string | null;
+  specialty?: string | null;
+  territoryNote?: string | null;
+};
 
 type Props = {
-  manufacturers: ManufacturerListItem[]
-}
+  manufacturers: ManufacturerListItem[];
+};
 
 export default function ManufacturersClient({ manufacturers }: Props) {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All")
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const categories = useMemo(() => {
-    const set = new Set<string>()
+    const set = new Set<string>();
     manufacturers.forEach((m) => {
-      if (m.category) set.add(m.category)
-    })
-    return ["All", ...Array.from(set)]
-  }, [manufacturers])
+      if (m.category) set.add(m.category);
+    });
+    return ["All", ...Array.from(set)];
+  }, [manufacturers]);
 
   const filteredManufacturers = manufacturers.filter((manufacturer) => {
     const matchesSearch =
       manufacturer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (manufacturer.description || "").toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "All" || manufacturer.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+      (manufacturer.description || "").toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "All" || manufacturer.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   const clearFilters = () => {
-    setSearchTerm("")
-    setSelectedCategory("All")
-  }
+    setSearchTerm("");
+    setSelectedCategory("All");
+  };
 
   return (
     <PageWrapper>
@@ -166,7 +167,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
           >
             <AnimatePresence mode="popLayout">
               {filteredManufacturers.map((manufacturer) => {
-                const logoSrc = manufacturer.logo || "/placeholder.svg"
+                const logoSrc = manufacturer.logo || "/placeholder.svg";
 
                 return (
                   <motion.div
@@ -189,8 +190,12 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                               className="object-contain max-h-20 w-auto"
                             />
                           </div>
-                          <CardTitle className="text-xl text-[#1C4E80]">{manufacturer.name}</CardTitle>
-                          {manufacturer.category && <Badge variant="secondary">{manufacturer.category}</Badge>}
+                          <CardTitle className="text-xl text-[#1C4E80]">
+                            {manufacturer.name}
+                          </CardTitle>
+                          {manufacturer.category && (
+                            <Badge variant="secondary">{manufacturer.category}</Badge>
+                          )}
                         </CardHeader>
                         <CardContent className="space-y-4">
                           <CardDescription className="text-base">
@@ -223,7 +228,11 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                             </Link>
                             {manufacturer.website && (
                               <Button variant="ghost" size="sm" asChild>
-                                <a href={manufacturer.website} target="_blank" rel="noopener noreferrer">
+                                <a
+                                  href={manufacturer.website}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
                                   <ExternalLink className="h-4 w-4 mr-2" />
                                   Visit Website
                                 </a>
@@ -273,7 +282,9 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                                 </div>
                               )}
                               {manufacturer.territoryNote && (
-                                <p className="text-xs text-muted-foreground">{manufacturer.territoryNote}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  {manufacturer.territoryNote}
+                                </p>
                               )}
                             </div>
                             <div className="flex flex-col gap-2">
@@ -284,7 +295,11 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                               </Link>
                               {manufacturer.website && (
                                 <Button variant="ghost" size="sm" asChild>
-                                  <a href={manufacturer.website} target="_blank" rel="noopener noreferrer">
+                                  <a
+                                    href={manufacturer.website}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
                                     <ExternalLink className="h-4 w-4 mr-2" />
                                     Visit Website
                                   </a>
@@ -296,7 +311,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                       </Card>
                     )}
                   </motion.div>
-                )
+                );
               })}
             </AnimatePresence>
           </motion.div>
@@ -330,6 +345,5 @@ export default function ManufacturersClient({ manufacturers }: Props) {
         </div>
       </section>
     </PageWrapper>
-  )
+  );
 }
-
