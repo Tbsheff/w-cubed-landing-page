@@ -148,7 +148,11 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
   };
 
   const prevManufacturer = () => {
-    setManufacturerSlide((prev) => (prev - 1 + Math.ceil(manufacturersData.length / 5)) % Math.ceil(manufacturersData.length / 5));
+    setManufacturerSlide(
+      (prev) =>
+        (prev - 1 + Math.ceil(manufacturersData.length / 5)) %
+        Math.ceil(manufacturersData.length / 5)
+    );
   };
 
   // Auto-rotate manufacturer carousel every 8 seconds
@@ -328,50 +332,52 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                 className="flex transition-transform duration-700 ease-in-out"
                 style={{ transform: `translateX(-${manufacturerSlide * 100}%)` }}
               >
-                {Array.from({ length: Math.ceil(manufacturersData.length / 5) }).map((_, slideIndex) => (
-                  <div key={slideIndex} className="w-full flex-shrink-0">
-                    <div className="flex justify-center items-center gap-12 md:gap-16 lg:gap-20 px-6">
-                      {manufacturersData
-                        .slice(slideIndex * 5, slideIndex * 5 + 5)
-                        .map((manufacturer) => (
-                          <motion.div
-                            key={manufacturer.id}
-                            className="hover:scale-105 transition-all duration-300 hover:drop-shadow-lg flex items-center justify-center"
-                            whileHover={{ y: -5 }}
-                          >
-                            <Link href={`/manufacturers/${manufacturer.id}`}>
-                              {manufacturer.id === "veolia-suez" ? (
-                                <div className="flex items-center gap-3 cursor-pointer">
+                {Array.from({ length: Math.ceil(manufacturersData.length / 5) }).map(
+                  (_, slideIndex) => (
+                    <div key={slideIndex} className="w-full flex-shrink-0">
+                      <div className="flex justify-center items-center gap-12 md:gap-16 lg:gap-20 px-6">
+                        {manufacturersData
+                          .slice(slideIndex * 5, slideIndex * 5 + 5)
+                          .map((manufacturer) => (
+                            <motion.div
+                              key={manufacturer.id}
+                              className="hover:scale-105 transition-all duration-300 hover:drop-shadow-lg flex items-center justify-center"
+                              whileHover={{ y: -5 }}
+                            >
+                              <Link href={`/manufacturers/${manufacturer.id}`}>
+                                {manufacturer.id === "veolia-suez" ? (
+                                  <div className="flex items-center gap-3 cursor-pointer">
+                                    <Image
+                                      src="/manufacturers/veolia-capsule-logo.svg"
+                                      alt="Veolia logo"
+                                      width={120}
+                                      height={80}
+                                      className="h-16 w-auto object-contain"
+                                    />
+                                    <Image
+                                      src="/manufacturers/suez-logo.png"
+                                      alt="Suez logo"
+                                      width={100}
+                                      height={70}
+                                      className="h-12 w-auto object-contain"
+                                    />
+                                  </div>
+                                ) : (
                                   <Image
-                                    src="/manufacturers/veolia-capsule-logo.svg"
-                                    alt="Veolia logo"
-                                    width={120}
-                                    height={80}
-                                    className="h-16 w-auto object-contain"
+                                    src={manufacturer.logo}
+                                    alt={`${manufacturer.name} logo`}
+                                    width={180}
+                                    height={90}
+                                    className="object-contain cursor-pointer max-h-16 w-auto"
                                   />
-                                  <Image
-                                    src="/manufacturers/suez-logo.png"
-                                    alt="Suez logo"
-                                    width={100}
-                                    height={70}
-                                    className="h-12 w-auto object-contain"
-                                  />
-                                </div>
-                              ) : (
-                                <Image
-                                  src={manufacturer.logo}
-                                  alt={`${manufacturer.name} logo`}
-                                  width={180}
-                                  height={90}
-                                  className="object-contain cursor-pointer max-h-16 w-auto"
-                                />
-                              )}
-                            </Link>
-                          </motion.div>
-                        ))}
+                                )}
+                              </Link>
+                            </motion.div>
+                          ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                )}
               </div>
             </motion.div>
 
@@ -498,7 +504,8 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               {
                 icon: Package,
                 title: "Pumping Systems",
-                description: "High-efficiency pumps and local control panels for pumping applications",
+                description:
+                  "High-efficiency pumps and local control panels for pumping applications",
               },
               {
                 icon: Wrench,
