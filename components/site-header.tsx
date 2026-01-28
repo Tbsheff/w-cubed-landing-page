@@ -22,9 +22,16 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showLogo, setShowLogo] = useState(false);
+  const isHomePage = pathname === "/";
 
-  // Show logo in header when scrolled past hero section
+  // Show logo in header when scrolled past hero section (homepage only)
+  // On other pages, show logo immediately
   useEffect(() => {
+    if (!isHomePage) {
+      setShowLogo(true);
+      return;
+    }
+
     const handleScroll = () => {
       // Show logo when scrolled more than 400px (past the large hero logo)
       setShowLogo(window.scrollY > 400);
@@ -32,7 +39,7 @@ export function SiteHeader() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isHomePage]);
 
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
