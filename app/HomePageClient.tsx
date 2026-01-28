@@ -83,28 +83,28 @@ const defaultManufacturers: ManufacturerStripItem[] = [
 
 const defaultHighlights: HighlightItem[] = [
   {
-    title: "Municipal Water Treatment Facilities",
+    title: "Municipal Water Treatment Facilities and Collections",
     description:
-      "Successfully designed and installed pumping systems for municipal water and wastewater treatment plants across our four-state territory.",
+      "Successfully designed and installed pumping systems for municipal water and wastewater treatment plants and collection systems across our four-state territory.",
     image: "/placeholder.svg?height=200&width=300&text=Municipal+Project",
     category: "Municipal",
     states: ["UT", "NV", "ID", "WY"],
   },
   {
-    title: "Industrial Plant Solutions",
+    title: "Industrial Pretreatment Solutions",
     description:
-      "Custom water-process equipment solutions for manufacturing facilities, mines, and processing plants throughout the Mountain West.",
+      "Custom water-process equipment solutions for manufacturing facilities and processing plants throughout the Mountain West.",
     image: "/placeholder.svg?height=200&width=300&text=Industrial+Project",
     category: "Industrial",
-    states: ["UT", "ID"],
+    states: ["UT", "NV", "ID", "WY"],
   },
   {
-    title: "Pretreatment & Infrastructure",
+    title: "Commercial Pretreatment Solutions",
     description:
-      "Reliable pumping and treatment systems for pretreatment facilities, resorts, and infrastructure projects.",
-    image: "/placeholder.svg?height=200&width=300&text=Pretreatment+Project",
-    category: "Pretreatment",
-    states: ["NV", "WY"],
+      "Reliable pumping and treatment systems for commercial pretreatment facilities, resorts, and infrastructure projects.",
+    image: "/placeholder.svg?height=200&width=300&text=Commercial+Project",
+    category: "Commercial",
+    states: ["UT", "NV", "ID", "WY"],
   },
 ];
 
