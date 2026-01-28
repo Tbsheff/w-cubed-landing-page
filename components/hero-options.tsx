@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ArrowRight, CheckCircle, Droplets, Award, Users } from "lucide-react"
-import Image from "next/image"
+import { motion } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, CheckCircle, Droplets, Award, Users } from "lucide-react";
+import Image from "next/image";
 
 // Option 1: Clean Equipment Focus
 export function HeroOption1() {
@@ -24,7 +24,9 @@ export function HeroOption1() {
             </Badge>
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand-deep">
               Water-process equipment experts,
-              <span className="text-brand-accent block lg:whitespace-nowrap">serving UT · ID · WY</span>
+              <span className="text-brand-accent block lg:whitespace-nowrap">
+                serving UT · ID · WY
+              </span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-lg">
               Your trusted partner for water treatment, pumping systems, and process equipment.
@@ -79,7 +81,7 @@ export function HeroOption1() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 // Option 2: Abstract Water Pattern
@@ -100,7 +102,9 @@ export function HeroOption2() {
             </Badge>
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand-deep">
               Water-process equipment experts,
-              <span className="text-brand-accent block lg:whitespace-nowrap">serving UT · ID · WY</span>
+              <span className="text-brand-accent block lg:whitespace-nowrap">
+                serving UT · ID · WY
+              </span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-lg">
               Your trusted partner for water treatment, pumping systems, and process equipment.
@@ -160,7 +164,7 @@ export function HeroOption2() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 // Option 3: Minimalist with Icons
@@ -181,7 +185,9 @@ export function HeroOption3() {
             </Badge>
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand-deep">
               Water-process equipment experts,
-              <span className="text-brand-accent block lg:whitespace-nowrap">serving UT · ID · WY</span>
+              <span className="text-brand-accent block lg:whitespace-nowrap">
+                serving UT · ID · WY
+              </span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-lg">
               Your trusted partner for water treatment, pumping systems, and process equipment.
@@ -247,5 +253,5 @@ export function HeroOption3() {
         </div>
       </div>
     </section>
-  )
+  );
 }

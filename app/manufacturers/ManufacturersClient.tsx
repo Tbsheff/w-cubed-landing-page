@@ -132,7 +132,9 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                   type="button"
                   onClick={() => setViewMode("grid")}
                   className={
-                    viewMode === "grid" ? "bg-brand-accent hover:bg-brand-accent/90" : "bg-transparent"
+                    viewMode === "grid"
+                      ? "bg-brand-accent hover:bg-brand-accent/90"
+                      : "bg-transparent"
                   }
                 >
                   <Grid className="h-4 w-4" />
@@ -143,7 +145,9 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                   type="button"
                   onClick={() => setViewMode("list")}
                   className={
-                    viewMode === "list" ? "bg-brand-accent hover:bg-brand-accent/90" : "bg-transparent"
+                    viewMode === "list"
+                      ? "bg-brand-accent hover:bg-brand-accent/90"
+                      : "bg-transparent"
                   }
                 >
                   <List className="h-4 w-4" />
@@ -190,9 +194,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                               className="object-contain max-h-20 w-auto"
                             />
                           </div>
-                          <CardTitle className="text-xl text-brand">
-                            {manufacturer.name}
-                          </CardTitle>
+                          <CardTitle className="text-xl text-brand">{manufacturer.name}</CardTitle>
                           {manufacturer.category && (
                             <Badge variant="secondary">{manufacturer.category}</Badge>
                           )}

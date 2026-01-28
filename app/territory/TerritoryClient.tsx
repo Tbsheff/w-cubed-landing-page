@@ -42,9 +42,7 @@ export default function TerritoryPage({
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand">
               {heroTitle}
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              {heroSubtitle}
-            </p>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{heroSubtitle}</p>
           </motion.div>
         </div>
       </section>

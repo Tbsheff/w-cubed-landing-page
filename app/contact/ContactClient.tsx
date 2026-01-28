@@ -142,9 +142,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                     <CardContent className="p-6 space-y-4 flex-1">
                       <div className="flex items-center gap-3">
                         <Phone className="h-5 w-5 text-brand-accent" />
-                        <h3 className="font-semibold text-brand">
-                          Contact Your Representative
-                        </h3>
+                        <h3 className="font-semibold text-brand">Contact Your Representative</h3>
                       </div>
                       <p className="text-sm text-muted-foreground">
                         Reach out to the team member covering your territory for project-specific
@@ -309,9 +307,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                         </Select>
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-brand">
-                          Equipment Category
-                        </label>
+                        <label className="text-sm font-medium text-brand">Equipment Category</label>
                         <Select>
                           <SelectTrigger>
                             <SelectValue placeholder="What type of equipment?" />
@@ -346,9 +342,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       </Select>
                     </div>
                     <div className="flex-1">
-                      <label className="text-sm font-medium text-brand">
-                        Project Message *
-                      </label>
+                      <label className="text-sm font-medium text-brand">Project Message *</label>
                       <Textarea
                         placeholder="- Describe your specific equipment needs&#10;- Project specifications or requirements&#10;- Current system issues (if any)&#10;- Any other important details..."
                         rows={5}

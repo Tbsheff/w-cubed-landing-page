@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,25 +10,36 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const territories = {
   utah: { name: "Utah", rep: "John Smith", color: "#1FA9A4" },
   idaho: { name: "Idaho", rep: "Sarah Johnson", color: "#123D6A" },
   wyoming: { name: "Wyoming", rep: "Mike Davis", color: "#1FA9A4" },
-}
+};
 
 export function TerritoryMap() {
-  const [hoveredState, setHoveredState] = useState<string | null>(null)
-  const [selectedState, setSelectedState] = useState<string>("")
+  const [hoveredState, setHoveredState] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState<string>("");
 
   return (
     <div className="flex flex-col items-center space-y-6">
       <div className="relative">
-        <svg width="300" height="200" viewBox="0 0 300 200" className="border rounded-lg bg-slate-50">
+        <svg
+          width="300"
+          height="200"
+          viewBox="0 0 300 200"
+          className="border rounded-lg bg-slate-50"
+        >
           {/* Utah */}
           <motion.path
             d="M50 50 L120 50 L120 150 L50 150 Z"
@@ -96,8 +107,8 @@ export function TerritoryMap() {
           <DialogHeader>
             <DialogTitle>Contact Your Territory Representative</DialogTitle>
             <DialogDescription>
-              Select your state and we&apos;ll connect you with the right representative for your water-process equipment
-              needs.
+              Select your state and we&apos;ll connect you with the right representative for your
+              water-process equipment needs.
             </DialogDescription>
           </DialogHeader>
           <form className="space-y-4">
@@ -130,12 +141,17 @@ export function TerritoryMap() {
             </div>
             <div>
               <label className="text-sm font-medium">Brief Message</label>
-              <Textarea placeholder="Tell us about your water-process equipment needs..." rows={3} />
+              <Textarea
+                placeholder="Tell us about your water-process equipment needs..."
+                rows={3}
+              />
             </div>
-            <Button className="w-full bg-brand-accent hover:bg-brand-accent/90">Contact My Rep</Button>
+            <Button className="w-full bg-brand-accent hover:bg-brand-accent/90">
+              Contact My Rep
+            </Button>
           </form>
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

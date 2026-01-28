@@ -479,9 +479,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Expertise
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-brand">
-              Water-Process Solutions
-            </h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-brand">Water-Process Solutions</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Comprehensive water treatment and process equipment solutions for municipal,
               industrial, and pretreatment applications
@@ -543,9 +541,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Get In Touch
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-brand">
-              Meet Your Territory Team
-            </h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-brand">Meet Your Territory Team</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Reach out directly to the representative serving your area for quotes, project
               support, and technical guidance.
@@ -645,9 +641,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Expertise
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-brand">
-              Project Types We Serve
-            </h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-brand">Project Types We Serve</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Specialized water-process equipment solutions across multiple industries and
               applications
@@ -825,7 +819,10 @@ function WordWithAccent({ text }: { text: string }) {
                 <span className="relative inline-block font-extrabold">
                   <span
                     className="inline-block"
-                    style={{ borderBottom: "4px solid rgb(var(--brand-accent))", paddingBottom: "2px" }}
+                    style={{
+                      borderBottom: "4px solid rgb(var(--brand-accent))",
+                      paddingBottom: "2px",
+                    }}
                   >
                     {word[0]}
                   </span>

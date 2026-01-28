@@ -1,26 +1,26 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export function NavigationProgress() {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
 
   // Only show progress on manual trigger, not automatic detection
   useEffect(() => {
-    const handleStart = () => setIsVisible(true)
-    const handleComplete = () => setIsVisible(false)
+    const handleStart = () => setIsVisible(true);
+    const handleComplete = () => setIsVisible(false);
 
     // Listen for Next.js router events if needed
     // For now, just hide the progress bar
-    setIsVisible(false)
+    setIsVisible(false);
 
     return () => {
       // Cleanup if needed
-    }
-  }, [])
+    };
+  }, []);
 
-  if (!isVisible) return null
+  if (!isVisible) return null;
 
   return (
     <motion.div
@@ -29,5 +29,5 @@ export function NavigationProgress() {
       animate={{ scaleX: 1 }}
       style={{ transformOrigin: "left" }}
     />
-  )
+  );
 }
