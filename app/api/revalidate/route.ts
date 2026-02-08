@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
         }
 
         if (path) revalidatePath(path)
-        if (tag) revalidateTag(tag)
+        if (tag) revalidateTag(tag, { expire: 0 })
 
         return NextResponse.json({ ok: true, revalidated: { path, tag } })
     } catch (err) {
