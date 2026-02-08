@@ -148,7 +148,7 @@ export default function WCubedLanding({
         territories: r.territories,
         phone: r.phone ?? "",
         email: r.email ?? "",
-        role: r.role ?? "",
+        role: r.territories.join(", "),
         image: r.image ?? undefined,
       }))
     : territoryRepresentatives;

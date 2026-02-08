@@ -169,5 +169,6 @@ export const featuredPostsQuery = groq`*[_type == "post" && featured == true && 
   "slug": slug.current,
   "excerpt": coalesce(excerpt, body[0].children[0].text),
   "date": coalesce(publishedAt, _updatedAt),
-  "imageUrl": mainImage.asset->url
+  "imageUrl": mainImage.asset->url,
+  "imageAlt": mainImage.alt
 }`

@@ -1,6 +1,6 @@
 import HomePageClient from "./HomePageClient"
 import { sanityClient } from "@/lib/sanity.client"
-import { siteSettingsQuery } from "@/lib/sanity.queries"
+import { siteSettingsQuery, representativesQuery } from "@/lib/sanity.queries"
 import { urlForImage } from "@/lib/sanity.image"
 
 export const revalidate = 3600
@@ -30,8 +30,21 @@ type SiteSettingsResult = {
   }>
 }
 
+type RepresentativeResult = {
+  name: string
+  role?: string | null
+  phone?: string | null
+  email?: string | null
+  states?: string[] | null
+  photo?: any
+  photoAlt?: string | null
+}
+
 export default async function Page() {
-  const data = await sanityClient.fetch<SiteSettingsResult | null>(siteSettingsQuery)
+  const [data, repsData] = await Promise.all([
+    sanityClient.fetch<SiteSettingsResult | null>(siteSettingsQuery),
+    sanityClient.fetch<RepresentativeResult[]>(representativesQuery),
+  ])
 
   if (!data) return <HomePageClient />
 
@@ -73,12 +86,24 @@ export default async function Page() {
     secondaryCta: data.secondaryCta,
   }
 
+  const representatives = repsData
+    ?.filter((r) => r.name)
+    .map((r) => ({
+      name: r.name,
+      role: r.role,
+      phone: r.phone,
+      email: r.email,
+      territories: r.states ?? [],
+      image: r.photo ? urlForImage(r.photo).width(300).height(300).fit("crop").url() : null,
+    })) ?? []
+
   return (
     <HomePageClient
       hero={hero}
       stats={stats}
       manufacturers={manufacturers}
       highlights={highlights}
+      representatives={representatives.length > 0 ? representatives : undefined}
     />
   )
 }

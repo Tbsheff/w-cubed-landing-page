@@ -93,8 +93,21 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
     control,
     formState: { errors },
     reset: resetForm,
+    setError,
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      company: "",
+      location: "",
+      projectType: "",
+      equipmentCategory: "",
+      timeline: "",
+      message: "",
+    },
   });
 
   const onSubmit = (data: ContactFormData) => {
@@ -104,6 +117,13 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
         toast.success("Your project inquiry has been submitted. We'll be in touch within one business day.");
         resetForm();
       } else {
+        if (result.errors) {
+          for (const [field, messages] of Object.entries(result.errors)) {
+            if (messages && messages.length > 0) {
+              setError(field as keyof ContactFormData, { message: messages[0] });
+            }
+          }
+        }
         toast.error("Something went wrong. Please check the form and try again.");
       }
     });
@@ -281,20 +301,20 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-[#1C4E80]">First Name *</label>
-                        <Input placeholder="John" {...register("firstName")} />
-                        {errors.firstName && <p className="text-sm text-red-500 mt-1">{errors.firstName.message}</p>}
+                        <Input placeholder="John" aria-invalid={!!errors.firstName} aria-describedby={errors.firstName ? "firstName-error" : undefined} {...register("firstName")} />
+                        {errors.firstName && <p id="firstName-error" className="text-sm text-red-500 mt-1">{errors.firstName.message}</p>}
                       </div>
                       <div>
                         <label className="text-sm font-medium text-[#1C4E80]">Last Name *</label>
-                        <Input placeholder="Doe" {...register("lastName")} />
-                        {errors.lastName && <p className="text-sm text-red-500 mt-1">{errors.lastName.message}</p>}
+                        <Input placeholder="Doe" aria-invalid={!!errors.lastName} aria-describedby={errors.lastName ? "lastName-error" : undefined} {...register("lastName")} />
+                        {errors.lastName && <p id="lastName-error" className="text-sm text-red-500 mt-1">{errors.lastName.message}</p>}
                       </div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-[#1C4E80]">Email *</label>
-                        <Input type="email" placeholder="john@company.com" {...register("email")} />
-                        {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>}
+                        <Input type="email" placeholder="john@company.com" aria-invalid={!!errors.email} aria-describedby={errors.email ? "email-error" : undefined} {...register("email")} />
+                        {errors.email && <p id="email-error" className="text-sm text-red-500 mt-1">{errors.email.message}</p>}
                       </div>
                       <div>
                         <label className="text-sm font-medium text-[#1C4E80]">Phone</label>
@@ -313,7 +333,11 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                           name="location"
                           render={({ field }) => (
                             <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                              <SelectTrigger>
+                              <SelectTrigger
+                                onBlur={field.onBlur}
+                                aria-invalid={!!errors.location}
+                                aria-describedby={errors.location ? "location-error" : undefined}
+                              >
                                 <SelectValue placeholder="Select your state" />
                               </SelectTrigger>
                               <SelectContent>
@@ -326,7 +350,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                             </Select>
                           )}
                         />
-                        {errors.location && <p className="text-sm text-red-500 mt-1">{errors.location.message}</p>}
+                        {errors.location && <p id="location-error" className="text-sm text-red-500 mt-1">{errors.location.message}</p>}
                       </div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
@@ -337,7 +361,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                           name="projectType"
                           render={({ field }) => (
                             <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                              <SelectTrigger>
+                              <SelectTrigger onBlur={field.onBlur}>
                                 <SelectValue placeholder="Select project type" />
                               </SelectTrigger>
                               <SelectContent>
@@ -362,7 +386,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                           name="equipmentCategory"
                           render={({ field }) => (
                             <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                              <SelectTrigger>
+                              <SelectTrigger onBlur={field.onBlur}>
                                 <SelectValue placeholder="What type of equipment?" />
                               </SelectTrigger>
                               <SelectContent>
@@ -387,7 +411,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                         name="timeline"
                         render={({ field }) => (
                           <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                            <SelectTrigger>
+                            <SelectTrigger onBlur={field.onBlur}>
                               <SelectValue placeholder="When do you need this completed?" />
                             </SelectTrigger>
                             <SelectContent>
@@ -409,9 +433,11 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       <Textarea
                         placeholder="- Describe your specific equipment needs&#10;- Project specifications or requirements&#10;- Current system issues (if any)&#10;- Any other important details..."
                         rows={5}
+                        aria-invalid={!!errors.message}
+                        aria-describedby={errors.message ? "message-error" : undefined}
                         {...register("message")}
                       />
-                      {errors.message && <p className="text-sm text-red-500 mt-1">{errors.message.message}</p>}
+                      {errors.message && <p id="message-error" className="text-sm text-red-500 mt-1">{errors.message.message}</p>}
                     </div>
                     <div className="text-xs text-muted-foreground">
                       * Required fields. By submitting this form, you agree to be contacted by
