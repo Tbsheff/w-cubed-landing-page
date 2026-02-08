@@ -2,8 +2,16 @@ import ManufacturersClient, { type ManufacturerListItem } from "./ManufacturersC
 import { sanityClient } from "@/lib/sanity.client"
 import { manufacturersListQuery } from "@/lib/sanity.queries"
 import { urlForImage } from "@/lib/sanity.image"
+import type { Metadata } from "next"
+import { buildMetadata } from "@/lib/metadata"
 
-export const dynamic = "force-static"
+export const revalidate = 3600
+
+export const metadata: Metadata = buildMetadata({
+  title: "Manufacturers",
+  description: "Premium water treatment and process equipment from industry-leading manufacturers we represent.",
+  path: "/manufacturers",
+})
 
 type ManufacturerQueryResult = {
   slug: string

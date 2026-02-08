@@ -3,15 +3,29 @@ import { projectBySlugQuery, allProjectSlugsQuery } from '@/lib/sanity.queries'
 import ProjectClient from './ProjectClient'
 import { notFound } from 'next/navigation'
 import { urlForImage } from '@/lib/sanity.image'
+import type { Metadata } from "next"
+import { buildMetadata } from "@/lib/metadata"
+import groq from "groq"
 
-export const dynamic = 'force-static'
+export const revalidate = 3600
 
 export async function generateStaticParams() {
     const slugs: Array<{ slug: string }> = await sanityClient.fetch(allProjectSlugsQuery)
     return slugs.map(({ slug }) => ({ slug }))
 }
 
-export default async function ProjectPage({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const data = await sanityClient.fetch<{ title: string; excerpt?: string; imageUrl?: string } | null>(
+    groq`*[_type == "project" && slug.current == $slug][0]{ title, "excerpt": coalesce(excerpt, body[0].children[0].text), "imageUrl": mainImage.asset->url }`,
+    { slug }
+  )
+  if (!data) return {}
+  return buildMetadata({ title: data.title, description: data.excerpt, path: `/projects/${slug}`, image: data.imageUrl })
+}
+
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params
     type ProjectResult = {
         title: string
         excerpt?: string
@@ -22,7 +36,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
         body?: any
     }
 
-    const data = await sanityClient.fetch<ProjectResult>(projectBySlugQuery, { slug: params.slug })
+    const data = await sanityClient.fetch<ProjectResult>(projectBySlugQuery, { slug })
 
     if (!data) return notFound()
 
@@ -33,11 +47,9 @@ export default async function ProjectPage({ params }: { params: { slug: string }
         date: data.date,
         categories: (data.categories || []).map((c) => c.title as string).filter(Boolean),
         body: data.body,
-        slug: params.slug,
+        slug: slug,
         related: [],
     }
 
     return <ProjectClient project={project} />
 }
-
-

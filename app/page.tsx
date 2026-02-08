@@ -3,7 +3,7 @@ import { sanityClient } from "@/lib/sanity.client"
 import { siteSettingsQuery } from "@/lib/sanity.queries"
 import { urlForImage } from "@/lib/sanity.image"
 
-export const dynamic = "force-static"
+export const revalidate = 3600
 
 type ManufacturerStripItem = {
   slug: string
@@ -33,19 +33,16 @@ type SiteSettingsResult = {
 export default async function Page() {
   const data = await sanityClient.fetch<SiteSettingsResult | null>(siteSettingsQuery)
 
-  if (!data) throw new Error("CMS siteSettings missing")
+  if (!data) return <HomePageClient />
 
   const manufacturers =
-    data.manufacturerStrip?.map((m) => {
-      if (!m.slug) throw new Error("CMS manufacturer missing slug")
-      return {
-        id: m.slug,
-        name: m.name,
-        logo:
-          m.logoUrl ||
-          (m.logo ? urlForImage(m.logo).width(240).height(120).fit("max").url() : "/placeholder.svg"),
-      }
-    }) || []
+    data.manufacturerStrip?.filter((m) => m.slug).map((m) => ({
+      id: m.slug,
+      name: m.name,
+      logo:
+        m.logoUrl ||
+        (m.logo ? urlForImage(m.logo).width(240).height(120).fit("max").url() : "/placeholder.svg"),
+    })) || []
 
   const highlights =
     data.highlights
@@ -66,11 +63,6 @@ export default async function Page() {
         label: s.label as string,
         detail: s.detail,
       })) || []
-
-  if (!data.heroTitle || !data.heroDescription) throw new Error("CMS hero content missing")
-  if (!stats.length) throw new Error("CMS stats missing")
-  if (!manufacturers.length) throw new Error("CMS manufacturers strip missing")
-  if (!highlights.length) throw new Error("CMS highlights missing")
 
   const hero = {
     badge: data.heroBadge,

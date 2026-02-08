@@ -2,8 +2,16 @@ import BlogListClient from "./BlogListClient"
 import { sanityClient } from "@/lib/sanity.client"
 import { postsListQuery, categoriesListQuery, authorsListQuery } from "@/lib/sanity.queries"
 import { urlForImage } from "@/lib/sanity.image"
+import type { Metadata } from "next"
+import { buildMetadata } from "@/lib/metadata"
 
-export const dynamic = 'force-static'
+export const revalidate = 3600
+
+export const metadata: Metadata = buildMetadata({
+  title: "Blog",
+  description: "Industry insights, technical guides, and news about water treatment equipment and solutions.",
+  path: "/blog",
+})
 
 type PostsListResultItem = {
   _id: string

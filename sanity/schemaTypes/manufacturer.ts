@@ -4,6 +4,13 @@ export default defineType({
   name: 'manufacturer',
   title: 'Manufacturer',
   type: 'document',
+  orderings: [
+    { title: 'Display Order', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] },
+    { title: 'Name (A-Z)', name: 'nameAsc', by: [{ field: 'name', direction: 'asc' }] },
+  ],
+  preview: {
+    select: { title: 'name', subtitle: 'category', media: 'logo' },
+  },
   fields: [
     defineField({
       name: 'name',
@@ -26,6 +33,14 @@ export default defineType({
       title: 'Logo',
       type: 'image',
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Describe the image for accessibility and SEO',
+        }),
+      ],
     }),
     defineField({
       name: 'category',
@@ -76,4 +91,3 @@ export default defineType({
     }),
   ],
 })
-

@@ -10,6 +10,7 @@ export const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][
   "date": coalesce(publishedAt, _updatedAt),
   mainImage,
   "imageUrl": mainImage.asset->url,
+  "imageAlt": mainImage.alt,
   author->{ name, image },
   categories[]->{ title },
   body
@@ -17,7 +18,7 @@ export const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][
 
 export const allPostSlugsQuery = groq`*[_type == "post" && defined(slug.current)]{ "slug": slug.current }`
 
-export const postsListQuery = groq`*[_type == "post"]|order(coalesce(publishedAt,_updatedAt) desc){
+export const postsListQuery = groq`*[_type == "post" && defined(slug.current)]|order(coalesce(publishedAt,_updatedAt) desc){
   _id,
   title,
   "slug": slug.current,
@@ -25,6 +26,7 @@ export const postsListQuery = groq`*[_type == "post"]|order(coalesce(publishedAt
   "date": coalesce(publishedAt, _updatedAt),
   mainImage,
   "imageUrl": mainImage.asset->url,
+  "imageAlt": mainImage.alt,
   author->{ name },
   categories[]->{ title }
 }`
@@ -39,13 +41,14 @@ export const projectBySlugQuery = groq`*[_type == "project" && slug.current == $
   "date": coalesce(publishedAt, _updatedAt),
   mainImage,
   "imageUrl": mainImage.asset->url,
+  "imageAlt": mainImage.alt,
   categories[]->{ title },
   body
 }`
 
 export const allProjectSlugsQuery = groq`*[_type == "project" && defined(slug.current)]{ "slug": slug.current }`
 
-export const projectsListQuery = groq`*[_type == "project"]|order(coalesce(publishedAt,_updatedAt) desc){
+export const projectsListQuery = groq`*[_type == "project" && defined(slug.current)]|order(coalesce(publishedAt,_updatedAt) desc){
   _id,
   title,
   "slug": slug.current,
@@ -53,12 +56,13 @@ export const projectsListQuery = groq`*[_type == "project"]|order(coalesce(publi
   "date": coalesce(publishedAt, _updatedAt),
   mainImage,
   "imageUrl": mainImage.asset->url,
+  "imageAlt": mainImage.alt,
   categories[]->{ title }
 }`
 
 export const allManufacturerSlugsQuery = groq`*[_type == "manufacturer" && defined(slug.current)]{ "slug": slug.current }`
 
-export const manufacturersListQuery = groq`*[_type == "manufacturer"]|order(coalesce(order, 9999) asc, name asc){
+export const manufacturersListQuery = groq`*[_type == "manufacturer" && defined(slug.current)]|order(coalesce(order, 9999) asc, name asc){
   _id,
   name,
   "slug": slug.current,
@@ -71,7 +75,8 @@ export const manufacturersListQuery = groq`*[_type == "manufacturer"]|order(coal
   featured,
   order,
   logo,
-  "logoUrl": logo.asset->url
+  "logoUrl": logo.asset->url,
+  "logoAlt": logo.alt
 }`
 
 export const manufacturerBySlugQuery = groq`*[_type == "manufacturer" && slug.current == $slug][0]{
@@ -88,7 +93,8 @@ export const manufacturerBySlugQuery = groq`*[_type == "manufacturer" && slug.cu
   featured,
   order,
   logo,
-  "logoUrl": logo.asset->url
+  "logoUrl": logo.asset->url,
+  "logoAlt": logo.alt
 }`
 
 export const siteSettingsQuery = groq`*[_type == "siteSettings"][0]{
@@ -96,6 +102,7 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0]{
   heroTitle,
   heroDescription,
   heroImage,
+  "heroImageAlt": heroImage.alt,
   primaryCta,
   secondaryCta,
   stats,
@@ -111,7 +118,8 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0]{
     description,
     category,
     states,
-    image
+    image,
+    "imageAlt": image.alt
   }
 }`
 
@@ -128,7 +136,8 @@ export const representativesQuery = groq`*[_type == "representative"]|order(coal
     state,
     county
   },
-  photo
+  photo,
+  "photoAlt": photo.alt
 }`
 
 export const territoryInfoQuery = groq`*[_type == "territoryInfo"][0]{
@@ -143,3 +152,22 @@ export const territoryInfoQuery = groq`*[_type == "territoryInfo"][0]{
 export const categoriesListQuery = groq`*[_type == "category"]{ title }`
 
 export const authorsListQuery = groq`*[_type == "author"]{ name }`
+
+export const relatedPostsQuery = groq`*[_type == "post" && slug.current != $slug && count(categories[]->_id[@ in $categoryIds]) > 0] | order(coalesce(publishedAt, _updatedAt) desc) [0...3] {
+  _id,
+  title,
+  "slug": slug.current,
+  "excerpt": coalesce(excerpt, body[0].children[0].text),
+  "date": coalesce(publishedAt, _updatedAt),
+  "imageUrl": mainImage.asset->url,
+  "imageAlt": mainImage.alt
+}`
+
+export const featuredPostsQuery = groq`*[_type == "post" && featured == true && defined(slug.current)] | order(coalesce(publishedAt, _updatedAt) desc) [0...3] {
+  _id,
+  title,
+  "slug": slug.current,
+  "excerpt": coalesce(excerpt, body[0].children[0].text),
+  "date": coalesce(publishedAt, _updatedAt),
+  "imageUrl": mainImage.asset->url
+}`

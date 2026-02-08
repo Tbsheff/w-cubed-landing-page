@@ -9,6 +9,7 @@ import { Calendar, ArrowLeft, ArrowRight, MapPin } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { PortableText } from "@portabletext/react"
+import { portableTextComponents } from "@/components/portable-text-components"
 
 export type ProjectClientProps = {
     project: {
@@ -126,7 +127,7 @@ export default function ProjectClient({ project }: ProjectClientProps) {
                                 transition={{ duration: 0.8 }}
                             >
                                 {project.body ? (
-                                    <PortableText value={project.body} />
+                                    <PortableText value={project.body} components={portableTextComponents} />
                                 ) : null}
 
                                 <Separator className="my-12" />

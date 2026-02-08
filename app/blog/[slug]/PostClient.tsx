@@ -10,6 +10,7 @@ import { Calendar, User, Mail, Phone, Share2, Facebook, Twitter, Linkedin, Arrow
 import Image from "next/image"
 import Link from "next/link"
 import { PortableText } from "@portabletext/react"
+import { portableTextComponents } from "@/components/portable-text-components"
 
 export type PostClientProps = {
     post: {
@@ -148,7 +149,7 @@ export default function PostClient({ post }: PostClientProps) {
                                 transition={{ duration: 0.8 }}
                             >
                                 {post.body ? (
-                                    <PortableText value={post.body} />
+                                    <PortableText value={post.body} components={portableTextComponents} />
                                 ) : null}
 
                                 <Separator className="my-12" />
@@ -233,7 +234,9 @@ export default function PostClient({ post }: PostClientProps) {
                                             <p className="text-[15px] leading-7 text-muted-foreground">
                                                 Our team can help you optimize your water treatment systems for maximum efficiency.
                                             </p>
-                                            <Button size="lg" className="w-full bg-[#1FA9A4] hover:bg-[#1FA9A4]/90 text-base text-white">Contact Our Experts</Button>
+                                            <Link href="/contact">
+                                <Button size="lg" className="w-full bg-[#1FA9A4] hover:bg-[#1FA9A4]/90 text-base text-white">Contact Our Experts</Button>
+                            </Link>
                                         </div>
                                     </Card>
                                 </div>
@@ -303,18 +306,22 @@ export default function PostClient({ post }: PostClientProps) {
                             Contact our team to discuss how we can help improve your water treatment efficiency and reduce costs.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Button size="lg" className="bg-[#1FA9A4] hover:bg-[#1FA9A4]/90">
+                            <Link href="/contact">
+                              <Button size="lg" className="bg-[#1FA9A4] hover:bg-[#1FA9A4]/90">
                                 <Phone className="mr-2 h-4 w-4" />
                                 Contact Your Rep
-                            </Button>
-                            <Button
+                              </Button>
+                            </Link>
+                            <Link href="/territory">
+                              <Button
                                 size="lg"
                                 variant="outline"
                                 className="border-white text-white hover:bg-white hover:text-[#123D6A] bg-transparent"
-                            >
+                              >
                                 <Mail className="mr-2 h-4 w-4" />
                                 Request Consultation
-                            </Button>
+                              </Button>
+                            </Link>
                         </div>
                     </motion.div>
                 </div>

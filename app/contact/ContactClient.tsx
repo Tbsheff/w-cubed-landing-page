@@ -1,6 +1,10 @@
 "use client";
 
+import { useTransition } from "react";
 import { motion } from "framer-motion";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,6 +20,8 @@ import { Phone, Mail, Clock } from "lucide-react";
 import Link from "next/link";
 import { PageWrapper } from "@/components/page-wrapper";
 import { territoryRepresentatives } from "@/lib/representatives";
+import { contactFormSchema, type ContactFormData } from "@/lib/schemas/contact-form";
+import { submitContactForm } from "./actions";
 import type { RepCoverage, TerritoryInfo as TerritoryInfoType } from "@/lib/types/territory";
 
 const fadeInUp = {
@@ -79,6 +85,29 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
   const heroSubtitle =
     territoryInfo?.heroSubtitle ||
     "Tell us about your water equipment needs or reach out directly to the right representative. We respond within one business day across Utah, Nevada, Idaho, and Wyoming.";
+
+  const [isPending, startTransition] = useTransition();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+    reset: resetForm,
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
+  });
+
+  const onSubmit = (data: ContactFormData) => {
+    startTransition(async () => {
+      const result = await submitContactForm(data);
+      if (result.ok) {
+        toast.success("Your project inquiry has been submitted. We'll be in touch within one business day.");
+        resetForm();
+      } else {
+        toast.error("Something went wrong. Please check the form and try again.");
+      }
+    });
+  };
 
   return (
     <PageWrapper>
@@ -248,102 +277,130 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="px-0 pb-0 flex-1">
-                  <form className="flex h-full flex-col gap-4">
+                  <form onSubmit={handleSubmit(onSubmit)} className="flex h-full flex-col gap-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-[#1C4E80]">First Name *</label>
-                        <Input placeholder="John" required />
+                        <Input placeholder="John" {...register("firstName")} />
+                        {errors.firstName && <p className="text-sm text-red-500 mt-1">{errors.firstName.message}</p>}
                       </div>
                       <div>
                         <label className="text-sm font-medium text-[#1C4E80]">Last Name *</label>
-                        <Input placeholder="Doe" required />
+                        <Input placeholder="Doe" {...register("lastName")} />
+                        {errors.lastName && <p className="text-sm text-red-500 mt-1">{errors.lastName.message}</p>}
                       </div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-[#1C4E80]">Email *</label>
-                        <Input type="email" placeholder="john@company.com" required />
+                        <Input type="email" placeholder="john@company.com" {...register("email")} />
+                        {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>}
                       </div>
                       <div>
                         <label className="text-sm font-medium text-[#1C4E80]">Phone</label>
-                        <Input type="tel" placeholder="(801) 555-1234" />
+                        <Input type="tel" placeholder="(801) 555-1234" {...register("phone")} />
                       </div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-[#1C4E80]">Company</label>
-                        <Input placeholder="Your Company Name" />
+                        <Input placeholder="Your Company Name" {...register("company")} />
                       </div>
                       <div>
                         <label className="text-sm font-medium text-[#1C4E80]">Location *</label>
-                        <Select required>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select your state" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="utah">Utah</SelectItem>
-                            <SelectItem value="nevada">Nevada</SelectItem>
-                            <SelectItem value="idaho">Idaho</SelectItem>
-                            <SelectItem value="wyoming">Wyoming</SelectItem>
-                            <SelectItem value="other">Other State</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <Controller
+                          control={control}
+                          name="location"
+                          render={({ field }) => (
+                            <Select value={field.value ?? ""} onValueChange={field.onChange}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select your state" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="utah">Utah</SelectItem>
+                                <SelectItem value="nevada">Nevada</SelectItem>
+                                <SelectItem value="idaho">Idaho</SelectItem>
+                                <SelectItem value="wyoming">Wyoming</SelectItem>
+                                <SelectItem value="other">Other State</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          )}
+                        />
+                        {errors.location && <p className="text-sm text-red-500 mt-1">{errors.location.message}</p>}
                       </div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-[#1C4E80]">Project Type</label>
-                        <Select>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select project type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="new-installation">New Installation</SelectItem>
-                            <SelectItem value="replacement">Equipment Replacement</SelectItem>
-                            <SelectItem value="upgrade">System Upgrade</SelectItem>
-                            <SelectItem value="maintenance">Maintenance Contract</SelectItem>
-                            <SelectItem value="urgent-repair">Urgent Repair</SelectItem>
-                            <SelectItem value="consultation">Consultation/Design</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <Controller
+                          control={control}
+                          name="projectType"
+                          render={({ field }) => (
+                            <Select value={field.value ?? ""} onValueChange={field.onChange}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select project type" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="new-installation">New Installation</SelectItem>
+                                <SelectItem value="replacement">Equipment Replacement</SelectItem>
+                                <SelectItem value="upgrade">System Upgrade</SelectItem>
+                                <SelectItem value="maintenance">Maintenance Contract</SelectItem>
+                                <SelectItem value="urgent-repair">Urgent Repair</SelectItem>
+                                <SelectItem value="consultation">Consultation/Design</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          )}
+                        />
                       </div>
                       <div>
                         <label className="text-sm font-medium text-[#1C4E80]">
                           Equipment Category
                         </label>
-                        <Select>
-                          <SelectTrigger>
-                            <SelectValue placeholder="What type of equipment?" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="pumps">Pumps & Pumping Systems</SelectItem>
-                            <SelectItem value="valves">Valves & Flow Control</SelectItem>
-                            <SelectItem value="treatment">Water Treatment Systems</SelectItem>
-                            <SelectItem value="wastewater">Wastewater Treatment</SelectItem>
-                            <SelectItem value="blowers">Air Systems & Blowers</SelectItem>
-                            <SelectItem value="mixers">Mixers & Agitation</SelectItem>
-                            <SelectItem value="multiple">Multiple Equipment Types</SelectItem>
-                            <SelectItem value="unsure">Not Sure</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <Controller
+                          control={control}
+                          name="equipmentCategory"
+                          render={({ field }) => (
+                            <Select value={field.value ?? ""} onValueChange={field.onChange}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="What type of equipment?" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="pumps">Pumps & Pumping Systems</SelectItem>
+                                <SelectItem value="valves">Valves & Flow Control</SelectItem>
+                                <SelectItem value="treatment">Water Treatment Systems</SelectItem>
+                                <SelectItem value="wastewater">Wastewater Treatment</SelectItem>
+                                <SelectItem value="blowers">Air Systems & Blowers</SelectItem>
+                                <SelectItem value="mixers">Mixers & Agitation</SelectItem>
+                                <SelectItem value="multiple">Multiple Equipment Types</SelectItem>
+                                <SelectItem value="unsure">Not Sure</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          )}
+                        />
                       </div>
                     </div>
                     <div>
                       <label className="text-sm font-medium text-[#1C4E80]">Timeline</label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="When do you need this completed?" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="immediate">Immediate (This Week)</SelectItem>
-                          <SelectItem value="urgent">Urgent (Within 2 Weeks)</SelectItem>
-                          <SelectItem value="month">Within 1 Month</SelectItem>
-                          <SelectItem value="quarter">Within 3 Months</SelectItem>
-                          <SelectItem value="planning">Planning Phase (6+ Months)</SelectItem>
-                          <SelectItem value="budget">Budget Planning Only</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Controller
+                        control={control}
+                        name="timeline"
+                        render={({ field }) => (
+                          <Select value={field.value ?? ""} onValueChange={field.onChange}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="When do you need this completed?" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="immediate">Immediate (This Week)</SelectItem>
+                              <SelectItem value="urgent">Urgent (Within 2 Weeks)</SelectItem>
+                              <SelectItem value="month">Within 1 Month</SelectItem>
+                              <SelectItem value="quarter">Within 3 Months</SelectItem>
+                              <SelectItem value="planning">Planning Phase (6+ Months)</SelectItem>
+                              <SelectItem value="budget">Budget Planning Only</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
                     </div>
                     <div className="flex-1">
                       <label className="text-sm font-medium text-[#1C4E80]">
@@ -352,15 +409,16 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       <Textarea
                         placeholder="- Describe your specific equipment needs&#10;- Project specifications or requirements&#10;- Current system issues (if any)&#10;- Any other important details..."
                         rows={5}
-                        required
+                        {...register("message")}
                       />
+                      {errors.message && <p className="text-sm text-red-500 mt-1">{errors.message.message}</p>}
                     </div>
                     <div className="text-xs text-muted-foreground">
                       * Required fields. By submitting this form, you agree to be contacted by
                       W-Cubed regarding your project inquiry.
                     </div>
-                    <Button className="w-full bg-[#4986C8] hover:bg-[#4986C8]/90">
-                      Submit Project Inquiry
+                    <Button type="submit" disabled={isPending} className="w-full bg-[#4986C8] hover:bg-[#4986C8]/90">
+                      {isPending ? "Submitting..." : "Submit Project Inquiry"}
                     </Button>
                   </form>
                 </CardContent>

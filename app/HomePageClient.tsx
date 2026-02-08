@@ -43,11 +43,21 @@ type HighlightItem = {
   states?: string[] | null;
 };
 
+type RepresentativeItem = {
+  name: string;
+  role?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  territories: string[];
+  image?: string | null;
+};
+
 type HomePageProps = {
   hero?: HeroContent | null;
   stats?: StatItem[] | null;
   manufacturers?: ManufacturerStripItem[] | null;
   highlights?: HighlightItem[] | null;
+  representatives?: RepresentativeItem[] | null;
 };
 
 const fadeInUp = {
@@ -129,7 +139,20 @@ export default function WCubedLanding({
   stats,
   manufacturers,
   highlights,
+  representatives,
 }: HomePageProps) {
+  const reps = representatives && representatives.length > 0
+    ? representatives.map((r) => ({
+        name: r.name,
+        title: r.role ?? "",
+        territories: r.territories,
+        phone: r.phone ?? "",
+        email: r.email ?? "",
+        role: r.role ?? "",
+        image: r.image ?? undefined,
+      }))
+    : territoryRepresentatives;
+
   const heroData = { ...defaultHero, ...(hero || {}) };
   const heroImageSrc: string = heroData.heroImage ?? "/hero-image.png";
   const statsData = stats && stats.length ? stats : defaultStats;
@@ -486,7 +509,7 @@ export default function WCubedLanding({
             whileInView="animate"
             viewport={{ once: true }}
           >
-            {territoryRepresentatives.map((rep) => (
+            {reps.map((rep) => (
               <motion.div key={rep.email} variants={fadeInUp}>
                 <Card className="text-center hover:shadow-lg transition-shadow h-full">
                   <CardHeader>
