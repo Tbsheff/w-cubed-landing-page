@@ -22,10 +22,16 @@ type TerritoryInfoResult = {
 }
 
 export default async function TerritoryPage() {
-  const [territoryInfo, repsRaw] = await Promise.all([
-    sanityClient.fetch<TerritoryInfoResult | null>(territoryInfoQuery),
-    sanityClient.fetch(representativesQuery),
-  ])
+  let territoryInfo: TerritoryInfoResult | null = null
+  let repsRaw: Array<Record<string, unknown>> = []
+  try {
+    ;[territoryInfo, repsRaw] = await Promise.all([
+      sanityClient.fetch<TerritoryInfoResult | null>(territoryInfoQuery),
+      sanityClient.fetch<Array<Record<string, unknown>>>(representativesQuery),
+    ])
+  } catch {
+    // Sanity unreachable; render with fallback data
+  }
 
   const reps: RepCoverage[] = normalizeReps(repsRaw || [])
 

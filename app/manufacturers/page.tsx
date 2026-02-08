@@ -27,7 +27,12 @@ type ManufacturerQueryResult = {
 }
 
 export default async function ManufacturersPage() {
-  const results = await sanityClient.fetch<ManufacturerQueryResult[]>(manufacturersListQuery)
+  let results: ManufacturerQueryResult[] = []
+  try {
+    results = await sanityClient.fetch<ManufacturerQueryResult[]>(manufacturersListQuery)
+  } catch {
+    // Sanity unreachable; render with empty data
+  }
 
   const manufacturers: ManufacturerListItem[] = results.map((m) => ({
     id: m.slug,

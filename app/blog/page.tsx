@@ -26,11 +26,18 @@ type PostsListResultItem = {
 }
 
 export default async function BlogPage() {
-  const [result, categoriesResult, authorsResult] = await Promise.all([
-    sanityClient.fetch<PostsListResultItem[]>(postsListQuery),
-    sanityClient.fetch<Array<{ title?: string }>>(categoriesListQuery),
-    sanityClient.fetch<Array<{ name?: string }>>(authorsListQuery),
-  ])
+  let result: PostsListResultItem[] = []
+  let categoriesResult: Array<{ title?: string }> = []
+  let authorsResult: Array<{ name?: string }> = []
+  try {
+    ;[result, categoriesResult, authorsResult] = await Promise.all([
+      sanityClient.fetch<PostsListResultItem[]>(postsListQuery),
+      sanityClient.fetch<Array<{ title?: string }>>(categoriesListQuery),
+      sanityClient.fetch<Array<{ name?: string }>>(authorsListQuery),
+    ])
+  } catch {
+    // Sanity unreachable; render with empty data
+  }
   const posts = result.map((p) => ({
     id: p.slug,
     title: p.title,

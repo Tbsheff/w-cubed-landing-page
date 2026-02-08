@@ -25,7 +25,12 @@ type ProjectsListResultItem = {
 }
 
 export default async function ProjectsPage() {
-  const result = await sanityClient.fetch<ProjectsListResultItem[]>(projectsListQuery)
+  let result: ProjectsListResultItem[] = []
+  try {
+    result = await sanityClient.fetch<ProjectsListResultItem[]>(projectsListQuery)
+  } catch {
+    // Sanity unreachable; render with empty data
+  }
   const projects = result.map((p) => ({
     id: p.slug,
     title: p.title,

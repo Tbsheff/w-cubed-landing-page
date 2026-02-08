@@ -32,8 +32,16 @@ type TerritoryInfoResult = {
 }
 
 export default async function ContactPage() {
-  const representatives = await sanityClient.fetch<RepresentativeResult[]>(representativesQuery)
-  const territoryInfo = await sanityClient.fetch<TerritoryInfoResult | null>(territoryInfoQuery)
+  let representatives: RepresentativeResult[] = []
+  let territoryInfo: TerritoryInfoResult | null = null
+  try {
+    ;[representatives, territoryInfo] = await Promise.all([
+      sanityClient.fetch<RepresentativeResult[]>(representativesQuery),
+      sanityClient.fetch<TerritoryInfoResult | null>(territoryInfoQuery),
+    ])
+  } catch {
+    // Sanity unreachable; render with fallback data
+  }
 
   const normalizedReps: RepCoverage[] = normalizeReps(representatives || [])
 

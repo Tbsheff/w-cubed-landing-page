@@ -23,8 +23,12 @@ type ManufacturerResult = {
 }
 
 export async function generateStaticParams() {
-  const slugs: Array<{ slug: string }> = await sanityClient.fetch(allManufacturerSlugsQuery)
-  return slugs.map(({ slug }) => ({ slug }))
+  try {
+    const slugs: Array<{ slug: string }> = await sanityClient.fetch(allManufacturerSlugsQuery)
+    return slugs.map(({ slug }) => ({ slug }))
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

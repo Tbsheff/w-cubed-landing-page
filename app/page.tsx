@@ -41,10 +41,16 @@ type RepresentativeResult = {
 }
 
 export default async function Page() {
-  const [data, repsData] = await Promise.all([
-    sanityClient.fetch<SiteSettingsResult | null>(siteSettingsQuery),
-    sanityClient.fetch<RepresentativeResult[]>(representativesQuery),
-  ])
+  let data: SiteSettingsResult | null = null
+  let repsData: RepresentativeResult[] = []
+  try {
+    ;[data, repsData] = await Promise.all([
+      sanityClient.fetch<SiteSettingsResult | null>(siteSettingsQuery),
+      sanityClient.fetch<RepresentativeResult[]>(representativesQuery),
+    ])
+  } catch {
+    // Sanity unreachable; render with fallback data
+  }
 
   if (!data) return <HomePageClient />
 
