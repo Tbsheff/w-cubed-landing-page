@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ ok: false, error: 'Missing path or tag' }, { status: 400 })
         }
 
-        if (path) revalidatePath(path)
+        if (path) revalidatePath(path, 'page')
         if (tag) revalidateTag(tag)
 
         return NextResponse.json({ ok: true, revalidated: { path, tag } })
