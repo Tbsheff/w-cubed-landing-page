@@ -36,7 +36,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
 
   return (
     <PageWrapper>
-      <section className="py-6 bg-slate-50">
+      <section className="py-6 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="flex items-center space-x-2 text-sm" {...fadeInUp}>
             <Link
@@ -73,7 +73,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
               <div className="mb-4 text-center">
                 <Badge
                   variant="outline"
-                  className="border-brand-accent/30 text-brand-accent bg-blue-50 px-3 py-1 inline-block"
+                  className="border-brand-accent/30 text-brand-accent bg-brand-light/25 px-3 py-1 inline-block"
                 >
                   {manufacturer.category}
                 </Badge>
@@ -81,7 +81,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
             )}
 
             {manufacturer.description && (
-              <p className="text-lg text-gray-700 leading-relaxed mb-6 max-w-2xl mx-auto">
+              <p className="text-lg text-brand-deep/80 leading-relaxed mb-6 max-w-2xl mx-auto">
                 {manufacturer.description}
               </p>
             )}
@@ -124,7 +124,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
         </div>
       </section>
 
-      <section className="py-10 md:py-14 bg-slate-50">
+      <section className="py-10 md:py-14 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <div className="max-w-6xl mx-auto">
             <motion.div className="text-center space-y-4 mb-12" {...fadeInUp}>

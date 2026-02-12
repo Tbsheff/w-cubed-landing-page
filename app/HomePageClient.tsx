@@ -27,6 +27,7 @@ type HeroContent = {
   title?: string | null;
   description?: string | null;
   heroImage?: string | null;
+  heroSlides?: { image?: string | null; alt?: string | null; tags?: string[] | null }[] | null;
   primaryCta?: { label?: string | null; href?: string | null } | null;
   secondaryCta?: { label?: string | null; href?: string | null } | null;
 };
@@ -48,6 +49,12 @@ type HomePageProps = {
   stats?: StatItem[] | null;
   manufacturers?: ManufacturerStripItem[] | null;
   highlights?: HighlightItem[] | null;
+};
+
+type HeroSlide = {
+  image: string;
+  alt: string;
+  tags: string[];
 };
 
 const fadeInUp = {
@@ -120,19 +127,59 @@ const defaultHero: HeroContent = {
   description:
     "Your trusted partner for water treatment, pumping systems, and process equipment. Delivering reliable solutions across the Mountain West for nearly four decades.",
   heroImage: "/hero-image.png",
+  heroSlides: [
+    {
+      image: "/hero-image.png",
+      alt: "Industrial Water Equipment",
+      tags: ["Municipal", "Industrial", "Pretreatment"],
+    },
+    {
+      image: "/placeholder.svg?height=500&width=600&text=Temporary+Slide+2",
+      alt: "Temporary hero slide",
+      tags: ["Temporary", "Demo"],
+    },
+  ],
   primaryCta: { label: "Get Project Quote", href: "/contact" },
   secondaryCta: { label: "Browse Equipment", href: "/manufacturers" },
 };
 
 export default function WCubedLanding({ hero, stats, manufacturers, highlights }: HomePageProps) {
   const heroData = { ...defaultHero, ...(hero || {}) };
-  const heroImageSrc: string = heroData.heroImage ?? "/hero-image.png";
+
+  const heroSlidesData: HeroSlide[] =
+    heroData.heroSlides
+      ?.filter((slide): slide is { image?: string | null; alt?: string | null; tags?: string[] | null } =>
+        Boolean(slide?.image)
+      )
+      .map((slide, idx) => ({
+        image: (slide.image as string) || "/hero-image.png",
+        alt: slide.alt || `Hero slide ${idx + 1}`,
+        tags: (slide.tags || []).filter(Boolean),
+      })) || [];
+
+  if (!heroSlidesData.length) {
+    heroSlidesData.push({
+      image: heroData.heroImage ?? "/hero-image.png",
+      alt: "Industrial Water Equipment",
+      tags: ["Municipal", "Industrial", "Pretreatment"],
+    });
+  }
+
+  if (heroSlidesData.length === 1) {
+    heroSlidesData.push({
+      image: "/placeholder.svg?height=500&width=600&text=Temporary+Slide+2",
+      alt: "Temporary hero slide",
+      tags: ["Temporary", "Demo"],
+    });
+  }
+
   const statsData = stats && stats.length ? stats : defaultStats;
   const manufacturersData =
     manufacturers && manufacturers.length ? manufacturers : defaultManufacturers;
   const projectHighlights = highlights && highlights.length ? highlights : defaultHighlights;
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const [manufacturerSlide, setManufacturerSlide] = useState(0);
 
   const nextSlide = () => {
@@ -163,11 +210,24 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
     return () => clearInterval(interval);
   }, [manufacturersData.length]);
 
+  // Auto-rotate hero slideshow every 6 seconds
+  useEffect(() => {
+    if (heroSlidesData.length <= 1) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setHeroSlideIndex((prev) => (prev + 1) % heroSlidesData.length);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [heroSlidesData.length]);
+
   return (
     <PageWrapper>
       {/* Hero Section */}
       <section className="relative flex items-center overflow-hidden py-12 md:py-16 lg:py-24">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-brand-light/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-light/5" />
         <div className="container mx-auto px-4 lg:px-6 relative w-full">
           <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
             <motion.div
@@ -250,14 +310,66 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               className="relative flex items-center justify-center mt-4 md:mt-20 lg:mt-40"
             >
               {/* Clean, simple equipment showcase */}
-              <div className="relative bg-gradient-to-br from-white to-slate-50 rounded-3xl p-6 md:p-12 shadow-2xl border max-w-2xl w-full">
-                <Image
-                  src={heroImageSrc}
-                  alt="Industrial Water Equipment"
-                  width={600}
-                  height={500}
-                  className="rounded-2xl w-full"
-                />
+              <div className="relative bg-gradient-to-br from-white to-brand-light/20 rounded-3xl p-6 md:p-12 shadow-2xl border max-w-2xl w-full">
+                <div className="relative rounded-2xl w-full overflow-hidden">
+                  <Image
+                    src={heroSlidesData[heroSlideIndex].image}
+                    alt={heroSlidesData[heroSlideIndex].alt}
+                    width={600}
+                    height={500}
+                    className="rounded-2xl w-full"
+                  />
+
+                  {heroSlidesData[heroSlideIndex].tags.length > 0 && (
+                    <div className="absolute left-3 top-3 md:left-4 md:top-4 flex flex-wrap gap-2 max-w-[85%]">
+                      {heroSlidesData[heroSlideIndex].tags.map((tag) => (
+                        <Badge
+                          key={tag}
+                          variant="secondary"
+                          className="bg-white/90 text-brand-deep border border-brand-light/70 backdrop-blur-sm"
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+
+                  {heroSlidesData.length > 1 && (
+                    <>
+                      <button
+                        onClick={() =>
+                          setHeroSlideIndex(
+                            (prev) => (prev - 1 + heroSlidesData.length) % heroSlidesData.length
+                          )
+                        }
+                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-brand-deep rounded-full p-2 shadow-md transition-colors"
+                        aria-label="Previous hero image"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => setHeroSlideIndex((prev) => (prev + 1) % heroSlidesData.length)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-brand-deep rounded-full p-2 shadow-md transition-colors"
+                        aria-label="Next hero image"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+
+                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                        {heroSlidesData.map((_, index) => (
+                          <button
+                            key={`hero-dot-${index}`}
+                            onClick={() => setHeroSlideIndex(index)}
+                            className={`h-2.5 w-2.5 rounded-full transition-colors ${
+                              index === heroSlideIndex ? "bg-brand-accent" : "bg-white/75"
+                            }`}
+                            aria-label={`Go to hero slide ${index + 1}`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
 
                 {/* Simple floating badges */}
                 <div className="absolute -top-6 -left-6 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border">
@@ -311,7 +423,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
       </section>
 
       {/* Manufacturer Logo Carousel */}
-      <section id="manufacturers" className="py-24 bg-slate-50">
+      <section id="manufacturers" className="py-24 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
             <h2 className="text-3xl font-bold text-brand-deep">Trusted Manufacturing Partners</h2>
@@ -384,14 +496,14 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             {/* Navigation arrows */}
             <button
               onClick={prevManufacturer}
-              className="absolute -left-4 lg:-left-12 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-slate-50 transition-colors z-10"
+              className="absolute -left-4 lg:-left-12 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-brand-light/20 transition-colors z-10"
               aria-label="Previous manufacturers"
             >
               <ChevronLeft className="h-6 w-6 text-brand-deep" />
             </button>
             <button
               onClick={nextManufacturer}
-              className="absolute -right-4 lg:-right-12 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-slate-50 transition-colors z-10"
+              className="absolute -right-4 lg:-right-12 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-brand-light/20 transition-colors z-10"
               aria-label="Next manufacturers"
             >
               <ChevronRight className="h-6 w-6 text-brand-deep" />
@@ -404,7 +516,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                   key={index}
                   onClick={() => setManufacturerSlide(index)}
                   className={`w-3 h-3 rounded-full transition-colors ${
-                    index === manufacturerSlide ? "bg-brand-accent" : "bg-slate-300"
+                    index === manufacturerSlide ? "bg-brand-accent" : "bg-brand-light/60"
                   }`}
                   aria-label={`Go to manufacturer slide ${index + 1}`}
                 />
@@ -473,7 +585,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 bg-slate-50">
+      <section id="services" className="py-20 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
@@ -635,7 +747,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
       </section>
 
       {/* Project Highlights Carousel */}
-      <section id="projects" className="py-20 bg-slate-50">
+      <section id="projects" className="py-20 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
@@ -716,13 +828,13 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             {/* Navigation buttons */}
             <button
               onClick={prevSlide}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-slate-50 transition-colors"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-brand-light/20 transition-colors"
             >
               <ChevronLeft className="h-6 w-6 text-brand-deep" />
             </button>
             <button
               onClick={nextSlide}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-slate-50 transition-colors"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-brand-light/20 transition-colors"
             >
               <ChevronRight className="h-6 w-6 text-brand-deep" />
             </button>
@@ -734,7 +846,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                   key={index}
                   onClick={() => setCurrentSlide(index)}
                   className={`w-3 h-3 rounded-full transition-colors ${
-                    index === currentSlide ? "bg-brand-accent" : "bg-slate-300"
+                    index === currentSlide ? "bg-brand-accent" : "bg-brand-light/60"
                   }`}
                 />
               ))}

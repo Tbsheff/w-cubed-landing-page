@@ -51,13 +51,29 @@ const STATE_NAMES: Record<string, string> = {
   WY: "Wyoming",
 };
 
-const COLOR_PALETTE = ["#1C4E80", "#4986C8", "#2F5C9C", "#5E7FC4", "#1FA9A4"];
+const COLOR_PALETTE = [
+  "rgb(var(--brand))",
+  "rgb(var(--brand-deep))",
+  "rgb(var(--brand-accent))",
+  "rgb(var(--brand-light))",
+];
 
 const STATE_COLORS: Record<string, string> = {
-  UT: "#1C4E80",
-  NV: "#2F5C9C",
-  ID: "#4986C8",
-  WY: "#5E7FC4",
+  UT: "rgb(var(--brand))",
+  NV: "rgb(var(--brand-deep))",
+  ID: "rgb(var(--brand-accent))",
+  WY: "rgb(var(--brand-light))",
+};
+
+const MAP_COLORS = {
+  notServedFill: "hsl(var(--muted))",
+  notServedStroke: "hsl(var(--border))",
+  notServedHoverFill: "hsl(var(--secondary))",
+  notServedHoverStroke: "rgb(var(--brand-light) / 0.8)",
+  fallbackServedFill: "rgb(var(--brand) / 0.45)",
+  selectedStroke: "rgb(var(--brand-deep))",
+  hoveredStroke: "rgb(var(--brand))",
+  defaultStroke: "rgb(var(--brand-light))",
 };
 
 const STATE_CHIPS = [
@@ -502,24 +518,24 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       if (!county.properties.served) {
         return {
           default: {
-            fill: "#E5E7EB",
+            fill: MAP_COLORS.notServedFill,
             fillOpacity: 0.8,
-            stroke: "#D1D5DB",
+            stroke: MAP_COLORS.notServedStroke,
             strokeWidth: 0.6,
             outline: "none",
             transition: "fill-opacity 150ms ease, stroke-width 150ms ease",
           },
           hover: {
-            fill: "#E2E8F0",
+            fill: MAP_COLORS.notServedHoverFill,
             fillOpacity: 0.85,
-            stroke: "#CBD5F5",
+            stroke: MAP_COLORS.notServedHoverStroke,
             strokeWidth: 0.75,
             cursor: "not-allowed",
           },
           pressed: {
-            fill: "#E2E8F0",
+            fill: MAP_COLORS.notServedHoverFill,
             fillOpacity: 0.85,
-            stroke: "#CBD5F5",
+            stroke: MAP_COLORS.notServedHoverStroke,
             strokeWidth: 0.75,
           },
         };
@@ -530,14 +546,18 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         : undefined;
       const fillColor =
         colorMode === "rep"
-          ? repColor || "#94A3B8"
-          : STATE_COLORS[county.properties.state] || "#94A3B8";
+          ? repColor || MAP_COLORS.fallbackServedFill
+          : STATE_COLORS[county.properties.state] || MAP_COLORS.fallbackServedFill;
       const isSelected = county.properties.id === selectedCountyId;
       const isHovered = county.properties.id === hoveredCountyId;
 
       const opacity = isSelected ? 0.9 : isHovered ? 0.78 : 0.6;
       const strokeWidth = isSelected ? 1.8 : isHovered ? 1.4 : 0.75;
-      const strokeColor = isSelected ? "#0B1C3F" : isHovered ? "#2F5C9C" : "#BFD3F2";
+      const strokeColor = isSelected
+        ? MAP_COLORS.selectedStroke
+        : isHovered
+          ? MAP_COLORS.hoveredStroke
+          : MAP_COLORS.defaultStroke;
 
       return {
         default: {
@@ -551,14 +571,14 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         hover: {
           fill: fillColor,
           fillOpacity: 0.85,
-          stroke: "#0B1C3F",
+          stroke: MAP_COLORS.selectedStroke,
           strokeWidth: 1.6,
           cursor: "pointer",
         },
         pressed: {
           fill: fillColor,
           fillOpacity: 0.88,
-          stroke: "#0B1C3F",
+          stroke: MAP_COLORS.selectedStroke,
           strokeWidth: 1.8,
         },
       };
@@ -854,7 +874,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                       key={county.id}
                       type="button"
                       className={clsx(
-                        "flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-brand/10 focus:bg-brand/10 focus:outline-none",
+                        "flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm text-brand-deep/80 hover:bg-brand/10 focus:bg-brand/10 focus:outline-none",
                         county.id === selectedCountyId ? "bg-brand/15" : ""
                       )}
                       onClick={() => handleSelectCounty(county.id, { animate: false })}

@@ -22,9 +22,16 @@ import {
 } from "@/components/ui/select";
 
 const territories = {
-  utah: { name: "Utah", rep: "John Smith", color: "#1FA9A4" },
-  idaho: { name: "Idaho", rep: "Sarah Johnson", color: "#123D6A" },
-  wyoming: { name: "Wyoming", rep: "Mike Davis", color: "#1FA9A4" },
+  utah: { name: "Utah", rep: "John Smith", color: "rgb(var(--brand-accent))" },
+  idaho: { name: "Idaho", rep: "Sarah Johnson", color: "rgb(var(--brand-deep))" },
+  wyoming: { name: "Wyoming", rep: "Mike Davis", color: "rgb(var(--brand))" },
+};
+
+const mapColors = {
+  neutralFill: "rgb(var(--brand-light) / 0.35)",
+  neutralStroke: "rgb(var(--brand) / 0.45)",
+  label: "rgb(var(--brand-deep) / 0.85)",
+  tooltipBg: "rgb(var(--brand-deep))",
 };
 
 export function TerritoryMap() {
@@ -38,50 +45,68 @@ export function TerritoryMap() {
           width="300"
           height="200"
           viewBox="0 0 300 200"
-          className="border rounded-lg bg-slate-50"
+          className="border rounded-lg bg-brand-light/20"
         >
           {/* Utah */}
           <motion.path
             d="M50 50 L120 50 L120 150 L50 150 Z"
-            fill={hoveredState === "utah" ? territories.utah.color : "#e2e8f0"}
-            stroke="#64748b"
+            fill={hoveredState === "utah" ? territories.utah.color : mapColors.neutralFill}
+            stroke={mapColors.neutralStroke}
             strokeWidth="2"
             className="cursor-pointer"
             onMouseEnter={() => setHoveredState("utah")}
             onMouseLeave={() => setHoveredState(null)}
             whileHover={{ scale: 1.05 }}
           />
-          <text x="85" y="100" textAnchor="middle" className="text-sm font-medium fill-slate-700">
+          <text
+            x="85"
+            y="100"
+            textAnchor="middle"
+            fill={mapColors.label}
+            className="text-sm font-medium"
+          >
             UT
           </text>
 
           {/* Idaho */}
           <motion.path
             d="M130 30 L200 30 L200 120 L130 120 Z"
-            fill={hoveredState === "idaho" ? territories.idaho.color : "#e2e8f0"}
-            stroke="#64748b"
+            fill={hoveredState === "idaho" ? territories.idaho.color : mapColors.neutralFill}
+            stroke={mapColors.neutralStroke}
             strokeWidth="2"
             className="cursor-pointer"
             onMouseEnter={() => setHoveredState("idaho")}
             onMouseLeave={() => setHoveredState(null)}
             whileHover={{ scale: 1.05 }}
           />
-          <text x="165" y="75" textAnchor="middle" className="text-sm font-medium fill-slate-700">
+          <text
+            x="165"
+            y="75"
+            textAnchor="middle"
+            fill={mapColors.label}
+            className="text-sm font-medium"
+          >
             ID
           </text>
 
           {/* Wyoming */}
           <motion.path
             d="M210 60 L280 60 L280 160 L210 160 Z"
-            fill={hoveredState === "wyoming" ? territories.wyoming.color : "#e2e8f0"}
-            stroke="#64748b"
+            fill={hoveredState === "wyoming" ? territories.wyoming.color : mapColors.neutralFill}
+            stroke={mapColors.neutralStroke}
             strokeWidth="2"
             className="cursor-pointer"
             onMouseEnter={() => setHoveredState("wyoming")}
             onMouseLeave={() => setHoveredState(null)}
             whileHover={{ scale: 1.05 }}
           />
-          <text x="245" y="110" textAnchor="middle" className="text-sm font-medium fill-slate-700">
+          <text
+            x="245"
+            y="110"
+            textAnchor="middle"
+            fill={mapColors.label}
+            className="text-sm font-medium"
+          >
             WY
           </text>
         </svg>
@@ -91,7 +116,8 @@ export function TerritoryMap() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-3 py-1 rounded text-sm whitespace-nowrap"
+            className="absolute -top-12 left-1/2 transform -translate-x-1/2 text-white px-3 py-1 rounded text-sm whitespace-nowrap"
+            style={{ backgroundColor: mapColors.tooltipBg }}
           >
             {territories[hoveredState as keyof typeof territories].name} - Rep:{" "}
             {territories[hoveredState as keyof typeof territories].rep}

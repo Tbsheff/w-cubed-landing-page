@@ -29,6 +29,53 @@ export default defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: 'heroSlides',
+      title: 'Hero Slideshow',
+      description: 'Optional. If provided, these slides replace the single hero image on the homepage.',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'image',
+              title: 'Slide Image',
+              type: 'image',
+              options: { hotspot: true },
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+              description: 'Accessible description for this slide image.',
+            }),
+            defineField({
+              name: 'tags',
+              title: 'Slide Tags',
+              description: 'Short labels shown on top of the image, e.g. Municipal, Pumps, Controls.',
+              type: 'array',
+              of: [{ type: 'string' }],
+            }),
+          ],
+          preview: {
+            select: {
+              title: 'alt',
+              media: 'image',
+              subtitle: 'tags.0',
+            },
+            prepare({ title, media, subtitle }) {
+              return {
+                title: title || 'Hero Slide',
+                subtitle: subtitle ? `Tag: ${subtitle}` : 'No tags',
+                media,
+              }
+            },
+          },
+        },
+      ],
+    }),
+    defineField({
       name: 'primaryCta',
       title: 'Primary CTA',
       type: 'object',

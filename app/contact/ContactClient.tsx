@@ -84,7 +84,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
     <PageWrapper>
       {/* Hero Section */}
       <section className="relative py-10 lg:py-14 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-brand-light/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-light/5" />
         <div className="container mx-auto px-4 lg:px-6 relative">
           <motion.div className="max-w-4xl mx-auto text-center space-y-4" {...fadeInUp}>
             <h1 className="text-3xl lg:text-5xl font-bold tracking-tight text-brand">

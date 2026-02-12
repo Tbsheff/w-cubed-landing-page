@@ -10,7 +10,7 @@ import Image from "next/image";
 export function HeroOption1() {
   return (
     <section className="relative py-20 lg:py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-brand-accent/5" />
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-accent/5" />
       <div className="container mx-auto px-4 lg:px-6 relative">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div
@@ -53,7 +53,7 @@ export function HeroOption1() {
             className="relative"
           >
             {/* Clean, simple equipment showcase */}
-            <div className="relative bg-gradient-to-br from-white to-slate-50 rounded-2xl p-8 shadow-xl border">
+            <div className="relative bg-gradient-to-br from-white to-brand-light/20 rounded-2xl p-8 shadow-xl border">
               <Image
                 src="/placeholder.svg?height=400&width=500&text=Clean+Industrial+Pump"
                 alt="Industrial Water Equipment"
@@ -88,7 +88,7 @@ export function HeroOption1() {
 export function HeroOption2() {
   return (
     <section className="relative py-20 lg:py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-brand-accent/5" />
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-accent/5" />
       <div className="container mx-auto px-4 lg:px-6 relative">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div
@@ -171,7 +171,7 @@ export function HeroOption2() {
 export function HeroOption3() {
   return (
     <section className="relative py-20 lg:py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-brand-accent/5" />
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-accent/5" />
       <div className="container mx-auto px-4 lg:px-6 relative">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div

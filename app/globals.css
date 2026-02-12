@@ -13,11 +13,11 @@
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
 
-    /* Brand color tokens (current palette) */
-    --brand: 28 78 128; /* #1C4E80 - Primary brand blue */
-    --brand-deep: 18 61 106; /* #123D6A - Deep navy */
-    --brand-accent: 73 134 200; /* #4986C8 - Sky blue accent */
-    --brand-light: 149 198 236; /* #95C6EC - Light blue */
+    /* Brand color tokens (Option B: Modern Slate) */
+    --brand: 30 41 59; /* #1E293B - Primary (deep slate) */
+    --brand-deep: 15 23 42; /* #0F172A - Deep (charcoal slate) */
+    --brand-accent: 56 189 248; /* #38BDF8 - Accent (clean cyan) */
+    --brand-light: 186 230 253; /* #BAE6FD - Light (soft cyan) */
 
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;

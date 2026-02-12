@@ -8,7 +8,7 @@ export default function Loading() {
       <SiteHeader />
 
       {/* Breadcrumb Skeleton */}
-      <section className="py-6 bg-slate-50">
+      <section className="py-6 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <Skeleton className="h-4 w-32" />
         </div>

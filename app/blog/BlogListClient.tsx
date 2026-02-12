@@ -97,7 +97,7 @@ export default function BlogListClient({
     <PageWrapper>
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-brand-accent/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-accent/5" />
         <div className="container mx-auto px-4 lg:px-6 relative">
           <motion.div className="text-center space-y-6 max-w-4xl mx-auto" {...fadeInUp}>
             <Badge variant="outline" className="border-brand-accent/30 text-brand-deep">
@@ -115,7 +115,7 @@ export default function BlogListClient({
       </section>
 
       {/* Search and Filter Section */}
-      <section className="py-12 bg-slate-50">
+      <section className="py-12 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="space-y-6" {...fadeInUp}>
             {/* Search Bar */}
@@ -249,7 +249,7 @@ export default function BlogListClient({
       )}
 
       {/* Regular Posts */}
-      <section className="py-20 bg-slate-50">
+      <section className="py-20 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
             <h2 className="text-3xl lg:text-4xl font-bold text-brand-deep">Latest Articles</h2>

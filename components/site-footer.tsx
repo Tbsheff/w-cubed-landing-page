@@ -11,17 +11,17 @@ export function SiteFooter() {
               <Droplets className="h-8 w-8 text-brand-accent" />
               <span className="text-xl font-bold">W-Cubed</span>
             </div>
-            <p className="text-slate-300">
+            <p className="text-brand-light/85">
               Water-process equipment experts serving Utah, Nevada, Idaho, and Wyoming since 1986.
             </p>
-            <div className="text-sm text-slate-400">
+            <div className="text-sm text-brand-light/70">
               <p>Salt Lake City, Utah</p>
               <p>Phone: (801) 466-3819</p>
             </div>
           </div>
           <div>
             <h3 className="font-semibold mb-4">Company</h3>
-            <ul className="space-y-2 text-slate-300">
+            <ul className="space-y-2 text-brand-light/85">
               <li>
                 <Link href="/contact" className="hover:text-brand-accent transition-colors">
                   Contact
@@ -36,7 +36,7 @@ export function SiteFooter() {
           </div>
           <div>
             <h3 className="font-semibold mb-4">Services</h3>
-            <ul className="space-y-2 text-slate-300">
+            <ul className="space-y-2 text-brand-light/85">
               <li>
                 <Link href="/manufacturers" className="hover:text-brand-accent transition-colors">
                   Manufacturers
@@ -56,7 +56,7 @@ export function SiteFooter() {
           </div>
           <div>
             <h3 className="font-semibold mb-4">Connect</h3>
-            <ul className="space-y-2 text-slate-300">
+            <ul className="space-y-2 text-brand-light/85">
               <li>
                 <a href="tel:+18014663819" className="hover:text-brand-accent transition-colors">
                   (801) 466-3819
@@ -73,7 +73,7 @@ export function SiteFooter() {
             </ul>
           </div>
         </div>
-        <div className="border-t border-slate-700 mt-8 pt-8 text-center text-slate-400">
+        <div className="border-t border-brand-light/30 mt-8 pt-8 text-center text-brand-light/70">
           <p>
             &copy; {new Date().getFullYear()} W-Cubed. All rights reserved. | Serving UT · NV · ID ·
             WY since 1986

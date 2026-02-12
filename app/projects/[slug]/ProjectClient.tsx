@@ -36,7 +36,7 @@ export default function ProjectClient({ project }: ProjectClientProps) {
   return (
     <>
       {/* Breadcrumb */}
-      <section className="py-6 bg-slate-50">
+      <section className="py-6 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="flex items-center space-x-2 text-sm" {...fadeInUp}>
             <Link href="/projects" className="flex items-center text-brand-accent hover:underline">
@@ -127,7 +127,7 @@ export default function ProjectClient({ project }: ProjectClientProps) {
           <div className="max-w-4xl mx-auto">
             <div className="grid lg:grid-cols-4 gap-12">
               <motion.div
-                className="lg:col-span-3 prose prose-lg max-w-none prose-headings:text-brand-deep prose-a:text-brand-accent prose-blockquote:border-l-brand-accent prose-blockquote:bg-slate-50 prose-blockquote:p-4 prose-blockquote:rounded-r-lg"
+                className="lg:col-span-3 prose prose-lg max-w-none prose-headings:text-brand-deep prose-a:text-brand-accent prose-blockquote:border-l-brand-accent prose-blockquote:bg-brand-light/20 prose-blockquote:p-4 prose-blockquote:rounded-r-lg"
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
