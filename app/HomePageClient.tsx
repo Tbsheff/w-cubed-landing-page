@@ -133,11 +133,6 @@ const defaultHero: HeroContent = {
       alt: "Industrial Water Equipment",
       tags: ["Municipal", "Industrial", "Pretreatment"],
     },
-    {
-      image: "/placeholder.svg?height=500&width=600&text=Temporary+Slide+2",
-      alt: "Temporary hero slide",
-      tags: ["Temporary", "Demo"],
-    },
   ],
   primaryCta: { label: "Get Project Quote", href: "/contact" },
   secondaryCta: { label: "Browse Equipment", href: "/manufacturers" },
@@ -148,8 +143,9 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
 
   const heroSlidesData: HeroSlide[] =
     heroData.heroSlides
-      ?.filter((slide): slide is { image?: string | null; alt?: string | null; tags?: string[] | null } =>
-        Boolean(slide?.image)
+      ?.filter(
+        (slide): slide is { image?: string | null; alt?: string | null; tags?: string[] | null } =>
+          Boolean(slide?.image)
       )
       .map((slide, idx) => ({
         image: (slide.image as string) || "/hero-image.png",
@@ -162,14 +158,6 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
       image: heroData.heroImage ?? "/hero-image.png",
       alt: "Industrial Water Equipment",
       tags: ["Municipal", "Industrial", "Pretreatment"],
-    });
-  }
-
-  if (heroSlidesData.length === 1) {
-    heroSlidesData.push({
-      image: "/placeholder.svg?height=500&width=600&text=Temporary+Slide+2",
-      alt: "Temporary hero slide",
-      tags: ["Temporary", "Demo"],
     });
   }
 
@@ -311,14 +299,16 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             >
               {/* Clean, simple equipment showcase */}
               <div className="relative bg-gradient-to-br from-white to-brand-light/20 rounded-3xl p-6 md:p-12 shadow-2xl border max-w-2xl w-full">
-                <div className="relative rounded-2xl w-full overflow-hidden">
-                  <Image
-                    src={heroSlidesData[heroSlideIndex].image}
-                    alt={heroSlidesData[heroSlideIndex].alt}
-                    width={600}
-                    height={500}
-                    className="rounded-2xl w-full"
-                  />
+                <div className="relative rounded-2xl w-full overflow-hidden bg-background/40">
+                  <div className="relative w-full aspect-[6/5] lg:aspect-[16/10]">
+                    <Image
+                      src={heroSlidesData[heroSlideIndex].image}
+                      alt={heroSlidesData[heroSlideIndex].alt}
+                      fill
+                      sizes="(min-width: 1024px) 600px, 100vw"
+                      className="rounded-2xl object-cover"
+                    />
+                  </div>
 
                   {heroSlidesData[heroSlideIndex].tags.length > 0 && (
                     <div className="absolute left-3 top-3 md:left-4 md:top-4 flex flex-wrap gap-2 max-w-[85%]">
@@ -348,7 +338,9 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                         <ChevronLeft className="h-4 w-4" />
                       </button>
                       <button
-                        onClick={() => setHeroSlideIndex((prev) => (prev + 1) % heroSlidesData.length)}
+                        onClick={() =>
+                          setHeroSlideIndex((prev) => (prev + 1) % heroSlidesData.length)
+                        }
                         className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-brand-deep rounded-full p-2 shadow-md transition-colors"
                         aria-label="Next hero image"
                       >
