@@ -248,7 +248,11 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                 )}
               </div>
               <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-brand leading-tight mt-8">
-                <HeroHeadline />
+                {heroData.title?.trim() ? (
+                  <span className="block whitespace-pre-line">{heroData.title}</span>
+                ) : (
+                  <HeroHeadline />
+                )}
                 <span className="text-2xl sm:text-3xl font-semibold tracking-wide text-brand-accent flex flex-wrap items-baseline gap-3 mt-2">
                   <span>serving</span>
                   <span className="whitespace-nowrap">UT</span>
