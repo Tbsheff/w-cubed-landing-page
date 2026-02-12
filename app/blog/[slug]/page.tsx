@@ -11,7 +11,9 @@ export async function generateStaticParams() {
   return slugs.map(({ slug }) => ({ slug }))
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+
   type PostResult = {
     title: string
     excerpt?: string
@@ -23,7 +25,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     body?: any
   }
 
-  const data = await sanityClient.fetch<PostResult>(postBySlugQuery, { slug: params.slug })
+  const data = await sanityClient.fetch<PostResult>(postBySlugQuery, { slug })
 
   if (!data) return notFound()
 
@@ -36,7 +38,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     authorImageUrl: data.author?.image ? urlForImage(data.author.image).width(160).height(160).url() : undefined,
     categories: (data.categories || []).map((c) => c.title as string).filter(Boolean),
     body: data.body,
-    slug: params.slug,
+    slug,
     related: [],
   }
 

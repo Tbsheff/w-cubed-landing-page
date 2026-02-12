@@ -24,9 +24,15 @@ export async function generateStaticParams() {
   return slugs.map(({ slug }) => ({ slug }))
 }
 
-export default async function ManufacturerPage({ params }: { params: { slug: string } }) {
+export default async function ManufacturerPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+
   const data = await sanityClient.fetch<ManufacturerResult | null>(manufacturerBySlugQuery, {
-    slug: params.slug,
+    slug,
   })
 
   if (!data) {
@@ -34,7 +40,7 @@ export default async function ManufacturerPage({ params }: { params: { slug: str
   }
 
   const manufacturer: ManufacturerDetail = {
-    slug: params.slug,
+    slug,
     name: data.name,
     category: data.category,
     description: data.description,

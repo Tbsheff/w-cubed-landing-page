@@ -6,7 +6,7 @@
     "build": "next build",
     "clean": "rm -rf .next node_modules",
     "dev": "next dev",
-    "lint": "next lint",
+    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint . --max-warnings=0",
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },

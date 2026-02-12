@@ -21,20 +21,19 @@ const navItems = [
 export function SiteHeader() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showLogo, setShowLogo] = useState(false);
+  const [showLogoOnHome, setShowLogoOnHome] = useState(false);
   const isHomePage = pathname === "/";
+  const showLogo = !isHomePage || showLogoOnHome;
 
   // Show logo in header when scrolled past hero section (homepage only)
-  // On other pages, show logo immediately
   useEffect(() => {
     if (!isHomePage) {
-      setShowLogo(true);
       return;
     }
 
     const handleScroll = () => {
       // Show logo when scrolled more than 400px (past the large hero logo)
-      setShowLogo(window.scrollY > 400);
+      setShowLogoOnHome(window.scrollY > 400);
     };
 
     window.addEventListener("scroll", handleScroll);

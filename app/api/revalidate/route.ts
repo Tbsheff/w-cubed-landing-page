@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (path) revalidatePath(path, "page");
-    if (tag) revalidateTag(tag);
+    if (tag) revalidateTag(tag, "max");
 
     return NextResponse.json({ ok: true, revalidated: { path, tag } });
   } catch (err) {
