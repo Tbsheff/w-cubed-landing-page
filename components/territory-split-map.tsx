@@ -51,13 +51,29 @@ const STATE_NAMES: Record<string, string> = {
   WY: "Wyoming",
 };
 
-const COLOR_PALETTE = ["#1C4E80", "#4986C8", "#2F5C9C", "#5E7FC4", "#1FA9A4"];
+const COLOR_PALETTE = [
+  "rgb(var(--brand))",
+  "rgb(var(--brand-deep))",
+  "rgb(var(--brand-accent))",
+  "rgb(var(--brand-light))",
+];
 
 const STATE_COLORS: Record<string, string> = {
-  UT: "#1C4E80",
-  NV: "#2F5C9C",
-  ID: "#4986C8",
-  WY: "#5E7FC4",
+  UT: "rgb(var(--brand))",
+  NV: "rgb(var(--brand-deep))",
+  ID: "rgb(var(--brand-accent))",
+  WY: "rgb(var(--brand-light))",
+};
+
+const MAP_COLORS = {
+  notServedFill: "hsl(var(--muted))",
+  notServedStroke: "hsl(var(--border))",
+  notServedHoverFill: "hsl(var(--secondary))",
+  notServedHoverStroke: "rgb(var(--brand-light) / 0.8)",
+  fallbackServedFill: "rgb(var(--brand) / 0.45)",
+  selectedStroke: "rgb(var(--brand-deep))",
+  hoveredStroke: "rgb(var(--brand))",
+  defaultStroke: "rgb(var(--brand-light))",
 };
 
 const STATE_CHIPS = [
@@ -86,11 +102,9 @@ type TerritorySplitMapProps = {
   representatives?: RepCoverage[];
 };
 
-const normalizeState = (value?: string | null) =>
-  value ? value.trim().toUpperCase() : "";
+const normalizeState = (value?: string | null) => (value ? value.trim().toUpperCase() : "");
 
-const normalizeCounty = (value?: string | null) =>
-  value ? value.trim().toLowerCase() : "";
+const normalizeCounty = (value?: string | null) => (value ? value.trim().toLowerCase() : "");
 
 const defaultStates = ["UT", "NV", "ID", "WY"];
 
@@ -237,15 +251,16 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
           const idValue = String(featureItem.id ?? "");
           const normalized = idValue.padStart(5, "0");
           const stateCode = normalized.slice(0, 2);
-          const stateAlpha = stateCode === "49"
-            ? "UT"
-            : stateCode === "32"
-              ? "NV"
-              : stateCode === "16"
-                ? "ID"
-                : stateCode === "56"
-                  ? "WY"
-                  : "";
+          const stateAlpha =
+            stateCode === "49"
+              ? "UT"
+              : stateCode === "32"
+                ? "NV"
+                : stateCode === "16"
+                  ? "ID"
+                  : stateCode === "56"
+                    ? "WY"
+                    : "";
           if (!stateAlpha || !allowed.has(stateAlpha)) {
             return null;
           }
@@ -357,7 +372,11 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
   }, [countiesMeta, hoveredCountyId]);
 
   const activeCounty = selectedCounty ?? hoveredCounty;
-  const activeRep = activeCounty?.repSlug ? repBySlug[activeCounty.repSlug] : selectedCounty?.repSlug ? repBySlug[selectedCounty.repSlug] : null;
+  const activeRep = activeCounty?.repSlug
+    ? repBySlug[activeCounty.repSlug]
+    : selectedCounty?.repSlug
+      ? repBySlug[selectedCounty.repSlug]
+      : null;
   const selectedRep = selectedCounty?.repSlug ? repBySlug[selectedCounty.repSlug] : null;
 
   const filteredSearchResults = useMemo(() => {
@@ -379,9 +398,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       return [];
     }
 
-    const repCounties = selectedCounty.repSlug
-      ? countiesByRep[selectedCounty.repSlug] ?? []
-      : [];
+    const repCounties = selectedCounty.repSlug ? (countiesByRep[selectedCounty.repSlug] ?? []) : [];
 
     if (!countyListFilter.trim()) {
       return repCounties.sort((a, b) => a.county.localeCompare(b.county));
@@ -501,24 +518,24 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       if (!county.properties.served) {
         return {
           default: {
-            fill: "#E5E7EB",
+            fill: MAP_COLORS.notServedFill,
             fillOpacity: 0.8,
-            stroke: "#D1D5DB",
+            stroke: MAP_COLORS.notServedStroke,
             strokeWidth: 0.6,
             outline: "none",
             transition: "fill-opacity 150ms ease, stroke-width 150ms ease",
           },
           hover: {
-            fill: "#E2E8F0",
+            fill: MAP_COLORS.notServedHoverFill,
             fillOpacity: 0.85,
-            stroke: "#CBD5F5",
+            stroke: MAP_COLORS.notServedHoverStroke,
             strokeWidth: 0.75,
             cursor: "not-allowed",
           },
           pressed: {
-            fill: "#E2E8F0",
+            fill: MAP_COLORS.notServedHoverFill,
             fillOpacity: 0.85,
-            stroke: "#CBD5F5",
+            stroke: MAP_COLORS.notServedHoverStroke,
             strokeWidth: 0.75,
           },
         };
@@ -529,14 +546,18 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         : undefined;
       const fillColor =
         colorMode === "rep"
-          ? repColor || "#94A3B8"
-          : STATE_COLORS[county.properties.state] || "#94A3B8";
+          ? repColor || MAP_COLORS.fallbackServedFill
+          : STATE_COLORS[county.properties.state] || MAP_COLORS.fallbackServedFill;
       const isSelected = county.properties.id === selectedCountyId;
       const isHovered = county.properties.id === hoveredCountyId;
 
       const opacity = isSelected ? 0.9 : isHovered ? 0.78 : 0.6;
       const strokeWidth = isSelected ? 1.8 : isHovered ? 1.4 : 0.75;
-      const strokeColor = isSelected ? "#0B1C3F" : isHovered ? "#2F5C9C" : "#BFD3F2";
+      const strokeColor = isSelected
+        ? MAP_COLORS.selectedStroke
+        : isHovered
+          ? MAP_COLORS.hoveredStroke
+          : MAP_COLORS.defaultStroke;
 
       return {
         default: {
@@ -550,14 +571,14 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         hover: {
           fill: fillColor,
           fillOpacity: 0.85,
-          stroke: "#0B1C3F",
+          stroke: MAP_COLORS.selectedStroke,
           strokeWidth: 1.6,
           cursor: "pointer",
         },
         pressed: {
           fill: fillColor,
           fillOpacity: 0.88,
-          stroke: "#0B1C3F",
+          stroke: MAP_COLORS.selectedStroke,
           strokeWidth: 1.8,
         },
       };
@@ -626,16 +647,13 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     setSearchQuery("");
   }, []);
 
-  const orderedReps = useMemo(
-    () => [...reps].sort((a, b) => a.name.localeCompare(b.name)),
-    [reps]
-  );
+  const orderedReps = useMemo(() => [...reps].sort((a, b) => a.name.localeCompare(b.name)), [reps]);
 
   const drawerContent = (
     <div className="space-y-6">
-      <div className="rounded-xl border border-[#1C4E80]/15 bg-[#1C4E80]/5 p-4">
+      <div className="rounded-xl border border-brand/15 bg-brand/5 p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <span className="text-sm font-semibold text-[#1C4E80]">Color by</span>
+          <span className="text-sm font-semibold text-brand">Color by</span>
           <div className="flex items-center gap-2" role="radiogroup" aria-label="Color counties by">
             {(
               [
@@ -651,10 +669,10 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                 onClick={() => setColorMode(item.value)}
                 aria-pressed={colorMode === item.value}
                 className={clsx(
-                  "rounded-full border-[#1C4E80]/30 px-3",
+                  "rounded-full border-brand/30 px-3",
                   colorMode === item.value
-                    ? "bg-[#1C4E80] text-white hover:bg-[#1C4E80]/90"
-                    : "bg-white/70 text-[#1C4E80] hover:bg-[#1C4E80]/10"
+                    ? "bg-brand text-white hover:bg-brand/90"
+                    : "bg-white/70 text-brand hover:bg-brand/10"
                 )}
               >
                 {item.label}
@@ -671,7 +689,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
               size="sm"
               onClick={() => handleStateChipClick(state.code)}
               aria-label={`Zoom to ${state.name}`}
-              className="border-[#1C4E80]/20 bg-white/70 text-[#1C4E80] hover:bg-[#1C4E80]/10"
+              className="border-brand/20 bg-white/70 text-brand hover:bg-brand/10"
             >
               {state.code}
             </Button>
@@ -685,20 +703,20 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
             aria-label="Search county"
             className="bg-white pr-12"
           />
-          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#1C4E80]" />
+          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand" />
           {searchQuery && (
             <button
               type="button"
               onClick={clearSearch}
               aria-label="Clear search"
-              className="absolute inset-y-0 right-8 flex items-center text-[#4986C8]"
+              className="absolute inset-y-0 right-8 flex items-center text-brand-accent"
             >
               <X className="h-4 w-4" />
             </button>
           )}
         </form>
         {debouncedSearch && filteredSearchResults.length > 0 && (
-          <div className="mt-3 rounded-lg border border-[#1C4E80]/10 bg-white shadow-sm">
+          <div className="mt-3 rounded-lg border border-brand/10 bg-white shadow-sm">
             <ul
               role="listbox"
               aria-label="County search results"
@@ -708,7 +726,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                 <li key={county.id}>
                   <button
                     type="button"
-                    className="flex w-full items-center justify-between gap-4 px-3 py-2 text-left hover:bg-[#1C4E80]/5 focus:bg-[#1C4E80]/10 focus:outline-none"
+                    className="flex w-full items-center justify-between gap-4 px-3 py-2 text-left hover:bg-brand/5 focus:bg-brand/10 focus:outline-none"
                     onClick={() => {
                       handleSelectCounty(county.id);
                       setSearchQuery("");
@@ -718,10 +736,8 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                     onFocus={() => handleHoverCounty(county.id)}
                     onBlur={() => handleHoverCounty(null)}
                   >
-                    <span className="text-sm font-medium text-[#1C4E80]">
-                      {county.county} County
-                    </span>
-                    <Badge variant="outline" className="border-[#1C4E80]/20 text-xs text-[#1C4E80]">
+                    <span className="text-sm font-medium text-brand">{county.county} County</span>
+                    <Badge variant="outline" className="border-brand/20 text-xs text-brand">
                       {county.state}
                     </Badge>
                   </button>
@@ -734,7 +750,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
 
       <div className="space-y-3">
         <div className="flex flex-col gap-1">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-[#1C4E80]">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-brand">
             Representative coverage
           </h3>
           <p className="text-xs text-muted-foreground">
@@ -743,8 +759,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         </div>
         <div className="space-y-3">
           {orderedReps.map((rep) => {
-            const isHighlighted =
-              activeRep?.slug === rep.slug || selectedRep?.slug === rep.slug;
+            const isHighlighted = activeRep?.slug === rep.slug || selectedRep?.slug === rep.slug;
             const totalCounties = countiesByRep[rep.slug]?.length ?? 0;
             const statesServed = (statesByRep[rep.slug] || []).join(" • ");
 
@@ -753,9 +768,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                 key={rep.slug}
                 className={clsx(
                   "flex items-start gap-3 rounded-xl border p-4 transition-colors",
-                  isHighlighted
-                    ? "border-[#1C4E80] bg-[#1C4E80]/5"
-                    : "border-[#1C4E80]/10 bg-background"
+                  isHighlighted ? "border-brand bg-brand/5" : "border-brand/10 bg-background"
                 )}
               >
                 {rep.photoUrl ? (
@@ -767,18 +780,15 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                     className="h-14 w-14 flex-shrink-0 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-[#1C4E80]/10 text-base font-semibold text-[#1C4E80]">
+                  <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-brand/10 text-base font-semibold text-brand">
                     {rep.name.slice(0, 1)}
                   </div>
                 )}
                 <div className="flex-1 space-y-2">
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="text-sm font-semibold text-[#1C4E80]">{rep.name}</p>
-                      <Badge
-                        variant="outline"
-                        className="border-[#1C4E80]/20 text-xs text-[#1C4E80]"
-                      >
+                      <p className="text-sm font-semibold text-brand">{rep.name}</p>
+                      <Badge variant="outline" className="border-brand/20 text-xs text-brand">
                         {totalCounties ? `${totalCounties} counties` : "Loading counties"}
                       </Badge>
                     </div>
@@ -786,7 +796,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                       {statesServed ? `Serving ${statesServed}` : "Coverage not specified"}
                     </p>
                   </div>
-                  <div className="flex flex-col gap-1 text-xs text-[#1C4E80]">
+                  <div className="flex flex-col gap-1 text-xs text-brand">
                     {rep.email && (
                       <a
                         href={`mailto:${rep.email}`}
@@ -812,14 +822,12 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       </div>
 
       {selectedCounty && (
-        <div className="space-y-4 rounded-xl border border-[#1C4E80]/20 bg-white p-4 shadow-sm">
+        <div className="space-y-4 rounded-xl border border-brand/20 bg-white p-4 shadow-sm">
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-semibold text-[#1C4E80]">
-                  {selectedCounty.county} County
-                </h3>
-                <Badge variant="outline" className="border-[#1C4E80]/20 text-xs text-[#1C4E80]">
+                <h3 className="text-lg font-semibold text-brand">{selectedCounty.county} County</h3>
+                <Badge variant="outline" className="border-brand/20 text-xs text-brand">
                   {selectedCounty.state}
                 </Badge>
               </div>
@@ -829,21 +837,24 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
               type="button"
               variant="ghost"
               size="sm"
-              className="h-8 px-2 text-[#1C4E80] hover:bg-[#1C4E80]/10"
+              className="h-8 px-2 text-brand hover:bg-brand/10"
               onClick={resetSelection}
             >
               <RefreshCcw className="mr-2 h-4 w-4" /> Reset
             </Button>
           </div>
 
-          <details className="rounded-lg border border-dashed border-[#1C4E80]/20 bg-[#1C4E80]/5 text-sm text-[#1C4E80]">
+          <details className="rounded-lg border border-dashed border-brand/20 bg-brand/5 text-sm text-brand">
             <summary className="flex cursor-pointer items-center justify-between px-3 py-2 font-medium">
               Counties served by this representative
-              <span className="text-xs text-[#1C4E80]/80">
-                {(selectedCounty.repSlug ? countiesByRep[selectedCounty.repSlug] ?? [] : []).length}
+              <span className="text-xs text-brand/80">
+                {
+                  (selectedCounty.repSlug ? (countiesByRep[selectedCounty.repSlug] ?? []) : [])
+                    .length
+                }
               </span>
             </summary>
-            <div className="border-t border-[#1C4E80]/10">
+            <div className="border-t border-brand/10">
               <div className="p-3">
                 <Input
                   value={countyListFilter}
@@ -856,15 +867,15 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                   {(filteredCountyList.length
                     ? filteredCountyList
                     : selectedCounty.repSlug
-                      ? countiesByRep[selectedCounty.repSlug] ?? []
+                      ? (countiesByRep[selectedCounty.repSlug] ?? [])
                       : []
                   ).map((county) => (
                     <button
                       key={county.id}
                       type="button"
                       className={clsx(
-                        "flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-[#1C4E80]/10 focus:bg-[#1C4E80]/10 focus:outline-none",
-                        county.id === selectedCountyId ? "bg-[#1C4E80]/15" : ""
+                        "flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm text-brand-deep/80 hover:bg-brand/10 focus:bg-brand/10 focus:outline-none",
+                        county.id === selectedCountyId ? "bg-brand/15" : ""
                       )}
                       onClick={() => handleSelectCounty(county.id, { animate: false })}
                       onMouseEnter={() => handleHoverCounty(county.id)}
@@ -873,10 +884,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                       onBlur={() => handleHoverCounty(null)}
                     >
                       <span>{county.county} County</span>
-                      <Badge
-                        variant="outline"
-                        className="border-[#1C4E80]/20 text-xs text-[#1C4E80]"
-                      >
+                      <Badge variant="outline" className="border-brand/20 text-xs text-brand">
                         {county.state}
                       </Badge>
                     </button>
@@ -894,10 +902,10 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     <section ref={containerRef} className="relative py-16">
       <div className="container mx-auto px-4 lg:px-6">
         <div className="mb-10 max-w-2xl">
-          <Badge variant="outline" className="border-[#1C4E80]/30 text-[#1C4E80]">
+          <Badge variant="outline" className="border-brand/30 text-brand">
             Interactive Coverage
           </Badge>
-          <h2 className="mt-3 text-3xl font-bold text-[#1C4E80] md:text-4xl">
+          <h2 className="mt-3 text-3xl font-bold text-brand md:text-4xl">
             County-level Territory Explorer
           </h2>
           <p className="mt-2 text-lg text-muted-foreground">
@@ -994,7 +1002,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
 
               {tooltip && (
                 <div
-                  className="pointer-events-none fixed z-50 rounded-md border border-[#1C4E80]/40 bg-[#1C4E80] px-3 py-1 text-xs font-medium text-white shadow-lg"
+                  className="pointer-events-none fixed z-50 rounded-md border border-brand/40 bg-brand px-3 py-1 text-xs font-medium text-white shadow-lg"
                   style={{ left: tooltip.x, top: tooltip.y }}
                 >
                   {tooltip.content}

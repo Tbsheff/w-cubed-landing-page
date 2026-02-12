@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { AnimatePresence, motion } from "framer-motion"
-import { useMemo, useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { Search, ExternalLink, Grid, List } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { PageWrapper } from "@/components/page-wrapper"
+import { AnimatePresence, motion } from "framer-motion";
+import { useMemo, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Search, ExternalLink, Grid, List } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { PageWrapper } from "@/components/page-wrapper";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -30 },
   transition: { duration: 0.6 },
-}
+};
 
 const staggerContainer = {
   animate: {
@@ -24,61 +24,62 @@ const staggerContainer = {
       staggerChildren: 0.1,
     },
   },
-}
+};
 
 export type ManufacturerListItem = {
-  id: string
-  name: string
-  logo?: string | null
-  category?: string | null
-  description?: string | null
-  keyProducts?: string[]
-  website?: string | null
-  specialty?: string | null
-  territoryNote?: string | null
-}
+  id: string;
+  name: string;
+  logo?: string | null;
+  category?: string | null;
+  description?: string | null;
+  keyProducts?: string[];
+  website?: string | null;
+  specialty?: string | null;
+  territoryNote?: string | null;
+};
 
 type Props = {
-  manufacturers: ManufacturerListItem[]
-}
+  manufacturers: ManufacturerListItem[];
+};
 
 export default function ManufacturersClient({ manufacturers }: Props) {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All")
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const categories = useMemo(() => {
-    const set = new Set<string>()
+    const set = new Set<string>();
     manufacturers.forEach((m) => {
-      if (m.category) set.add(m.category)
-    })
-    return ["All", ...Array.from(set)]
-  }, [manufacturers])
+      if (m.category) set.add(m.category);
+    });
+    return ["All", ...Array.from(set)];
+  }, [manufacturers]);
 
   const filteredManufacturers = manufacturers.filter((manufacturer) => {
     const matchesSearch =
       manufacturer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (manufacturer.description || "").toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "All" || manufacturer.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+      (manufacturer.description || "").toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "All" || manufacturer.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   const clearFilters = () => {
-    setSearchTerm("")
-    setSelectedCategory("All")
-  }
+    setSearchTerm("");
+    setSelectedCategory("All");
+  };
 
   return (
     <PageWrapper>
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-[#95C6EC]/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-light/5" />
         <div className="container mx-auto px-4 lg:px-6 relative">
           <motion.div className="text-center space-y-6 max-w-4xl mx-auto" {...fadeInUp}>
-            <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
+            <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Partners
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-[#1C4E80]">
+            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand">
               Trusted Manufacturing Partners
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -90,7 +91,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
       </section>
 
       {/* Search and Filter Section */}
-      <section className="py-12 bg-slate-50">
+      <section className="py-12 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="space-y-6" {...fadeInUp}>
             {/* Search Bar */}
@@ -116,7 +117,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                     onClick={() => setSelectedCategory(category)}
                     className={
                       selectedCategory === category
-                        ? "bg-[#4986C8] hover:bg-[#4986C8]/90"
+                        ? "bg-brand-accent hover:bg-brand-accent/90"
                         : "bg-transparent"
                     }
                   >
@@ -131,7 +132,9 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                   type="button"
                   onClick={() => setViewMode("grid")}
                   className={
-                    viewMode === "grid" ? "bg-[#4986C8] hover:bg-[#4986C8]/90" : "bg-transparent"
+                    viewMode === "grid"
+                      ? "bg-brand-accent hover:bg-brand-accent/90"
+                      : "bg-transparent"
                   }
                 >
                   <Grid className="h-4 w-4" />
@@ -142,7 +145,9 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                   type="button"
                   onClick={() => setViewMode("list")}
                   className={
-                    viewMode === "list" ? "bg-[#4986C8] hover:bg-[#4986C8]/90" : "bg-transparent"
+                    viewMode === "list"
+                      ? "bg-brand-accent hover:bg-brand-accent/90"
+                      : "bg-transparent"
                   }
                 >
                   <List className="h-4 w-4" />
@@ -166,7 +171,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
           >
             <AnimatePresence mode="popLayout">
               {filteredManufacturers.map((manufacturer) => {
-                const logoSrc = manufacturer.logo || "/placeholder.svg"
+                const logoSrc = manufacturer.logo || "/placeholder.svg";
 
                 return (
                   <motion.div
@@ -189,8 +194,10 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                               className="object-contain max-h-20 w-auto"
                             />
                           </div>
-                          <CardTitle className="text-xl text-[#1C4E80]">{manufacturer.name}</CardTitle>
-                          {manufacturer.category && <Badge variant="secondary">{manufacturer.category}</Badge>}
+                          <CardTitle className="text-xl text-brand">{manufacturer.name}</CardTitle>
+                          {manufacturer.category && (
+                            <Badge variant="secondary">{manufacturer.category}</Badge>
+                          )}
                         </CardHeader>
                         <CardContent className="space-y-4">
                           <CardDescription className="text-base">
@@ -198,7 +205,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                           </CardDescription>
                           {manufacturer.keyProducts && manufacturer.keyProducts.length > 0 && (
                             <div>
-                              <h4 className="font-semibold text-sm text-[#1C4E80] mb-2">
+                              <h4 className="font-semibold text-sm text-brand mb-2">
                                 Key Products:
                               </h4>
                               <div className="flex flex-wrap gap-1">
@@ -223,8 +230,13 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                             </Link>
                             {manufacturer.website && (
                               <Button variant="ghost" size="sm" asChild>
-                                <a href={manufacturer.website} target="_blank" rel="noopener noreferrer">
-                                  <ExternalLink className="h-4 w-4" />
+                                <a
+                                  href={manufacturer.website}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <ExternalLink className="h-4 w-4 mr-2" />
+                                  Visit Website
                                 </a>
                               </Button>
                             )}
@@ -246,7 +258,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                             </div>
                             <div className="flex-grow space-y-3">
                               <div className="flex items-center gap-3">
-                                <h3 className="text-xl font-bold text-[#1C4E80]">
+                                <h3 className="text-xl font-bold text-brand">
                                   {manufacturer.name}
                                 </h3>
                                 {manufacturer.category && (
@@ -256,7 +268,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                               <p className="text-muted-foreground">{manufacturer.description}</p>
                               {manufacturer.specialty && (
                                 <div>
-                                  <span className="font-semibold text-sm text-[#1C4E80]">
+                                  <span className="font-semibold text-sm text-brand">
                                     Specialty:{" "}
                                   </span>
                                   <span className="text-sm">{manufacturer.specialty}</span>
@@ -272,7 +284,9 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                                 </div>
                               )}
                               {manufacturer.territoryNote && (
-                                <p className="text-xs text-muted-foreground">{manufacturer.territoryNote}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  {manufacturer.territoryNote}
+                                </p>
                               )}
                             </div>
                             <div className="flex flex-col gap-2">
@@ -283,9 +297,13 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                               </Link>
                               {manufacturer.website && (
                                 <Button variant="ghost" size="sm" asChild>
-                                  <a href={manufacturer.website} target="_blank" rel="noopener noreferrer">
+                                  <a
+                                    href={manufacturer.website}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
                                     <ExternalLink className="h-4 w-4 mr-2" />
-                                    Visit Site
+                                    Visit Website
                                   </a>
                                 </Button>
                               )}
@@ -295,7 +313,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                       </Card>
                     )}
                   </motion.div>
-                )
+                );
               })}
             </AnimatePresence>
           </motion.div>
@@ -314,7 +332,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-[#123D6A]">
+      <section className="py-20 bg-brand-deep">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
             <h2 className="text-3xl lg:text-4xl font-bold">Need Help Choosing Equipment?</h2>
@@ -322,13 +340,12 @@ export default function ManufacturersClient({ manufacturers }: Props) {
               Our experienced team can help you select the right manufacturer and equipment for your
               specific needs.
             </p>
-            <Button asChild size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90">
+            <Button asChild size="lg" className="bg-brand-accent hover:bg-brand-accent/90">
               <Link href="/contact">Contact Your Rep</Link>
             </Button>
           </motion.div>
         </div>
       </section>
     </PageWrapper>
-  )
+  );
 }
-

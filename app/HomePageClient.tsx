@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PageWrapper } from "@/components/page-wrapper";
 import { territoryRepresentatives } from "@/lib/representatives";
 
@@ -27,6 +27,7 @@ type HeroContent = {
   title?: string | null;
   description?: string | null;
   heroImage?: string | null;
+  heroSlides?: { image?: string | null; alt?: string | null; tags?: string[] | null }[] | null;
   primaryCta?: { label?: string | null; href?: string | null } | null;
   secondaryCta?: { label?: string | null; href?: string | null } | null;
 };
@@ -48,6 +49,12 @@ type HomePageProps = {
   stats?: StatItem[] | null;
   manufacturers?: ManufacturerStripItem[] | null;
   highlights?: HighlightItem[] | null;
+};
+
+type HeroSlide = {
+  image: string;
+  alt: string;
+  tags: string[];
 };
 
 const fadeInUp = {
@@ -83,28 +90,28 @@ const defaultManufacturers: ManufacturerStripItem[] = [
 
 const defaultHighlights: HighlightItem[] = [
   {
-    title: "Municipal Water Treatment Facilities",
+    title: "Municipal Water Treatment Facilities and Collections",
     description:
-      "Successfully designed and installed pumping systems for municipal water and wastewater treatment plants across our four-state territory.",
+      "Successfully designed and installed pumping systems for municipal water and wastewater treatment plants and collection systems across our four-state territory.",
     image: "/placeholder.svg?height=200&width=300&text=Municipal+Project",
     category: "Municipal",
     states: ["UT", "NV", "ID", "WY"],
   },
   {
-    title: "Industrial Plant Solutions",
+    title: "Industrial Pretreatment Solutions",
     description:
-      "Custom water-process equipment solutions for manufacturing facilities, mines, and processing plants throughout the Mountain West.",
+      "Custom water-process equipment solutions for manufacturing facilities and processing plants throughout the Mountain West.",
     image: "/placeholder.svg?height=200&width=300&text=Industrial+Project",
     category: "Industrial",
-    states: ["UT", "ID"],
+    states: ["UT", "NV", "ID", "WY"],
   },
   {
-    title: "Commercial & Infrastructure",
+    title: "Commercial Pretreatment Solutions",
     description:
-      "Reliable pumping and treatment systems for commercial developments, resorts, and infrastructure projects.",
+      "Reliable pumping and treatment systems for commercial pretreatment facilities, resorts, and infrastructure projects.",
     image: "/placeholder.svg?height=200&width=300&text=Commercial+Project",
     category: "Commercial",
-    states: ["NV", "WY"],
+    states: ["UT", "NV", "ID", "WY"],
   },
 ];
 
@@ -120,23 +127,48 @@ const defaultHero: HeroContent = {
   description:
     "Your trusted partner for water treatment, pumping systems, and process equipment. Delivering reliable solutions across the Mountain West for nearly four decades.",
   heroImage: "/hero-image.png",
+  heroSlides: [
+    {
+      image: "/hero-image.png",
+      alt: "Industrial Water Equipment",
+      tags: ["Municipal", "Industrial", "Pretreatment"],
+    },
+  ],
   primaryCta: { label: "Get Project Quote", href: "/contact" },
   secondaryCta: { label: "Browse Equipment", href: "/manufacturers" },
 };
 
-export default function WCubedLanding({
-  hero,
-  stats,
-  manufacturers,
-  highlights,
-}: HomePageProps) {
+export default function WCubedLanding({ hero, stats, manufacturers, highlights }: HomePageProps) {
   const heroData = { ...defaultHero, ...(hero || {}) };
-  const heroImageSrc: string = heroData.heroImage ?? "/hero-image.png";
+
+  const heroSlidesData: HeroSlide[] =
+    heroData.heroSlides
+      ?.filter(
+        (slide): slide is { image?: string | null; alt?: string | null; tags?: string[] | null } =>
+          Boolean(slide?.image)
+      )
+      .map((slide, idx) => ({
+        image: (slide.image as string) || "/hero-image.png",
+        alt: slide.alt || `Hero slide ${idx + 1}`,
+        tags: (slide.tags || []).filter(Boolean),
+      })) || [];
+
+  if (!heroSlidesData.length) {
+    heroSlidesData.push({
+      image: heroData.heroImage ?? "/hero-image.png",
+      alt: "Industrial Water Equipment",
+      tags: ["Municipal", "Industrial", "Pretreatment"],
+    });
+  }
+
   const statsData = stats && stats.length ? stats : defaultStats;
-  const manufacturersData = manufacturers && manufacturers.length ? manufacturers : defaultManufacturers;
+  const manufacturersData =
+    manufacturers && manufacturers.length ? manufacturers : defaultManufacturers;
   const projectHighlights = highlights && highlights.length ? highlights : defaultHighlights;
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+  const [manufacturerSlide, setManufacturerSlide] = useState(0);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % projectHighlights.length);
@@ -146,31 +178,82 @@ export default function WCubedLanding({
     setCurrentSlide((prev) => (prev - 1 + projectHighlights.length) % projectHighlights.length);
   };
 
+  const nextManufacturer = () => {
+    setManufacturerSlide((prev) => (prev + 1) % Math.ceil(manufacturersData.length / 5));
+  };
+
+  const prevManufacturer = () => {
+    setManufacturerSlide(
+      (prev) =>
+        (prev - 1 + Math.ceil(manufacturersData.length / 5)) %
+        Math.ceil(manufacturersData.length / 5)
+    );
+  };
+
+  // Auto-rotate manufacturer carousel every 8 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setManufacturerSlide((prev) => (prev + 1) % Math.ceil(manufacturersData.length / 5));
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [manufacturersData.length]);
+
+  // Auto-rotate hero slideshow every 6 seconds
+  useEffect(() => {
+    if (heroSlidesData.length <= 1) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setHeroSlideIndex((prev) => (prev + 1) % heroSlidesData.length);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [heroSlidesData.length]);
+
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <section className="relative flex items-center overflow-hidden py-12 md:py-16 lg:py-20">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-[#95C6EC]/5" />
+      <section className="relative flex items-center overflow-hidden py-12 md:py-16 lg:py-24">
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-light/5" />
         <div className="container mx-auto px-4 lg:px-6 relative w-full">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
             <motion.div
-              className="space-y-6 relative z-10"
+              className="space-y-4 md:space-y-6 relative z-10"
               initial={{ opacity: 0, x: -60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              {heroData.badge && (
-                <Badge variant="outline" className="border-[#1C4E80]/30 text-[#1C4E80]">
-                  {heroData.badge}
-                </Badge>
-              )}
-              <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-[#1C4E80] leading-tight">
-                {heroData.title ? (
-                  heroData.title
+              {/* Large Logo with Veteran Badge */}
+              <div className="flex flex-col items-center lg:items-start gap-6 lg:gap-8 mb-6 lg:mb-10">
+                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
+                  <Image
+                    src="/logo.png"
+                    alt="W-Cubed"
+                    width={550}
+                    height={132}
+                    className="h-auto w-auto max-w-[260px] sm:max-w-[320px] lg:max-w-[400px]"
+                    priority
+                  />
+                  <div className="bg-brand/10 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full">
+                    <span className="text-[10px] sm:text-xs font-semibold text-brand uppercase tracking-wide whitespace-nowrap">
+                      Veteran Owned & Operated
+                    </span>
+                  </div>
+                </div>
+                {heroData.badge && (
+                  <Badge variant="outline" className="border-brand/30 text-brand">
+                    {heroData.badge}
+                  </Badge>
+                )}
+              </div>
+              <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-brand leading-tight mt-8">
+                {heroData.title?.trim() ? (
+                  <span className="block whitespace-pre-line">{heroData.title}</span>
                 ) : (
                   <HeroHeadline />
                 )}
-                <span className="text-2xl sm:text-3xl font-semibold tracking-wide text-[#4986C8] flex flex-wrap items-baseline gap-3 mt-2">
+                <span className="text-2xl sm:text-3xl font-semibold tracking-wide text-brand-accent flex flex-wrap items-baseline gap-3 mt-2">
                   <span>serving</span>
                   <span className="whitespace-nowrap">UT</span>
                   <span className="opacity-60">·</span>
@@ -191,7 +274,7 @@ export default function WCubedLanding({
                   <Link href={heroData.primaryCta.href}>
                     <Button
                       size="lg"
-                      className="bg-[#4986C8] hover:bg-[#4986C8]/90 text-lg px-8 py-4"
+                      className="bg-brand-accent hover:bg-brand-accent/90 text-lg px-8 py-4"
                     >
                       {heroData.primaryCta.label}
                       <ArrowRight className="ml-2 h-5 w-5" />
@@ -203,7 +286,7 @@ export default function WCubedLanding({
                     <Button
                       size="lg"
                       variant="outline"
-                      className="border-[#1C4E80] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white bg-transparent text-lg px-8 py-4"
+                      className="border-brand text-brand hover:bg-brand hover:text-white bg-transparent text-lg px-8 py-4"
                     >
                       {heroData.secondaryCta.label}
                     </Button>
@@ -216,26 +299,82 @@ export default function WCubedLanding({
               initial={{ opacity: 0, x: 60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative flex items-center justify-center"
+              className="relative flex items-center justify-center mt-4 md:mt-20 lg:mt-40"
             >
               {/* Clean, simple equipment showcase */}
-              <div className="relative bg-gradient-to-br from-white to-slate-50 rounded-3xl p-12 shadow-2xl border max-w-2xl">
-                <Image
-                  src={heroImageSrc}
-                  alt="Industrial Water Equipment"
-                  width={600}
-                  height={500}
-                  className="rounded-2xl w-full"
-                />
+              <div className="relative bg-gradient-to-br from-white to-brand-light/20 rounded-3xl p-6 md:p-12 shadow-2xl border max-w-2xl w-full">
+                <div className="relative rounded-2xl w-full overflow-hidden bg-background/40">
+                  <div className="relative w-full aspect-[6/5] lg:aspect-[16/10]">
+                    <Image
+                      src={heroSlidesData[heroSlideIndex].image}
+                      alt={heroSlidesData[heroSlideIndex].alt}
+                      fill
+                      sizes="(min-width: 1024px) 600px, 100vw"
+                      className="rounded-2xl object-cover"
+                    />
+                  </div>
+
+                  {heroSlidesData[heroSlideIndex].tags.length > 0 && (
+                    <div className="absolute left-3 top-3 md:left-4 md:top-4 flex flex-wrap gap-2 max-w-[85%]">
+                      {heroSlidesData[heroSlideIndex].tags.map((tag) => (
+                        <Badge
+                          key={tag}
+                          variant="secondary"
+                          className="bg-white/90 text-brand-deep border border-brand-light/70 backdrop-blur-sm"
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+
+                  {heroSlidesData.length > 1 && (
+                    <>
+                      <button
+                        onClick={() =>
+                          setHeroSlideIndex(
+                            (prev) => (prev - 1 + heroSlidesData.length) % heroSlidesData.length
+                          )
+                        }
+                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-brand-deep rounded-full p-2 shadow-md transition-colors"
+                        aria-label="Previous hero image"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() =>
+                          setHeroSlideIndex((prev) => (prev + 1) % heroSlidesData.length)
+                        }
+                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-brand-deep rounded-full p-2 shadow-md transition-colors"
+                        aria-label="Next hero image"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+
+                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                        {heroSlidesData.map((_, index) => (
+                          <button
+                            key={`hero-dot-${index}`}
+                            onClick={() => setHeroSlideIndex(index)}
+                            className={`h-2.5 w-2.5 rounded-full transition-colors ${
+                              index === heroSlideIndex ? "bg-brand-accent" : "bg-white/75"
+                            }`}
+                            aria-label={`Go to hero slide ${index + 1}`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
 
                 {/* Simple floating badges */}
                 <div className="absolute -top-6 -left-6 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border">
                   <div className="flex items-center space-x-3">
-                    <div className="bg-[#4986C8]/10 p-3 rounded-full">
-                      <Droplets className="h-6 w-6 text-[#4986C8]" />
+                    <div className="bg-brand-accent/10 p-3 rounded-full">
+                      <Droplets className="h-6 w-6 text-brand-accent" />
                     </div>
                     <div>
-                      <div className="font-bold text-lg text-[#1C4E80]">38+ Years</div>
+                      <div className="font-bold text-lg text-brand">38+ Years</div>
                       <div className="text-sm text-muted-foreground">Experience</div>
                     </div>
                   </div>
@@ -243,11 +382,11 @@ export default function WCubedLanding({
 
                 <div className="absolute -bottom-6 -right-6 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border">
                   <div className="flex items-center space-x-3">
-                    <div className="bg-[#95C6EC]/20 p-3 rounded-full">
-                      <CheckCircle className="h-6 w-6 text-[#1C4E80]" />
+                    <div className="bg-brand-light/20 p-3 rounded-full">
+                      <CheckCircle className="h-6 w-6 text-brand" />
                     </div>
                     <div>
-                      <div className="font-bold text-lg text-[#1C4E80]">4 States</div>
+                      <div className="font-bold text-lg text-brand">4 States</div>
                       <div className="text-sm text-muted-foreground">Coverage Area</div>
                     </div>
                   </div>
@@ -259,7 +398,7 @@ export default function WCubedLanding({
       </section>
 
       {/* Credibility Bar */}
-      <section className="pt-8 pb-12 bg-[#1C4E80]">
+      <section className="pt-8 pb-12 bg-brand">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div
             className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center text-white"
@@ -270,7 +409,7 @@ export default function WCubedLanding({
           >
             {statsData.map((stat) => (
               <motion.div key={stat.label} variants={fadeInUp} className="space-y-2">
-                <div className="text-4xl font-bold text-[#4986C8]">{stat.value}</div>
+                <div className="text-4xl font-bold text-brand-accent">{stat.value}</div>
                 <div className="text-lg">{stat.label}</div>
                 {stat.detail && <div className="text-sm opacity-80">{stat.detail}</div>}
               </motion.div>
@@ -279,66 +418,107 @@ export default function WCubedLanding({
         </div>
       </section>
 
-      {/* Manufacturer Logo Strip */}
-      <section id="manufacturers" className="py-16 bg-slate-50">
+      {/* Manufacturer Logo Carousel */}
+      <section id="manufacturers" className="py-24 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
-          <motion.div className="text-center space-y-4 mb-12" {...fadeInUp}>
-            <h2 className="text-2xl font-bold text-[#123D6A]">Trusted Manufacturing Partners</h2>
-            <p className="text-muted-foreground">
+          <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
+            <h2 className="text-3xl font-bold text-brand-deep">Trusted Manufacturing Partners</h2>
+            <p className="text-lg text-muted-foreground">
               We represent industry-leading manufacturers of water-process equipment
             </p>
           </motion.div>
 
-          <motion.div
-            className="flex flex-wrap justify-center items-center gap-8 md:gap-12"
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-          >
-            {manufacturersData.map((manufacturer) => (
-              <motion.div
-                key={manufacturer.id}
-                variants={fadeInUp}
-                className="grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
+          <div className="relative">
+            <motion.div
+              className="overflow-hidden"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <div
+                className="flex transition-transform duration-700 ease-in-out"
+                style={{ transform: `translateX(-${manufacturerSlide * 100}%)` }}
               >
-                <Link href={`/manufacturers/${manufacturer.id}`}>
-                  {manufacturer.id === "veolia-suez" ? (
-                    <div className="flex items-center gap-3 cursor-pointer">
-                      <Image
-                        src="/manufacturers/veolia-capsule-logo.svg"
-                        alt="Veolia logo"
-                        width={100}
-                        height={70}
-                        className="h-12 w-auto object-contain"
-                      />
-                      <Image
-                        src="/manufacturers/suez-logo.png"
-                        alt="Suez logo"
-                        width={80}
-                        height={60}
-                        className="h-8 w-auto object-contain"
-                      />
+                {Array.from({ length: Math.ceil(manufacturersData.length / 5) }).map(
+                  (_, slideIndex) => (
+                    <div key={slideIndex} className="w-full flex-shrink-0">
+                      <div className="flex justify-center items-center gap-8 md:gap-10 lg:gap-12 px-6">
+                        {manufacturersData
+                          .slice(slideIndex * 5, slideIndex * 5 + 5)
+                          .map((manufacturer) => (
+                            <motion.div
+                              key={manufacturer.id}
+                              className="hover:scale-102 transition-all duration-300 hover:drop-shadow-md flex items-center justify-center"
+                              whileHover={{ y: -3 }}
+                            >
+                              <Link href={`/manufacturers/${manufacturer.id}`}>
+                                {manufacturer.id === "veolia-suez" ? (
+                                  <div className="flex items-center gap-3 cursor-pointer">
+                                    <Image
+                                      src="/manufacturers/veolia-capsule-logo.svg"
+                                      alt="Veolia logo"
+                                      width={120}
+                                      height={80}
+                                      className="h-16 w-auto object-contain"
+                                    />
+                                    <Image
+                                      src="/manufacturers/suez-logo.png"
+                                      alt="Suez logo"
+                                      width={100}
+                                      height={70}
+                                      className="h-12 w-auto object-contain"
+                                    />
+                                  </div>
+                                ) : (
+                                  <Image
+                                    src={manufacturer.logo}
+                                    alt={`${manufacturer.name} logo`}
+                                    width={180}
+                                    height={90}
+                                    className="object-contain cursor-pointer max-h-16 w-auto"
+                                  />
+                                )}
+                              </Link>
+                            </motion.div>
+                          ))}
+                      </div>
                     </div>
-                  ) : (
-                    <Image
-                      src={manufacturer.logo}
-                      alt={`${manufacturer.name} logo`}
-                      width={120}
-                      height={60}
-                      className={`object-contain cursor-pointer ${
-                        manufacturer.id === "pentair-fairbanks"
-                          ? "max-h-16"
-                          : manufacturer.id === "fournier"
-                            ? "max-h-10"
-                            : "max-h-12"
-                      } w-auto`}
-                    />
-                  )}
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
+                  )
+                )}
+              </div>
+            </motion.div>
+
+            {/* Navigation arrows */}
+            <button
+              onClick={prevManufacturer}
+              className="absolute -left-4 lg:-left-12 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-brand-light/20 transition-colors z-10"
+              aria-label="Previous manufacturers"
+            >
+              <ChevronLeft className="h-6 w-6 text-brand-deep" />
+            </button>
+            <button
+              onClick={nextManufacturer}
+              className="absolute -right-4 lg:-right-12 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-brand-light/20 transition-colors z-10"
+              aria-label="Next manufacturers"
+            >
+              <ChevronRight className="h-6 w-6 text-brand-deep" />
+            </button>
+
+            {/* Dot indicators */}
+            <div className="flex justify-center mt-8 space-x-3">
+              {Array.from({ length: Math.ceil(manufacturersData.length / 5) }).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setManufacturerSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    index === manufacturerSlide ? "bg-brand-accent" : "bg-brand-light/60"
+                  }`}
+                  aria-label={`Go to manufacturer slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -353,10 +533,10 @@ export default function WCubedLanding({
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
+              <Badge variant="outline" className="border-brand-accent/30 text-brand">
                 Our Story
               </Badge>
-              <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
+              <h2 className="text-3xl lg:text-4xl font-bold text-brand">
                 From Garage to Industry Leader
               </h2>
               <p className="text-lg text-muted-foreground">
@@ -373,11 +553,11 @@ export default function WCubedLanding({
               </p>
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-[#4986C8]">38+</div>
+                  <div className="text-3xl font-bold text-brand-accent">38+</div>
                   <div className="text-sm text-muted-foreground">Years Experience</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-[#4986C8]">4</div>
+                  <div className="text-3xl font-bold text-brand-accent">4</div>
                   <div className="text-sm text-muted-foreground">States Served</div>
                 </div>
               </div>
@@ -401,18 +581,16 @@ export default function WCubedLanding({
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 bg-slate-50">
+      <section id="services" className="py-20 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
+            <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Expertise
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
-              Water-Process Solutions
-            </h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-brand">Water-Process Solutions</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Comprehensive water treatment and process equipment solutions for municipal,
-              industrial, and commercial applications
+              industrial, and pretreatment applications
             </p>
           </motion.div>
 
@@ -432,7 +610,8 @@ export default function WCubedLanding({
               {
                 icon: Package,
                 title: "Pumping Systems",
-                description: "High-efficiency pumps for all water applications",
+                description:
+                  "High-efficiency pumps and local control panels for pumping applications",
               },
               {
                 icon: Wrench,
@@ -446,12 +625,12 @@ export default function WCubedLanding({
               },
             ].map((service, index) => (
               <motion.div key={index} variants={fadeInUp}>
-                <Card className="h-full hover:shadow-lg transition-shadow border-l-4 border-l-[#4986C8]">
+                <Card className="h-full hover:shadow-lg transition-shadow border-l-4 border-l-brand-accent">
                   <CardHeader>
-                    <div className="bg-[#4986C8]/10 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                      <service.icon className="h-6 w-6 text-[#4986C8]" />
+                    <div className="bg-brand-accent/10 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                      <service.icon className="h-6 w-6 text-brand-accent" />
                     </div>
-                    <CardTitle className="text-xl text-[#1C4E80]">{service.title}</CardTitle>
+                    <CardTitle className="text-xl text-brand">{service.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <CardDescription className="text-base">{service.description}</CardDescription>
@@ -467,12 +646,10 @@ export default function WCubedLanding({
       <section id="territory" className="py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
+            <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Get In Touch
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
-              Meet Your Territory Team
-            </h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-brand">Meet Your Territory Team</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Reach out directly to the representative serving your area for quotes, project
               support, and technical guidance.
@@ -498,8 +675,8 @@ export default function WCubedLanding({
                         className="rounded-full object-cover"
                       />
                     </div>
-                    <CardTitle className="text-xl text-[#1C4E80]">{rep.name}</CardTitle>
-                    <CardDescription className="text-[#4986C8] font-medium">
+                    <CardTitle className="text-xl text-brand">{rep.name}</CardTitle>
+                    <CardDescription className="text-brand-accent font-medium">
                       {rep.title}
                     </CardDescription>
                     <Badge variant="secondary" className="mt-2 mx-auto">
@@ -517,12 +694,12 @@ export default function WCubedLanding({
                       </div>
                     </div>
                     <div className="space-y-2 text-sm">
-                      <div className="flex items-center justify-center gap-2 text-[#1C4E80]">
-                        <Phone className="h-4 w-4 text-[#4986C8]" />
+                      <div className="flex items-center justify-center gap-2 text-brand">
+                        <Phone className="h-4 w-4 text-brand-accent" />
                         <span>{rep.phone}</span>
                       </div>
-                      <div className="flex items-center justify-center gap-2 text-[#1C4E80]">
-                        <Mail className="h-4 w-4 text-[#4986C8]" />
+                      <div className="flex items-center justify-center gap-2 text-brand">
+                        <Mail className="h-4 w-4 text-brand-accent" />
                         <span>{rep.email}</span>
                       </div>
                     </div>
@@ -556,7 +733,7 @@ export default function WCubedLanding({
               <Button
                 variant="outline"
                 size="lg"
-                className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white"
+                className="border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-white"
               >
                 Explore Territory Coverage
               </Button>
@@ -566,15 +743,13 @@ export default function WCubedLanding({
       </section>
 
       {/* Project Highlights Carousel */}
-      <section id="projects" className="py-20 bg-slate-50">
+      <section id="projects" className="py-20 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <Badge variant="outline" className="border-[#4986C8]/30 text-[#1C4E80]">
+            <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Expertise
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#1C4E80]">
-              Project Types We Serve
-            </h2>
+            <h2 className="text-3xl lg:text-4xl font-bold text-brand">Project Types We Serve</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Specialized water-process equipment solutions across multiple industries and
               applications
@@ -597,47 +772,49 @@ export default function WCubedLanding({
                   const imageSrc = project.image ?? "/placeholder.svg";
                   const states = project.states ?? [];
                   return (
-                  <div key={index} className="w-full flex-shrink-0 px-4">
-                    <Card className="max-w-2xl mx-auto overflow-hidden">
-                      <div className="md:flex">
-                        <div className="md:w-1/2">
-                          <Image
+                    <div key={index} className="w-full flex-shrink-0 px-4">
+                      <Card className="max-w-2xl mx-auto overflow-hidden">
+                        <div className="md:flex">
+                          <div className="md:w-1/2">
+                            <Image
                               src={imageSrc}
-                            alt={project.title}
-                            width={300}
-                            height={200}
-                            className="w-full h-48 md:h-full object-cover"
-                          />
-                        </div>
-                        <div className="md:w-1/2 p-6">
-                          <Badge variant="secondary" className="mb-3">
-                            {project.category}
-                          </Badge>
-                          <CardTitle className="text-xl mb-3 text-[#123D6A]">
-                            {project.title}
-                          </CardTitle>
-                          <CardDescription className="mb-4">{project.description}</CardDescription>
-                          <div className="flex items-center justify-between gap-4">
-                            <div className="flex gap-1">
-                              {states.map((state, idx) => (
-                                <Badge key={idx} variant="outline" className="text-xs">
-                                  {state}
-                                </Badge>
-                              ))}
+                              alt={project.title}
+                              width={300}
+                              height={200}
+                              className="w-full h-48 md:h-full object-cover"
+                            />
+                          </div>
+                          <div className="md:w-1/2 p-6">
+                            <Badge variant="secondary" className="mb-3">
+                              {project.category}
+                            </Badge>
+                            <CardTitle className="text-xl mb-3 text-brand-deep">
+                              {project.title}
+                            </CardTitle>
+                            <CardDescription className="mb-4">
+                              {project.description}
+                            </CardDescription>
+                            <div className="flex items-center justify-between gap-4">
+                              <div className="flex gap-1">
+                                {states.map((state, idx) => (
+                                  <Badge key={idx} variant="outline" className="text-xs">
+                                    {state}
+                                  </Badge>
+                                ))}
+                              </div>
+                              <Link href="/manufacturers">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-brand-accent border-brand-accent hover:bg-brand-accent hover:text-white bg-transparent"
+                                >
+                                  View Solutions
+                                </Button>
+                              </Link>
                             </div>
-                            <Link href="/manufacturers">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="text-[#4986C8] border-[#4986C8] hover:bg-[#4986C8] hover:text-white bg-transparent"
-                              >
-                                View Solutions
-                              </Button>
-                            </Link>
                           </div>
                         </div>
-                      </div>
-                    </Card>
+                      </Card>
                     </div>
                   );
                 })}
@@ -647,15 +824,15 @@ export default function WCubedLanding({
             {/* Navigation buttons */}
             <button
               onClick={prevSlide}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-slate-50 transition-colors"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-brand-light/20 transition-colors"
             >
-              <ChevronLeft className="h-6 w-6 text-[#123D6A]" />
+              <ChevronLeft className="h-6 w-6 text-brand-deep" />
             </button>
             <button
               onClick={nextSlide}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-slate-50 transition-colors"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-brand-light/20 transition-colors"
             >
-              <ChevronRight className="h-6 w-6 text-[#123D6A]" />
+              <ChevronRight className="h-6 w-6 text-brand-deep" />
             </button>
 
             {/* Dots indicator */}
@@ -665,7 +842,7 @@ export default function WCubedLanding({
                   key={index}
                   onClick={() => setCurrentSlide(index)}
                   className={`w-3 h-3 rounded-full transition-colors ${
-                    index === currentSlide ? "bg-[#4986C8]" : "bg-slate-300"
+                    index === currentSlide ? "bg-brand-accent" : "bg-brand-light/60"
                   }`}
                 />
               ))}
@@ -684,7 +861,7 @@ export default function WCubedLanding({
               <Button
                 variant="outline"
                 size="lg"
-                className="border-[#1C4E80] text-[#1C4E80] hover:bg-[#1C4E80] hover:text-white bg-transparent"
+                className="border-brand text-brand hover:bg-brand hover:text-white bg-transparent"
               >
                 View All Manufacturers
               </Button>
@@ -693,7 +870,7 @@ export default function WCubedLanding({
               <Button
                 variant="outline"
                 size="lg"
-                className="border-[#4986C8] text-[#4986C8] hover:bg-[#4986C8] hover:text-white bg-transparent"
+                className="border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-white bg-transparent"
               >
                 Discuss Your Project
               </Button>
@@ -714,9 +891,9 @@ function HeroHeadline() {
     <span className="block">
       <span className="flex flex-wrap items-baseline gap-x-3 gap-y-2">
         <WordWithAccent text="Water," />
-        <WordWithAccent text={`Waste${NB_HYPHEN}water,`} />
+        <WordWithAccent text={`Waste${NB_HYPHEN}Water,`} />
         <span className="inline-flex items-baseline whitespace-nowrap">Equipment</span>
-        <span className="inline-flex items-baseline whitespace-nowrap">experts</span>
+        <span className="inline-flex items-baseline whitespace-nowrap">Experts</span>
       </span>
     </span>
   );
@@ -725,7 +902,7 @@ function HeroHeadline() {
 /**
  * Renders a word and adds a short accent underline under any leading 'W'/'w'.
  * For hyphenated words (e.g., Waste-water) it accents the 'W' of each part.
- * Uses #4986C8 for the accent, main text stays #1C4E80 (no recolor of the W).
+ * Uses brand-accent for the accent, main text stays brand (no recolor of the W).
  */
 function WordWithAccent({ text }: { text: string }) {
   const NB_HYPHEN = "\u2011";
@@ -734,7 +911,7 @@ function WordWithAccent({ text }: { text: string }) {
   const parts = text.split(NB_HYPHEN);
 
   return (
-    <span className="inline-flex items-baseline whitespace-nowrap text-[#1C4E80]">
+    <span className="inline-flex items-baseline whitespace-nowrap text-brand">
       {parts.map((part, idx) => {
         // keep trailing punctuation out of the accent logic (e.g., the comma in "Water,")
         const match = part.match(/^([A-Za-z]+)([^A-Za-z]*)$/);
@@ -748,13 +925,15 @@ function WordWithAccent({ text }: { text: string }) {
             {startsWithW ? (
               <>
                 <span className="relative inline-block font-extrabold">
-                  <span>{word[0]}</span>
-                  {/* short accent underline just under the glyph */}
                   <span
-                    aria-hidden="true"
-                    className="pointer-events-none absolute left-[10%] right-[10%] -bottom-1 h-1 rounded-full"
-                    style={{ backgroundColor: "#4986C8" }}
-                  />
+                    className="inline-block"
+                    style={{
+                      borderBottom: "4px solid rgb(var(--brand-accent))",
+                      paddingBottom: "2px",
+                    }}
+                  >
+                    {word[0]}
+                  </span>
                 </span>
                 <span className="font-extrabold">{word.slice(1)}</span>
               </>

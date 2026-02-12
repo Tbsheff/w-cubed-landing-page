@@ -12,6 +12,13 @@
   :root {
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
+
+    /* Brand color tokens (Option B: Modern Slate) */
+    --brand: 30 41 59; /* #1E293B - Primary (deep slate) */
+    --brand-deep: 15 23 42; /* #0F172A - Deep (charcoal slate) */
+    --brand-accent: 56 189 248; /* #38BDF8 - Accent (clean cyan) */
+    --brand-light: 186 230 253; /* #BAE6FD - Light (soft cyan) */
+
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;

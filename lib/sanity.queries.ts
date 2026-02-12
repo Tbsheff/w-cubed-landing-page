@@ -96,6 +96,11 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0]{
   heroTitle,
   heroDescription,
   heroImage,
+  heroSlides[]{
+    image,
+    alt,
+    tags
+  },
   primaryCta,
   secondaryCta,
   stats,

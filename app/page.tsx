@@ -17,6 +17,11 @@ type SiteSettingsResult = {
   heroTitle?: string | null
   heroDescription?: string | null
   heroImage?: any
+  heroSlides?: Array<{
+    image?: any
+    alt?: string | null
+    tags?: string[] | null
+  }> | null
   primaryCta?: { label?: string | null; href?: string | null } | null
   secondaryCta?: { label?: string | null; href?: string | null } | null
   stats?: Array<{ value?: string | null; label?: string | null; detail?: string | null }>
@@ -77,6 +82,14 @@ export default async function Page() {
     title: data.heroTitle,
     description: data.heroDescription,
     heroImage: data.heroImage ? urlForImage(data.heroImage).width(900).height(700).fit("max").url() : null,
+    heroSlides:
+      data.heroSlides
+        ?.filter((slide) => slide?.image)
+        .map((slide) => ({
+          image: slide.image ? urlForImage(slide.image).width(900).height(700).fit("max").url() : null,
+          alt: slide.alt,
+          tags: (slide.tags || []).filter(Boolean),
+        })) || [],
     primaryCta: data.primaryCta,
     secondaryCta: data.secondaryCta,
   }

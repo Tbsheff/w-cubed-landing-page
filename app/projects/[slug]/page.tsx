@@ -11,7 +11,9 @@ export async function generateStaticParams() {
     return slugs.map(({ slug }) => ({ slug }))
 }
 
-export default async function ProjectPage({ params }: { params: { slug: string } }) {
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params
+
     type ProjectResult = {
         title: string
         excerpt?: string
@@ -22,7 +24,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
         body?: any
     }
 
-    const data = await sanityClient.fetch<ProjectResult>(projectBySlugQuery, { slug: params.slug })
+    const data = await sanityClient.fetch<ProjectResult>(projectBySlugQuery, { slug })
 
     if (!data) return notFound()
 
@@ -33,7 +35,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
         date: data.date,
         categories: (data.categories || []).map((c) => c.title as string).filter(Boolean),
         body: data.body,
-        slug: params.slug,
+        slug,
         related: [],
     }
 

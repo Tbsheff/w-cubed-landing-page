@@ -33,18 +33,16 @@ export default function TerritoryPage({
     <PageWrapper>
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-[#95C6EC]/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-light/5" />
         <div className="container mx-auto px-4 lg:px-6 relative">
           <motion.div className="text-center space-y-6 max-w-4xl mx-auto" {...fadeInUp}>
-            <Badge variant="outline" className="border-[#1C4E80]/30 text-[#1C4E80]">
+            <Badge variant="outline" className="border-brand/30 text-brand">
               Service Territory
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-[#1C4E80]">
+            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand">
               {heroTitle}
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              {heroSubtitle}
-            </p>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{heroSubtitle}</p>
           </motion.div>
         </div>
       </section>
@@ -52,7 +50,7 @@ export default function TerritoryPage({
       <TerritorySplitMap representatives={representatives} />
 
       {/* CTA Section */}
-      <section className="py-20 bg-[#1C4E80]">
+      <section className="py-20 bg-brand">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
             <h2 className="text-3xl lg:text-4xl font-bold">Ready to Connect with Your Rep?</h2>
@@ -63,7 +61,7 @@ export default function TerritoryPage({
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {primaryCta?.href && primaryCta?.label && (
                 <Link href={primaryCta.href}>
-                  <Button size="lg" className="bg-[#4986C8] hover:bg-[#4986C8]/90">
+                  <Button size="lg" className="bg-brand-accent hover:bg-brand-accent/90">
                     {primaryCta.label}
                   </Button>
                 </Link>
@@ -73,7 +71,7 @@ export default function TerritoryPage({
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-white text-white hover:bg-white hover:text-[#1C4E80] bg-transparent"
+                    className="border-white text-white hover:bg-white hover:text-brand bg-transparent"
                   >
                     {secondaryCta.label}
                   </Button>
