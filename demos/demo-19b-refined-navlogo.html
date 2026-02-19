@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W-Cubed | Water & Waste-Water Equipment Experts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════════════════════════
+       DESIGN TOKENS
+       ══════════════════════════════════════════════════════════ */
+    :root {
+      --brand: #1E293B;
+      --brand-deep: #0F172A;
+      --brand-accent: #38BDF8;
+      --brand-accent-hover: #0EA5E9;
+      --brand-light: #BAE6FD;
+      --white: #FFFFFF;
+      --gray-50: #F8FAFC;
+      --gray-100: #F1F5F9;
+      --gray-200: #E2E8F0;
+      --gray-300: #CBD5E1;
+      --gray-400: #94A3B8;
+      --gray-500: #64748B;
+
+      /* Layout */
+      --nav-height: 72px;
+      --max-width: 1120px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.03);
+      --shadow-md: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-nav: 0 1px 3px rgba(0,0,0,0.04);
+
+      /* Transitions */
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+      --duration: 0.2s;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       RESET & BASE
+       ══════════════════════════════════════════════════════════ */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--brand);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       NAVIGATION — 72px, logo + veteran lockup in nav
+       ══════════════════════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background: var(--white);
+      box-shadow: var(--shadow-nav);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Nav brand lockup — logo + divider + veteran text */
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .nav-brand img {
+      width: 180px;
+      height: auto;
+    }
+
+    .nav-brand-divider {
+      width: 2px;
+      height: 28px;
+      background: var(--brand-accent);
+      border-radius: 1px;
+      flex-shrink: 0;
+    }
+
+    .nav-veteran-text {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--brand-deep);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1.3;
+      white-space: nowrap;
+    }
+
+    /* Nav links — centered */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-link {
+      position: relative;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-500);
+      transition: color var(--duration) var(--ease);
+      padding: 4px 0;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--brand-accent);
+      border-radius: 1px;
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform var(--duration) var(--ease);
+    }
+
+    .nav-link:hover {
+      color: var(--brand-deep);
+    }
+
+    .nav-link:hover::after {
+      transform: scaleX(1);
+    }
+
+    /* Nav CTA — 8px radius, not pill */
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+      background: var(--brand-accent);
+      padding: 8px 20px;
+      border-radius: 8px;
+      transition: background var(--duration) var(--ease), transform var(--duration) var(--ease);
+      white-space: nowrap;
+    }
+
+    .nav-cta:hover {
+      background: var(--brand-accent-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Hamburger — hidden on desktop */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 1001;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--brand);
+      border-radius: 1px;
+      transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       MOBILE MENU
+       ══════════════════════════════════════════════════════════ */
+    .mobile-menu {
+      position: fixed;
+      top: var(--nav-height);
+      left: 0;
+      right: 0;
+      background: var(--white);
+      box-shadow: var(--shadow-md);
+      z-index: 999;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.35s var(--ease);
+    }
+
+    .mobile-menu.open {
+      max-height: 420px;
+    }
+
+    .mobile-menu-inner {
+      padding: 8px 24px 24px;
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 14px 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--gray-500);
+      border-bottom: 1px solid var(--gray-100);
+      transition: color var(--duration) var(--ease);
+    }
+
+    .mobile-menu a:hover {
+      color: var(--brand-deep);
+    }
+
+    .mobile-menu a:last-child {
+      border-bottom: none;
+      margin-top: 12px;
+      text-align: center;
+      background: var(--brand-accent);
+      color: var(--white);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .mobile-menu a:last-child:hover {
+      background: var(--brand-accent-hover);
+      color: var(--white);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       HERO — Content-forward split layout (no logo, it's in nav)
+       ══════════════════════════════════════════════════════════ */
+    .hero {
+      padding-top: var(--nav-height);
+      min-height: calc(100vh - var(--nav-height));
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 64px 24px;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+    }
+
+    /* Left column — 55% */
+    .hero-content {
+      flex: 0 0 55%;
+      max-width: 55%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    /* Headline — confident, not shouting */
+    .hero-headline {
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--brand-deep);
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    /* Subtitle */
+    .hero-subtitle {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--gray-500);
+      margin-bottom: 16px;
+    }
+
+    /* Description */
+    .hero-description {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--gray-500);
+      max-width: 480px;
+      margin-bottom: 32px;
+    }
+
+    /* CTA area */
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--white);
+      background: var(--brand-accent);
+      padding: 12px 28px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background var(--duration) var(--ease), transform var(--duration) var(--ease);
+    }
+
+    .btn-primary:hover {
+      background: var(--brand-accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .hero-link {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--gray-500);
+      position: relative;
+      transition: color var(--duration) var(--ease);
+    }
+
+    .hero-link span {
+      border-bottom: 1px solid var(--gray-300);
+      transition: border-color var(--duration) var(--ease);
+      padding-bottom: 1px;
+    }
+
+    .hero-link:hover {
+      color: var(--brand-deep);
+    }
+
+    .hero-link:hover span {
+      border-color: var(--brand-deep);
+    }
+
+    .hero-link .arrow {
+      display: inline-block;
+      margin-left: 4px;
+      transition: transform var(--duration) var(--ease);
+    }
+
+    .hero-link:hover .arrow {
+      transform: translateX(3px);
+    }
+
+    /* Right column — 45% */
+    .hero-slideshow {
+      flex: 0 0 45%;
+      max-width: 45%;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       SLIDESHOW CARD
+       ══════════════════════════════════════════════════════════ */
+    .slideshow-card {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: linear-gradient(180deg, var(--white) 0%, var(--gray-50) 100%);
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.3s var(--ease);
+    }
+
+    .slideshow-card:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    .slideshow-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding-bottom: 24px;
+    }
+
+    .slideshow-placeholder svg {
+      width: 56px;
+      height: 56px;
+      color: var(--gray-300);
+    }
+
+    .slideshow-placeholder p {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--gray-400);
+    }
+
+    .slide-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(4px);
+      border: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--gray-500);
+      transition: background var(--duration) var(--ease), color var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .slide-arrow:hover {
+      background: var(--white);
+      color: var(--brand-deep);
+      box-shadow: var(--shadow-md);
+    }
+
+    .slide-arrow svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .slide-arrow-prev { left: 12px; }
+    .slide-arrow-next { right: 12px; }
+
+    .slide-dots {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+    }
+
+    .slide-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gray-300);
+      transition: background var(--duration) var(--ease), transform var(--duration) var(--ease);
+      cursor: pointer;
+    }
+
+    .slide-dot.active {
+      background: var(--brand-accent);
+      transform: scale(1.15);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       STATS BAR
+       ══════════════════════════════════════════════════════════ */
+    .stats {
+      border-top: 1px solid var(--gray-200);
+      background: var(--white);
+    }
+
+    .stats-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: center;
+      gap: 80px;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 32px 0;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--brand-deep);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--gray-500);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       SECTION SHARED
+       ══════════════════════════════════════════════════════════ */
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--brand-deep);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .section-header p {
+      font-size: 15px;
+      color: var(--gray-500);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       SERVICES SECTION — white bg, 4 clean cards
+       ══════════════════════════════════════════════════════════ */
+    .services {
+      background: var(--white);
+      padding: 80px 24px;
+    }
+
+    .services-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .service-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: box-shadow var(--duration) var(--ease), transform var(--duration) var(--ease);
+    }
+
+    .service-card:hover {
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-2px);
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      color: var(--brand-accent);
+    }
+
+    .service-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--brand-deep);
+      margin-bottom: 8px;
+    }
+
+    .service-card p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--gray-500);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       MANUFACTURER LOGOS — gray-50 bg
+       ══════════════════════════════════════════════════════════ */
+    .manufacturers {
+      background: var(--gray-50);
+      padding: 64px 24px;
+    }
+
+    .manufacturers-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .logo-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 32px 40px;
+    }
+
+    .mfr-logo {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-400);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      transition: color var(--duration) var(--ease);
+      white-space: nowrap;
+    }
+
+    .mfr-logo:hover {
+      color: var(--brand-deep);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       TERRITORY TEAM — white bg, 4 rep cards
+       ══════════════════════════════════════════════════════════ */
+    .team {
+      background: var(--white);
+      padding: 80px 24px;
+    }
+
+    .team-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .team-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: box-shadow var(--duration) var(--ease), transform var(--duration) var(--ease);
+    }
+
+    .team-card:hover {
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-2px);
+    }
+
+    .team-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--gray-100);
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-400);
+    }
+
+    .team-avatar svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .team-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--brand-deep);
+      margin-bottom: 2px;
+    }
+
+    .team-card .team-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-500);
+      margin-bottom: 12px;
+    }
+
+    .team-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .chip {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--brand-accent-hover);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 3px 10px;
+      border-radius: 100px;
+      letter-spacing: 0.02em;
+    }
+
+    .team-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .team-contact a {
+      font-size: 13px;
+      color: var(--gray-500);
+      transition: color var(--duration) var(--ease);
+    }
+
+    .team-contact a:hover {
+      color: var(--brand-accent-hover);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════════════════════════ */
+    .footer {
+      background: var(--brand-deep);
+      color: var(--gray-400);
+      padding: 48px 24px 24px;
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 48px;
+    }
+
+    .footer-brand {
+      max-width: 320px;
+    }
+
+    .footer-brand img {
+      height: 28px;
+      width: auto;
+      filter: brightness(0) invert(1);
+      margin-bottom: 12px;
+    }
+
+    .footer-brand p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--gray-400);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 56px;
+    }
+
+    .footer-col h4 {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-300);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col li {
+      margin-bottom: 10px;
+    }
+
+    .footer-col a {
+      font-size: 13px;
+      color: var(--gray-400);
+      transition: color var(--duration) var(--ease);
+    }
+
+    .footer-col a:hover {
+      color: var(--brand-accent);
+    }
+
+    .footer-bottom {
+      max-width: var(--max-width);
+      margin: 40px auto 0;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       RESPONSIVE — Mobile (< 768px)
+       ══════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Nav: show hamburger, hide links + CTA */
+      .nav-links {
+        display: none;
+      }
+
+      .nav-cta-desktop {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      /* Nav brand: keep logo + veteran text visible */
+      .nav-brand img {
+        width: 140px;
+      }
+
+      .nav-veteran-text {
+        font-size: 9px;
+      }
+
+      /* Hero: single column, centered */
+      .hero-inner {
+        flex-direction: column;
+        padding: 40px 24px;
+        gap: 40px;
+      }
+
+      .hero-content {
+        flex: 1 1 100%;
+        max-width: 100%;
+        align-items: center;
+        text-align: center;
+      }
+
+      .hero-headline {
+        font-size: clamp(1.75rem, 5vw, 2.25rem);
+      }
+
+      .hero-description {
+        max-width: 100%;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 16px;
+      }
+
+      .btn-primary {
+        width: 100%;
+      }
+
+      .hero-slideshow {
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
+
+      /* Stats: stack */
+      .stats-inner {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .stat {
+        padding: 24px 0;
+      }
+
+      .stat:not(:first-child) {
+        border-top: 1px solid var(--gray-200);
+      }
+
+      /* Services: 1 col */
+      .services-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      /* Team: 1 col */
+      .team-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      /* Manufacturer logos: smaller */
+      .logo-row {
+        gap: 16px 24px;
+      }
+
+      .mfr-logo {
+        font-size: 13px;
+        padding: 8px 10px;
+      }
+
+      /* Footer: stack */
+      .footer-inner {
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .footer-links {
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+      }
+    }
+
+    /* Tablet */
+    @media (min-width: 769px) and (max-width: 960px) {
+      .stats-inner {
+        gap: 48px;
+      }
+
+      .hero-inner {
+        gap: 32px;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .nav-links {
+        gap: 20px;
+      }
+
+      .nav-link {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       NAVIGATION — Logo + Veteran lockup in nav
+       ══════════════════════════════════════════════════════════ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <!-- Brand lockup: logo + divider + veteran text -->
+      <div class="nav-brand">
+        <a href="#">
+          <img src="../public/logo.png" alt="W-Cubed">
+        </a>
+        <div class="nav-brand-divider"></div>
+        <span class="nav-veteran-text">Veteran Owned<br>&amp; Operated</span>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="#" class="nav-link">Home</a></li>
+        <li><a href="#" class="nav-link">Manufacturers</a></li>
+        <li><a href="#" class="nav-link">Territory</a></li>
+        <li><a href="#" class="nav-link">Projects</a></li>
+        <li><a href="#" class="nav-link">Blog</a></li>
+        <li><a href="#" class="nav-link">Contact</a></li>
+        <li><a href="#" class="nav-cta">Contact Your Rep</a></li>
+      </ul>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-inner">
+      <a href="#">Home</a>
+      <a href="#">Manufacturers</a>
+      <a href="#">Territory</a>
+      <a href="#">Projects</a>
+      <a href="#">Blog</a>
+      <a href="#">Contact</a>
+      <a href="#">Contact Your Rep</a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       HERO — Content-forward (no logo — it's in the nav)
+       ══════════════════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero-inner">
+
+      <!-- Left column (55%) -->
+      <div class="hero-content">
+        <h1 class="hero-headline">Water, Waste-Water,<br>Equipment Experts</h1>
+
+        <p class="hero-subtitle">Serving Utah, Nevada, Idaho &amp; Wyoming</p>
+
+        <p class="hero-description">
+          Trusted manufacturer representatives providing expert water and waste-water
+          solutions with over 38 years of industry experience across the Intermountain West.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#" class="btn-primary">Contact Your Rep</a>
+          <a href="#" class="hero-link"><span>Browse Equipment</span> <span class="arrow">&rarr;</span></a>
+        </div>
+      </div>
+
+      <!-- Right column (45%) — Slideshow -->
+      <div class="hero-slideshow">
+        <div class="slideshow-card">
+          <div class="slideshow-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <p>Project Gallery</p>
+          </div>
+
+          <button class="slide-arrow slide-arrow-prev" aria-label="Previous slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <button class="slide-arrow slide-arrow-next" aria-label="Next slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+
+          <div class="slide-dots">
+            <span class="slide-dot active"></span>
+            <span class="slide-dot"></span>
+            <span class="slide-dot"></span>
+            <span class="slide-dot"></span>
+            <span class="slide-dot"></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       STATS BAR
+       ══════════════════════════════════════════════════════════ -->
+  <section class="stats">
+    <div class="stats-inner">
+      <div class="stat">
+        <div class="stat-value">38+</div>
+        <div class="stat-label">Years of Experience</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">4-State</div>
+        <div class="stat-label">Territory Coverage</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">50+</div>
+        <div class="stat-label">Manufacturer Partners</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SERVICES — Equipment Expertise
+       ══════════════════════════════════════════════════════════ -->
+  <section class="services">
+    <div class="services-inner">
+      <div class="section-header">
+        <h2>Equipment Expertise</h2>
+        <p>Comprehensive water and waste-water solutions backed by decades of field experience.</p>
+      </div>
+
+      <div class="services-grid">
+        <!-- Water Treatment -->
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M24 4C24 4 10 20 10 30a14 14 0 0028 0C38 20 24 4 24 4z"/>
+            <path d="M18 32a6 6 0 006 6"/>
+          </svg>
+          <h3>Water Treatment</h3>
+          <p>Advanced filtration, disinfection, and purification systems for municipal and industrial applications.</p>
+        </div>
+
+        <!-- Pumping Systems -->
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="24" cy="24" r="16"/>
+            <circle cx="24" cy="24" r="6"/>
+            <path d="M24 8v6M24 34v6M8 24h6M34 24h6"/>
+          </svg>
+          <h3>Pumping Systems</h3>
+          <p>Reliable pump solutions for water distribution, wastewater collection, and process applications.</p>
+        </div>
+
+        <!-- Technical Support -->
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 36V18a6 6 0 016-6h24a6 6 0 016 6v18"/>
+            <rect x="14" y="36" width="20" height="4" rx="2"/>
+            <path d="M24 20v8M20 24h8"/>
+          </svg>
+          <h3>Technical Support</h3>
+          <p>Expert engineering consultation, system sizing, and ongoing technical assistance for your operations.</p>
+        </div>
+
+        <!-- Process Equipment -->
+        <div class="service-card">
+          <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="8" y="6" width="32" height="36" rx="4"/>
+            <path d="M16 16h16M16 24h16M16 32h8"/>
+            <circle cx="36" cy="34" r="8" fill="none"/>
+            <path d="M33 34l2 2 4-4"/>
+          </svg>
+          <h3>Process Equipment</h3>
+          <p>Screens, clarifiers, aerators, and specialty process equipment for complete treatment trains.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       MANUFACTURER LOGOS
+       ══════════════════════════════════════════════════════════ -->
+  <section class="manufacturers">
+    <div class="manufacturers-inner">
+      <div class="section-header">
+        <h2>Trusted Manufacturing Partners</h2>
+        <p>Representing industry-leading manufacturers across the Intermountain West.</p>
+      </div>
+
+      <div class="logo-row">
+        <span class="mfr-logo">KSB</span>
+        <span class="mfr-logo">Kaeser</span>
+        <span class="mfr-logo">Pratt</span>
+        <span class="mfr-logo">Hydro Gate</span>
+        <span class="mfr-logo">Fournier</span>
+        <span class="mfr-logo">EDI</span>
+        <span class="mfr-logo">Veolia / Suez</span>
+        <span class="mfr-logo">Trillium</span>
+        <span class="mfr-logo">Kusters</span>
+        <span class="mfr-logo">Pentair</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       TERRITORY TEAM
+       ══════════════════════════════════════════════════════════ -->
+  <section class="team">
+    <div class="team-inner">
+      <div class="section-header">
+        <h2>Meet Your Territory Team</h2>
+        <p>Experienced professionals dedicated to your region's water infrastructure needs.</p>
+      </div>
+
+      <div class="team-grid">
+        <!-- Tyler Sheffield -->
+        <div class="team-card">
+          <div class="team-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <h3>Tyler Sheffield</h3>
+          <p class="team-title">Owner</p>
+          <div class="team-chips">
+            <span class="chip">Utah</span>
+            <span class="chip">Nevada</span>
+            <span class="chip">Idaho</span>
+            <span class="chip">Wyoming</span>
+          </div>
+          <div class="team-contact">
+            <a href="tel:+18015551234">(801) 555-1234</a>
+            <a href="mailto:tyler@w-cubed.com">tyler@w-cubed.com</a>
+          </div>
+        </div>
+
+        <!-- Brian Pack -->
+        <div class="team-card">
+          <div class="team-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <h3>Brian Pack</h3>
+          <p class="team-title">Outside Sales</p>
+          <div class="team-chips">
+            <span class="chip">Utah</span>
+            <span class="chip">Wyoming</span>
+          </div>
+          <div class="team-contact">
+            <a href="tel:+18015555678">(801) 555-5678</a>
+            <a href="mailto:brian@w-cubed.com">brian@w-cubed.com</a>
+          </div>
+        </div>
+
+        <!-- Ryan Sheffield -->
+        <div class="team-card">
+          <div class="team-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <h3>Ryan Sheffield</h3>
+          <p class="team-title">Outside Sales</p>
+          <div class="team-chips">
+            <span class="chip">Nevada</span>
+            <span class="chip">Idaho</span>
+          </div>
+          <div class="team-contact">
+            <a href="tel:+18015559012">(801) 555-9012</a>
+            <a href="mailto:ryan@w-cubed.com">ryan@w-cubed.com</a>
+          </div>
+        </div>
+
+        <!-- Derek Hadley -->
+        <div class="team-card">
+          <div class="team-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <h3>Derek Hadley</h3>
+          <p class="team-title">Inside Sales</p>
+          <div class="team-chips">
+            <span class="chip">All Territories</span>
+          </div>
+          <div class="team-contact">
+            <a href="tel:+18015553456">(801) 555-3456</a>
+            <a href="mailto:derek@w-cubed.com">derek@w-cubed.com</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="../public/logo.png" alt="W-Cubed">
+        <p>Manufacturer representatives serving the water and waste-water industry across the Intermountain West.</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Territory</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Manufacturers</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Territory</h4>
+          <ul>
+            <li><a href="#">Utah</a></li>
+            <li><a href="#">Nevada</a></li>
+            <li><a href="#">Idaho</a></li>
+            <li><a href="#">Wyoming</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 W-Cubed. All rights reserved.</span>
+      <span>Veteran Owned &amp; Operated</span>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════════════════
+       JAVASCRIPT
+       ══════════════════════════════════════════════════════════ -->
+  <script>
+    (function () {
+      'use strict';
+
+      var hamburger = document.getElementById('hamburger');
+      var mobileMenu = document.getElementById('mobileMenu');
+
+      // Toggle mobile menu
+      hamburger.addEventListener('click', function () {
+        hamburger.classList.toggle('active');
+        mobileMenu.classList.toggle('open');
+      });
+
+      // Close mobile menu on link click
+      var mobileLinks = mobileMenu.querySelectorAll('a');
+      mobileLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+          hamburger.classList.remove('active');
+          mobileMenu.classList.remove('open');
+        });
+      });
+
+      // Slideshow dot interaction
+      var dots = document.querySelectorAll('.slide-dot');
+      dots.forEach(function (dot) {
+        dot.addEventListener('click', function () {
+          dots.forEach(function (d) { d.classList.remove('active'); });
+          dot.classList.add('active');
+        });
+      });
+
+      // Slideshow arrow interaction
+      var prevBtn = document.querySelector('.slide-arrow-prev');
+      var nextBtn = document.querySelector('.slide-arrow-next');
+
+      function getActiveIndex() {
+        for (var i = 0; i < dots.length; i++) {
+          if (dots[i].classList.contains('active')) return i;
+        }
+        return 0;
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function () {
+          var current = getActiveIndex();
+          var next = current === 0 ? dots.length - 1 : current - 1;
+          dots.forEach(function (d) { d.classList.remove('active'); });
+          dots[next].classList.add('active');
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function () {
+          var current = getActiveIndex();
+          var next = current === dots.length - 1 ? 0 : current + 1;
+          dots.forEach(function (d) { d.classList.remove('active'); });
+          dots[next].classList.add('active');
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>
