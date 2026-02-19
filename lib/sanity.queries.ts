@@ -126,12 +126,11 @@ export const representativesQuery = groq`*[_type == "representative"]|order(coal
   role,
   phone,
   email,
-  states,
   regions,
-  servedStates,
-  servedCounties[]{
-    state,
-    county
+  "servedStates": servedStates[]->code,
+  "servedCounties": servedCounties[]->{
+    "state": state->code,
+    "county": name
   },
   photo
 }`
@@ -143,6 +142,25 @@ export const territoryInfoQuery = groq`*[_type == "territoryInfo"][0]{
   secondaryCta,
   coverageBlurb,
   businessHours
+}`
+
+export const statesListQuery = groq`*[_type == "state"]|order(coalesce(order, 9999) asc, name asc){
+  _id,
+  name,
+  code
+}`
+
+export const countiesListQuery = groq`*[_type == "county"]|order(name asc){
+  _id,
+  name,
+  "stateCode": state->code,
+  "stateName": state->name
+}`
+
+export const countiesByStateQuery = groq`*[_type == "county" && state->code == $stateCode]|order(name asc){
+  _id,
+  name,
+  "stateCode": state->code
 }`
 
 export const categoriesListQuery = groq`*[_type == "category"]{ title }`

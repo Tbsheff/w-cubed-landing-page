@@ -40,18 +40,16 @@ export default defineType({
       options: { hotspot: true },
     }),
     defineField({
-      name: 'states',
-      title: 'States (Display)',
-      type: 'array',
-      of: [{ type: 'string' }],
-      description: 'Display names for states (e.g., "Utah", "Nevada")',
-    }),
-    defineField({
       name: 'servedStates',
-      title: 'Served States (Codes)',
+      title: 'Served States',
       type: 'array',
-      of: [{ type: 'string' }],
-      description: 'State codes for territory coverage (e.g., "UT", "NV")',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'state' }],
+        },
+      ],
+      description: 'Full states this representative covers',
     }),
     defineField({
       name: 'servedCounties',
@@ -59,14 +57,11 @@ export default defineType({
       type: 'array',
       of: [
         {
-          type: 'object',
-          fields: [
-            defineField({ name: 'state', title: 'State Code', type: 'string' }),
-            defineField({ name: 'county', title: 'County Name', type: 'string' }),
-          ],
+          type: 'reference',
+          to: [{ type: 'county' }],
         },
       ],
-      description: 'Specific counties served (optional, for partial state coverage)',
+      description: 'Specific counties for partial state coverage (optional)',
     }),
     defineField({
       name: 'regions',
@@ -79,5 +74,11 @@ export default defineType({
       type: 'number',
     }),
   ],
+  preview: {
+    select: {
+      title: 'name',
+      subtitle: 'role',
+      media: 'photo',
+    },
+  },
 })
-

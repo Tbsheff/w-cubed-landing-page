@@ -7,7 +7,20 @@ import manufacturer from './manufacturer'
 import siteSettings from './siteSettings'
 import representative from './representative'
 import territoryInfo from './territoryInfo'
+import state from './state'
+import county from './county'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [post, author, category, project, manufacturer, siteSettings, representative, territoryInfo],
+  types: [
+    post,
+    author,
+    category,
+    project,
+    manufacturer,
+    siteSettings,
+    representative,
+    territoryInfo,
+    state,
+    county,
+  ],
 }
