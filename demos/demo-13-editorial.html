@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W-Cubed | Water, Waste-Water, Equipment Experts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* ================================================================
+       RESET & DESIGN TOKENS
+       ================================================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --brand: #1E293B;
+      --brand-deep: #0F172A;
+      --brand-accent: #38BDF8;
+      --brand-light: #BAE6FD;
+      --white: #FFFFFF;
+      --gray-50: #F8FAFC;
+      --gray-100: #F1F5F9;
+      --gray-200: #E2E8F0;
+      --gray-300: #CBD5E1;
+      --gray-400: #94A3B8;
+      --gray-500: #64748B;
+
+      --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+      --max-width: 1200px;
+      --nav-height: 64px;
+
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 1.5rem;
+      --space-lg: 2.5rem;
+      --space-xl: 4rem;
+      --space-2xl: 6rem;
+      --space-3xl: 8rem;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--brand);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--brand-light);
+      color: var(--brand-deep);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { font-family: inherit; cursor: pointer; }
+
+    /* ================================================================
+       NAVIGATION
+       ================================================================ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      border-bottom: 1px solid transparent;
+      transition:
+        background 0.4s var(--ease-in-out),
+        backdrop-filter 0.4s var(--ease-in-out),
+        -webkit-backdrop-filter 0.4s var(--ease-in-out),
+        border-color 0.4s var(--ease-in-out),
+        box-shadow 0.4s var(--ease-in-out);
+    }
+
+    .nav.scrolled {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom-color: var(--gray-200);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-logo img {
+      height: 30px;
+      width: auto;
+      opacity: 0;
+      transition: opacity 0.4s var(--ease-in-out);
+    }
+
+    .nav.scrolled .nav-logo img {
+      opacity: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(1.2rem, 2.5vw, 2.2rem);
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--gray-400);
+      transition: color 0.25s var(--ease-in-out);
+      position: relative;
+      padding: 0.2rem 0;
+    }
+
+    .nav.scrolled .nav-links a {
+      color: var(--gray-500);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--brand-accent);
+      transition: width 0.3s var(--ease-out);
+    }
+
+    .nav-links a:hover {
+      color: var(--brand);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 6px;
+      position: relative;
+      z-index: 1001;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--brand);
+      border-radius: 1px;
+      transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out);
+      transform-origin: center;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--white);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s var(--ease-in-out);
+    }
+
+    .mobile-menu.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .mobile-menu a {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--brand);
+      padding: 0.75rem 0;
+      transition: color 0.2s;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.35s var(--ease-out), transform 0.35s var(--ease-out), color 0.2s;
+    }
+
+    .mobile-menu.open a {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mobile-menu.open a:nth-child(1) { transition-delay: 0.08s; }
+    .mobile-menu.open a:nth-child(2) { transition-delay: 0.12s; }
+    .mobile-menu.open a:nth-child(3) { transition-delay: 0.16s; }
+    .mobile-menu.open a:nth-child(4) { transition-delay: 0.20s; }
+    .mobile-menu.open a:nth-child(5) { transition-delay: 0.24s; }
+    .mobile-menu.open a:nth-child(6) { transition-delay: 0.28s; }
+
+    .mobile-menu a:hover {
+      color: var(--brand-accent);
+    }
+
+    /* ================================================================
+       HERO SECTION
+       ================================================================ */
+    .hero {
+      padding-top: var(--nav-height);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background: var(--white);
+    }
+
+    .hero-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Logo + Badge Area ---- */
+    .hero-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: var(--space-xl);
+      padding-bottom: var(--space-lg);
+    }
+
+    .hero-brand img {
+      width: 280px;
+      height: auto;
+      margin-bottom: var(--space-md);
+    }
+
+    .veteran-line {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      font-variant: small-caps;
+    }
+
+    .veteran-line .star {
+      color: var(--brand-accent);
+      font-size: 0.85rem;
+      line-height: 1;
+    }
+
+    /* ---- Thin accent divider ---- */
+    .accent-rule {
+      width: 48px;
+      height: 1px;
+      background: var(--brand-accent);
+      margin: 0 auto var(--space-lg);
+      opacity: 0.6;
+    }
+
+    /* ---- Slideshow ---- */
+    .slideshow-wrapper {
+      width: 100%;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: var(--space-lg);
+    }
+
+    .slideshow {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      min-height: 320px;
+      max-height: 540px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 50%, var(--gray-50) 100%);
+      box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.06),
+        0 4px 16px rgba(0, 0, 0, 0.04),
+        0 0 0 1px rgba(0, 0, 0, 0.03);
+    }
+
+    .slideshow-slides {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slideshow-slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.8s var(--ease-in-out);
+    }
+
+    .slideshow-slide.active {
+      opacity: 1;
+    }
+
+    .slide-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .slide-content .slide-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.25rem;
+    }
+
+    .slide-content .slide-icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--gray-400);
+    }
+
+    .slide-content .slide-number {
+      font-family: var(--font-serif);
+      font-size: 5rem;
+      font-weight: 700;
+      color: var(--gray-100);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .slide-content .slide-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+    }
+
+    /* Slideshow arrows */
+    .slide-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--gray-200);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-out);
+      z-index: 10;
+    }
+
+    .slide-arrow:hover {
+      background: var(--white);
+      border-color: var(--gray-300);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .slide-arrow svg {
+      width: 16px;
+      height: 16px;
+      color: var(--brand);
+    }
+
+    .slide-arrow.prev { left: 16px; }
+    .slide-arrow.next { right: 16px; }
+
+    /* Dot indicators with expansion animation */
+    .slide-dots {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .slide-dot {
+      height: 6px;
+      border-radius: 3px;
+      border: none;
+      cursor: pointer;
+      background: var(--gray-300);
+      width: 6px;
+      transition:
+        width 0.4s var(--ease-out),
+        background 0.3s var(--ease-in-out);
+      padding: 0;
+    }
+
+    .slide-dot.active {
+      width: 24px;
+      background: var(--brand-accent);
+    }
+
+    .slide-dot:hover:not(.active) {
+      background: var(--gray-400);
+    }
+
+    /* ---- Below slideshow: Headline + CTAs ---- */
+    .hero-content {
+      text-align: center;
+      padding: var(--space-xl) 0 var(--space-2xl);
+      position: relative;
+    }
+
+    .hero-headline {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 4.5vw, 3.4rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--brand-deep);
+      letter-spacing: -0.01em;
+      margin-bottom: var(--space-md);
+    }
+
+    .hero-headline .accent {
+      color: var(--brand-accent);
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: var(--space-lg);
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 0.85rem 2rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-out);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--brand-deep);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--brand-accent);
+      color: var(--brand-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+    }
+
+    .btn-primary svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.25s var(--ease-out);
+    }
+
+    .btn-primary:hover svg {
+      transform: translateX(3px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--gray-500);
+      border-bottom: 1px solid var(--gray-300);
+      border-radius: 0;
+      padding: 0.85rem 0;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-ghost:hover {
+      color: var(--brand);
+      border-bottom-color: var(--brand);
+    }
+
+    /* ---- Stats (integrated subtly beside hero content) ---- */
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-xl);
+      padding-top: var(--space-lg);
+      margin-top: var(--space-md);
+      position: relative;
+    }
+
+    .hero-stats::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 1px;
+      background: var(--gray-200);
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-value {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      font-weight: 700;
+      color: var(--brand-deep);
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+
+    .hero-stat-value .accent {
+      color: var(--brand-accent);
+      font-style: normal;
+    }
+
+    .hero-stat-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+    }
+
+    /* ================================================================
+       SERVICES SECTION
+       ================================================================ */
+    .services {
+      padding: var(--space-3xl) 0;
+      background: var(--gray-50);
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .services-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+
+    .section-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xl);
+      align-items: end;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--brand-accent);
+      margin-bottom: var(--space-sm);
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--brand-deep);
+    }
+
+    .section-title strong {
+      font-weight: 700;
+    }
+
+    .section-description {
+      font-size: 0.92rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--gray-500);
+      max-width: 420px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--gray-200);
+      border: 1px solid var(--gray-200);
+    }
+
+    .service-card {
+      background: var(--white);
+      padding: var(--space-lg) var(--space-lg) var(--space-xl);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s var(--ease-in-out);
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--brand-accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s var(--ease-out);
+    }
+
+    .service-card:hover {
+      background: var(--gray-50);
+    }
+
+    .service-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .service-number {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--gray-100);
+      line-height: 1;
+      margin-bottom: var(--space-md);
+      transition: color 0.3s var(--ease-in-out);
+    }
+
+    .service-card:hover .service-number {
+      color: var(--brand-light);
+    }
+
+    .service-title {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--brand-deep);
+      margin-bottom: var(--space-xs);
+    }
+
+    .service-text {
+      font-size: 0.85rem;
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--gray-500);
+    }
+
+    /* ================================================================
+       ABOUT / STORY SECTION
+       ================================================================ */
+    .about {
+      padding: var(--space-3xl) 0;
+    }
+
+    .about-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl);
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-image {
+      aspect-ratio: 4 / 5;
+      background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+      border: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-image-placeholder {
+      text-align: center;
+      color: var(--gray-300);
+    }
+
+    .about-image-placeholder svg {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 0.5rem;
+    }
+
+    .about-image-placeholder p {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .about-accent {
+      position: absolute;
+      bottom: -16px;
+      right: -16px;
+      width: 100px;
+      height: 100px;
+      border: 1px solid var(--brand-accent);
+      opacity: 0.15;
+    }
+
+    .about-content .section-eyebrow { margin-bottom: var(--space-sm); }
+    .about-content .section-title { margin-bottom: var(--space-lg); }
+
+    .about-text {
+      font-size: 0.92rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--gray-500);
+      margin-bottom: var(--space-md);
+    }
+
+    .about-signature {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-xl);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .signature-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--gray-400);
+    }
+
+    .signature-name {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--brand);
+    }
+
+    .signature-role {
+      font-size: 0.72rem;
+      color: var(--gray-400);
+      letter-spacing: 0.04em;
+    }
+
+    /* ================================================================
+       CTA SECTION
+       ================================================================ */
+    .cta {
+      padding: var(--space-3xl) 0;
+      background: var(--brand-deep);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta .section-eyebrow {
+      color: var(--brand-accent);
+      margin-bottom: var(--space-sm);
+    }
+
+    .cta-headline {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.25;
+      margin-bottom: var(--space-md);
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-headline strong {
+      font-weight: 700;
+    }
+
+    .cta-text {
+      font-size: 0.92rem;
+      font-weight: 300;
+      color: var(--gray-400);
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto var(--space-xl);
+    }
+
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    .btn-cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 0.85rem 2rem;
+      background: var(--brand-accent);
+      color: var(--brand-deep);
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-out);
+    }
+
+    .btn-cta-primary:hover {
+      background: var(--white);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-cta-primary svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.25s var(--ease-out);
+    }
+
+    .btn-cta-primary:hover svg {
+      transform: translateX(3px);
+    }
+
+    .btn-cta-ghost {
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--gray-400);
+      background: none;
+      border: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.85rem 0;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-out);
+    }
+
+    .btn-cta-ghost:hover {
+      color: var(--white);
+      border-bottom-color: var(--white);
+    }
+
+    /* ================================================================
+       FOOTER
+       ================================================================ */
+    .footer {
+      background: var(--brand-deep);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: var(--space-xl) 0 var(--space-lg);
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-xl);
+      padding-bottom: var(--space-xl);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-brand img {
+      height: 24px;
+      width: auto;
+      filter: brightness(0) invert(1);
+      margin-bottom: var(--space-sm);
+    }
+
+    .footer-brand p {
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: var(--gray-400);
+      line-height: 1.65;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: var(--space-sm);
+    }
+
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.45rem; }
+
+    .footer-col a {
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: var(--gray-500);
+      transition: color 0.2s var(--ease-in-out);
+    }
+
+    .footer-col a:hover {
+      color: var(--brand-accent);
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-md);
+      font-size: 0.72rem;
+      color: var(--gray-500);
+    }
+
+    .footer-bottom a {
+      color: var(--gray-400);
+      transition: color 0.2s;
+    }
+
+    .footer-bottom a:hover {
+      color: var(--brand-accent);
+    }
+
+    /* ================================================================
+       SCROLL ANIMATIONS
+       ================================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* ================================================================
+       RESPONSIVE
+       ================================================================ */
+    @media (max-width: 1024px) {
+      .section-header {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-top {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-lg);
+      }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --nav-height: 56px;
+      }
+
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .hero-brand {
+        padding-top: var(--space-lg);
+      }
+
+      .hero-brand img {
+        width: 220px;
+      }
+
+      .hero-headline {
+        font-size: clamp(1.6rem, 6vw, 2.2rem);
+      }
+
+      .hero-stats {
+        gap: var(--space-lg);
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .slideshow {
+        min-height: 240px;
+        max-height: 360px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-inner {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+      }
+
+      .about-image {
+        aspect-ratio: 16 / 10;
+      }
+
+      .cta-actions {
+        flex-direction: column;
+      }
+
+      .footer-top {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-xs);
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      :root {
+        --space-lg: 1.5rem;
+        --space-xl: 2.5rem;
+        --space-2xl: 3.5rem;
+        --space-3xl: 5rem;
+      }
+
+      .hero-brand img {
+        width: 180px;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        gap: var(--space-md);
+      }
+
+      .hero-stats::before {
+        width: 60px;
+      }
+
+      .slide-arrow {
+        width: 34px;
+        height: 34px;
+      }
+
+      .slide-arrow.prev { left: 10px; }
+      .slide-arrow.next { right: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================================================================
+       NAVIGATION
+       ================================================================ -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <img src="../public/logo.png" alt="W-Cubed">
+      </a>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Manufacturers</a></li>
+        <li><a href="#">Territory</a></li>
+        <li><a href="#">Projects</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#" onclick="closeMobileMenu()">Home</a>
+    <a href="#" onclick="closeMobileMenu()">Manufacturers</a>
+    <a href="#" onclick="closeMobileMenu()">Territory</a>
+    <a href="#" onclick="closeMobileMenu()">Projects</a>
+    <a href="#" onclick="closeMobileMenu()">Blog</a>
+    <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+  </div>
+
+  <!-- ================================================================
+       HERO
+       ================================================================ -->
+  <section class="hero">
+    <div class="hero-inner">
+
+      <!-- Logo + Veteran badge -->
+      <div class="hero-brand reveal">
+        <img src="../public/logo.png" alt="W-Cubed">
+        <div class="veteran-line">
+          <span class="star">&#9733;</span>
+          Veteran Owned &amp; Operated
+        </div>
+      </div>
+
+      <!-- Thin accent divider -->
+      <div class="accent-rule reveal reveal-delay-1"></div>
+
+      <!-- Slideshow -->
+      <div class="slideshow-wrapper reveal reveal-delay-2">
+        <div class="slideshow" id="slideshow">
+          <div class="slideshow-slides">
+            <div class="slideshow-slide active" data-index="0">
+              <div class="slide-content">
+                <div class="slide-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <path d="m21 15-5-5L5 21"/>
+                  </svg>
+                </div>
+                <div class="slide-number">01</div>
+                <div class="slide-label">Water Treatment Systems</div>
+              </div>
+            </div>
+            <div class="slideshow-slide" data-index="1">
+              <div class="slide-content">
+                <div class="slide-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <path d="m21 15-5-5L5 21"/>
+                  </svg>
+                </div>
+                <div class="slide-number">02</div>
+                <div class="slide-label">Wastewater Infrastructure</div>
+              </div>
+            </div>
+            <div class="slideshow-slide" data-index="2">
+              <div class="slide-content">
+                <div class="slide-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <path d="m21 15-5-5L5 21"/>
+                  </svg>
+                </div>
+                <div class="slide-number">03</div>
+                <div class="slide-label">Municipal Projects</div>
+              </div>
+            </div>
+            <div class="slideshow-slide" data-index="3">
+              <div class="slide-content">
+                <div class="slide-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <path d="m21 15-5-5L5 21"/>
+                  </svg>
+                </div>
+                <div class="slide-number">04</div>
+                <div class="slide-label">Equipment Solutions</div>
+              </div>
+            </div>
+            <div class="slideshow-slide" data-index="4">
+              <div class="slide-content">
+                <div class="slide-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <path d="m21 15-5-5L5 21"/>
+                  </svg>
+                </div>
+                <div class="slide-number">05</div>
+                <div class="slide-label">Industrial Applications</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Arrows -->
+          <button class="slide-arrow prev" id="slidePrev" aria-label="Previous slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <button class="slide-arrow next" id="slideNext" aria-label="Next slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 6 15 12 9 18"/>
+            </svg>
+          </button>
+
+          <!-- Dot indicators -->
+          <div class="slide-dots" id="slideDots">
+            <button class="slide-dot active" data-index="0" aria-label="Slide 1"></button>
+            <button class="slide-dot" data-index="1" aria-label="Slide 2"></button>
+            <button class="slide-dot" data-index="2" aria-label="Slide 3"></button>
+            <button class="slide-dot" data-index="3" aria-label="Slide 4"></button>
+            <button class="slide-dot" data-index="4" aria-label="Slide 5"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Headline + CTAs -->
+      <div class="hero-content">
+        <h1 class="hero-headline reveal">
+          Water, Waste-Water,<br><span class="accent">Equipment</span> Experts
+        </h1>
+        <p class="hero-subtitle reveal reveal-delay-1">
+          Serving Utah &middot; Nevada &middot; Idaho &middot; Wyoming
+        </p>
+        <div class="hero-actions reveal reveal-delay-2">
+          <a href="#contact" class="btn btn-primary">
+            Contact Your Rep
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a href="#" class="btn btn-ghost">Browse Manufacturers</a>
+        </div>
+
+        <!-- Stats integrated subtly -->
+        <div class="hero-stats reveal reveal-delay-3">
+          <div class="hero-stat">
+            <div class="hero-stat-value">38<span class="accent">+</span></div>
+            <div class="hero-stat-label">Years Experience</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value">4<span class="accent">-State</span></div>
+            <div class="hero-stat-label">Territory</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value">50<span class="accent">+</span></div>
+            <div class="hero-stat-label">Manufacturers</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SERVICES
+       ================================================================ -->
+  <section class="services" id="services">
+    <div class="services-inner">
+      <div class="section-header">
+        <div>
+          <div class="section-eyebrow reveal">What We Represent</div>
+          <h2 class="section-title reveal reveal-delay-1">
+            Comprehensive <strong>Water &amp; Wastewater</strong> Equipment Solutions
+          </h2>
+        </div>
+        <p class="section-description reveal reveal-delay-2">
+          From pumps and valves to complete treatment systems, we connect engineers and municipalities with the right equipment for every project.
+        </p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card reveal">
+          <div class="service-number">01</div>
+          <h3 class="service-title">Water Treatment</h3>
+          <p class="service-text">Complete treatment and distribution systems for municipal and industrial applications across the Intermountain West.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-number">02</div>
+          <h3 class="service-title">Wastewater Systems</h3>
+          <p class="service-text">Advanced treatment facilities designed for regulatory compliance, operational efficiency, and long-term sustainability.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-number">03</div>
+          <h3 class="service-title">Pumps &amp; Valves</h3>
+          <p class="service-text">Premium pumping solutions, control valves, and actuators from industry-leading manufacturers.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-3">
+          <div class="service-number">04</div>
+          <h3 class="service-title">Instrumentation</h3>
+          <p class="service-text">Precision measurement, monitoring, and control instrumentation for water quality and process management.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-4">
+          <div class="service-number">05</div>
+          <h3 class="service-title">Disinfection</h3>
+          <p class="service-text">UV, chlorination, and ozone disinfection systems engineered for reliable water safety compliance.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-5">
+          <div class="service-number">06</div>
+          <h3 class="service-title">Technical Support</h3>
+          <p class="service-text">Hands-on engineering support from specification through commissioning. Local expertise, national manufacturer backing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       ABOUT
+       ================================================================ -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="about-visual reveal">
+        <div class="about-image">
+          <div class="about-image-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <p>Company Photo</p>
+          </div>
+        </div>
+        <div class="about-accent"></div>
+      </div>
+      <div class="about-content">
+        <div class="section-eyebrow reveal">Our Story</div>
+        <h2 class="section-title reveal reveal-delay-1">
+          A Legacy of <strong>Precision</strong> &amp; <strong>Integrity</strong>
+        </h2>
+        <p class="about-text reveal reveal-delay-2">
+          Founded over 38 years ago, W-Cubed has grown into one of the Intermountain West's most trusted manufacturer representatives in the water and wastewater industry. Our veteran-led team brings military discipline and precision to every project.
+        </p>
+        <p class="about-text reveal reveal-delay-3">
+          We believe that clean water infrastructure is the foundation of healthy communities. Every manufacturer we represent, every system we specify, reflects that commitment to public health and environmental stewardship.
+        </p>
+        <div class="about-signature reveal reveal-delay-4">
+          <div class="signature-avatar">W</div>
+          <div>
+            <div class="signature-name">W-Cubed Leadership</div>
+            <div class="signature-role">Veteran Owned &amp; Operated</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       CTA
+       ================================================================ -->
+  <section class="cta" id="contact">
+    <div class="cta-inner">
+      <div class="section-eyebrow reveal">Start a Conversation</div>
+      <h2 class="cta-headline reveal reveal-delay-1">
+        Let's Build <strong>Infrastructure</strong> That Stands the Test of Time
+      </h2>
+      <p class="cta-text reveal reveal-delay-2">
+        Whether you need equipment for a new treatment plant or support for an existing system, our team is ready to deliver solutions that exceed expectations.
+      </p>
+      <div class="cta-actions reveal reveal-delay-3">
+        <button class="btn-cta-primary">
+          Request a Consultation
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <button class="btn-cta-ghost">Call Us Directly</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       FOOTER
+       ================================================================ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="../public/logo.png" alt="W-Cubed">
+          <p>Manufacturer representatives serving the water and wastewater industry across Utah, Nevada, Idaho, and Wyoming.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Territory</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Manufacturers</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Territory</h4>
+          <ul>
+            <li><a href="#">Utah</a></li>
+            <li><a href="#">Nevada</a></li>
+            <li><a href="#">Idaho</a></li>
+            <li><a href="#">Wyoming</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 W-Cubed. All rights reserved.</span>
+        <span><a href="#">Privacy</a> &nbsp;&middot;&nbsp; <a href="#">Terms</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================================================================
+       JAVASCRIPT
+       ================================================================ -->
+  <script>
+    /* ---- Nav scroll behavior ---- */
+    (function() {
+      var nav = document.getElementById('nav');
+      var lastScroll = 0;
+
+      function checkScroll() {
+        var y = window.scrollY || window.pageYOffset;
+        if (y > 40) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+        lastScroll = y;
+      }
+
+      window.addEventListener('scroll', checkScroll, { passive: true });
+      checkScroll();
+    })();
+
+    /* ---- Mobile menu ---- */
+    (function() {
+      var btn = document.getElementById('hamburger');
+      var menu = document.getElementById('mobileMenu');
+
+      btn.addEventListener('click', function() {
+        btn.classList.toggle('active');
+        menu.classList.toggle('open');
+        document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+      });
+    })();
+
+    function closeMobileMenu() {
+      document.getElementById('hamburger').classList.remove('active');
+      var menu = document.getElementById('mobileMenu');
+      menu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* ---- Slideshow ---- */
+    (function() {
+      var slides = document.querySelectorAll('.slideshow-slide');
+      var dots = document.querySelectorAll('.slide-dot');
+      var current = 0;
+      var total = slides.length;
+      var interval;
+
+      function goTo(index) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = ((index % total) + total) % total;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+      }
+
+      function next() { goTo(current + 1); }
+      function prev() { goTo(current - 1); }
+
+      function startAuto() {
+        interval = setInterval(next, 5000);
+      }
+
+      function resetAuto() {
+        clearInterval(interval);
+        startAuto();
+      }
+
+      document.getElementById('slideNext').addEventListener('click', function() {
+        next();
+        resetAuto();
+      });
+
+      document.getElementById('slidePrev').addEventListener('click', function() {
+        prev();
+        resetAuto();
+      });
+
+      dots.forEach(function(dot) {
+        dot.addEventListener('click', function() {
+          goTo(parseInt(this.dataset.index));
+          resetAuto();
+        });
+      });
+
+      startAuto();
+    })();
+
+    /* ---- Scroll reveal animations ---- */
+    (function() {
+      var elements = document.querySelectorAll('.reveal');
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.08,
+        rootMargin: '0px 0px -30px 0px'
+      });
+
+      elements.forEach(function(el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+</body>
+</html>
