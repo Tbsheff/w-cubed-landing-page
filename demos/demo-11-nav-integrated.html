@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W-Cubed | Nav Integrated Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & Base ──────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --brand: #1E293B;
+      --brand-deep: #0F172A;
+      --brand-accent: #38BDF8;
+      --brand-light: #BAE6FD;
+      --white: #FFFFFF;
+      --gray-100: #F1F5F9;
+      --gray-200: #E2E8F0;
+      --gray-300: #CBD5E1;
+      --gray-400: #94A3B8;
+      --gray-500: #64748B;
+      --nav-height: 80px;
+      --max-width: 1120px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--brand);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Navigation ────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo {
+      height: 44px;
+      width: auto;
+    }
+
+    .veteran-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 14px;
+      background: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--brand);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .veteran-badge svg {
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+      color: var(--brand-accent);
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-center a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-500);
+      text-decoration: none;
+      transition: color 0.2s;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-center a:hover { color: var(--brand); }
+
+    .nav-right {
+      flex-shrink: 0;
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 22px;
+      background: var(--brand-accent);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+
+    .btn-cta:hover {
+      background: #0EA5E9;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 22px;
+      background: transparent;
+      color: var(--brand);
+      font-size: 14px;
+      font-weight: 600;
+      border: 2px solid var(--gray-300);
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.15s;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--brand);
+      transform: translateY(-1px);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--brand);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* Mobile menu overlay */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: var(--nav-height);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--white);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 48px;
+      gap: 8px;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--brand);
+      text-decoration: none;
+      padding: 14px 0;
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: var(--brand-accent); }
+
+    .mobile-menu .btn-cta {
+      margin-top: 24px;
+      font-size: 16px;
+      padding: 14px 32px;
+    }
+
+    /* ── Hero ──────────────────────────────────────────────── */
+    .hero {
+      padding-top: calc(var(--nav-height) + 64px);
+      padding-bottom: 80px;
+      text-align: center;
+    }
+
+    .hero-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.12;
+      color: var(--brand-deep);
+      margin-bottom: 16px;
+      letter-spacing: -0.025em;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: var(--gray-500);
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-description {
+      font-size: 17px;
+      color: var(--gray-500);
+      line-height: 1.7;
+      max-width: 620px;
+      margin: 0 auto 48px;
+    }
+
+    /* ── Slideshow Placeholder ─────────────────────────────── */
+    .slideshow {
+      position: relative;
+      max-width: 960px;
+      margin: 0 auto 48px;
+      aspect-ratio: 16 / 9;
+      background: var(--gray-100);
+      border: 2px dashed var(--gray-300);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      overflow: hidden;
+    }
+
+    .slideshow-icon {
+      width: 48px;
+      height: 48px;
+      color: var(--gray-400);
+    }
+
+    .slideshow-label {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--gray-400);
+      letter-spacing: 0.02em;
+    }
+
+    /* Prev / Next arrows */
+    .slideshow-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      color: var(--brand);
+    }
+
+    .slideshow-arrow:hover {
+      background: var(--gray-100);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .slideshow-arrow svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .slideshow-arrow.prev { left: 16px; }
+    .slideshow-arrow.next { right: 16px; }
+
+    /* Dot indicators */
+    .slideshow-dots {
+      position: absolute;
+      bottom: 20px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .slideshow-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--gray-300);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .slideshow-dot.active { background: var(--brand-accent); }
+    .slideshow-dot:hover { background: var(--brand-accent); }
+
+    /* CTA buttons */
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Stats Bar ─────────────────────────────────────────── */
+    .stats {
+      background: var(--brand-deep);
+      padding: 48px 24px;
+    }
+
+    .stats-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 80px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--gray-400);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    .footer {
+      padding: 40px 24px;
+      text-align: center;
+      color: var(--gray-400);
+      font-size: 13px;
+    }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 960px) {
+      .nav-center { gap: 20px; }
+      .nav-center a { font-size: 13px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-center { display: none; }
+      .nav-right { display: none; }
+      .hamburger { display: flex; }
+
+      .hero {
+        padding-top: calc(var(--nav-height) + 40px);
+        padding-bottom: 48px;
+      }
+
+      .hero h1 { font-size: 30px; }
+      .hero-subtitle { font-size: 14px; margin-bottom: 16px; }
+      .hero-description { font-size: 15px; margin-bottom: 36px; }
+
+      .slideshow {
+        border-radius: 12px;
+        aspect-ratio: 4 / 3;
+        margin-bottom: 36px;
+      }
+
+      .slideshow-arrow { width: 36px; height: 36px; }
+      .slideshow-arrow.prev { left: 10px; }
+      .slideshow-arrow.next { right: 10px; }
+
+      .stats { padding: 36px 24px; }
+
+      .stats-inner {
+        flex-direction: column;
+        gap: 28px;
+        align-items: center;
+      }
+
+      .stat-value { font-size: 26px; }
+
+      .hero-ctas {
+        flex-direction: column;
+      }
+
+      .hero-ctas .btn-cta,
+      .hero-ctas .btn-outline {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-logo { height: 36px; }
+      .veteran-badge { font-size: 10px; padding: 4px 10px; }
+      .hero h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Navigation ──────────────────────────────────────── -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">
+        <img src="../public/logo.png" alt="W-Cubed" class="nav-logo">
+        <span class="veteran-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Veteran Owned &amp; Operated
+        </span>
+      </a>
+      <ul class="nav-center">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Manufacturers</a></li>
+        <li><a href="#">Territory</a></li>
+        <li><a href="#">Projects</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="#" class="btn-cta">Contact Your Rep</a>
+      </div>
+      <button class="hamburger" aria-label="Toggle menu" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ─── Mobile Menu ─────────────────────────────────────── -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#" onclick="toggleMenu()">Home</a>
+    <a href="#" onclick="toggleMenu()">Manufacturers</a>
+    <a href="#" onclick="toggleMenu()">Territory</a>
+    <a href="#" onclick="toggleMenu()">Projects</a>
+    <a href="#" onclick="toggleMenu()">Blog</a>
+    <a href="#" onclick="toggleMenu()">Contact</a>
+    <a href="#" class="btn-cta" onclick="toggleMenu()">Contact Your Rep</a>
+  </div>
+
+  <!-- ─── Hero ────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-inner">
+
+      <!-- Headline -->
+      <h1>Water, Waste-Water,<br>Equipment Experts</h1>
+      <p class="hero-subtitle">serving UT &middot; NV &middot; ID &middot; WY</p>
+      <p class="hero-description">
+        W-Cubed represents top-tier manufacturers of water and waste-water treatment equipment across the Intermountain West. We connect municipalities and engineers with the right solutions.
+      </p>
+
+      <!-- Slideshow placeholder -->
+      <div class="slideshow">
+        <!-- Icon -->
+        <svg class="slideshow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="3"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="m21 15-5-5L5 21"/>
+        </svg>
+        <span class="slideshow-label">Image Slideshow</span>
+
+        <!-- Prev arrow -->
+        <button class="slideshow-arrow prev" aria-label="Previous slide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+
+        <!-- Next arrow -->
+        <button class="slideshow-arrow next" aria-label="Next slide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 6 15 12 9 18"/>
+          </svg>
+        </button>
+
+        <!-- Dots -->
+        <div class="slideshow-dots">
+          <button class="slideshow-dot active" aria-label="Slide 1"></button>
+          <button class="slideshow-dot" aria-label="Slide 2"></button>
+          <button class="slideshow-dot" aria-label="Slide 3"></button>
+          <button class="slideshow-dot" aria-label="Slide 4"></button>
+        </div>
+      </div>
+
+      <!-- CTA buttons -->
+      <div class="hero-ctas">
+        <a href="#" class="btn-cta">Contact Your Rep</a>
+        <a href="#" class="btn-outline">View Manufacturers</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── Stats Bar ───────────────────────────────────────── -->
+  <section class="stats">
+    <div class="stats-inner">
+      <div class="stat">
+        <div class="stat-value">38+</div>
+        <div class="stat-label">Years of Experience</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">10+</div>
+        <div class="stat-label">Manufacturers</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">4-State</div>
+        <div class="stat-label">Coverage Area</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ──────────────────────────────────────────── -->
+  <footer class="footer">
+    &copy; 2026 W-Cubed. All rights reserved.
+  </footer>
+
+  <!-- ─── Script ──────────────────────────────────────────── -->
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+      document.querySelector('.hamburger').classList.toggle('active');
+    }
+  </script>
+
+</body>
+</html>
