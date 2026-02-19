@@ -392,7 +392,7 @@
     }
 
     /* ================================================================
-       SLIDESHOW — Real image, dot indicators, no arrows
+       SLIDESHOW PLACEHOLDER — Polished container for future project photos
        ================================================================ */
     .slideshow-container {
       position: relative;
@@ -401,14 +401,56 @@
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid var(--gray-200);
+      background: var(--gray-50);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
     }
 
-    .slideshow-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+    .slideshow-placeholder-icon {
+      width: 48px;
+      height: 48px;
+      color: var(--gray-300);
     }
+
+    .slideshow-placeholder-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-400);
+    }
+
+    /* Prev / Next arrows */
+    .slide-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--gray-400);
+      transition: color var(--duration) var(--ease);
+      padding: 0;
+    }
+
+    .slide-arrow:hover {
+      color: var(--brand);
+    }
+
+    .slide-arrow svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .slide-arrow-prev { left: var(--space-md); }
+    .slide-arrow-next { right: var(--space-md); }
 
     .slide-dots {
       position: absolute;
@@ -423,7 +465,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.5);
+      background: var(--gray-300);
       border: none;
       padding: 0;
       cursor: pointer;
@@ -435,7 +477,7 @@
     }
 
     .slide-dot:hover:not(.active) {
-      background: rgba(255,255,255,0.8);
+      background: var(--gray-400);
     }
 
     /* ================================================================
@@ -961,7 +1003,27 @@
       <!-- Right column (50%) — Slideshow with real image -->
       <div class="hero-slideshow">
         <div class="slideshow-container">
-          <img src="../public/hero-image.png" alt="Water treatment facility equipment" width="560" height="420" loading="eager">
+          <!-- Placeholder icon -->
+          <svg class="slideshow-placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span class="slideshow-placeholder-label">Project Slideshow</span>
+
+          <!-- Prev / Next arrows -->
+          <button class="slide-arrow slide-arrow-prev" aria-label="Previous slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <button class="slide-arrow slide-arrow-next" aria-label="Next slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+
+          <!-- Dot indicators -->
           <div class="slide-dots">
             <button class="slide-dot active" aria-label="Slide 1"></button>
             <button class="slide-dot" aria-label="Slide 2"></button>
@@ -1246,14 +1308,39 @@
         });
       });
 
-      /* ── Slideshow dot interaction ── */
+      /* ── Slideshow dot + arrow interaction ── */
       var dots = document.querySelectorAll('.slide-dot');
-      dots.forEach(function (dot) {
-        dot.addEventListener('click', function () {
-          dots.forEach(function (d) { d.classList.remove('active'); });
-          dot.classList.add('active');
-        });
+      var prevBtn = document.querySelector('.slide-arrow-prev');
+      var nextBtn = document.querySelector('.slide-arrow-next');
+
+      function getActiveIndex() {
+        for (var i = 0; i < dots.length; i++) {
+          if (dots[i].classList.contains('active')) return i;
+        }
+        return 0;
+      }
+
+      function setActive(index) {
+        dots.forEach(function (d) { d.classList.remove('active'); });
+        dots[index].classList.add('active');
+      }
+
+      dots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () { setActive(i); });
       });
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function () {
+          var idx = getActiveIndex();
+          setActive(idx === 0 ? dots.length - 1 : idx - 1);
+        });
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function () {
+          var idx = getActiveIndex();
+          setActive(idx === dots.length - 1 ? 0 : idx + 1);
+        });
+      }
 
       /* ── Smooth scroll for anchor links ── */
       document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
