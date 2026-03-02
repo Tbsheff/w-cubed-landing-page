@@ -1,6 +1,14 @@
 import type React from "react"
 import "./globals.css"
+import { Inter, Barlow_Condensed } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
+const barlowCondensed = Barlow_Condensed({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-display",
+})
 
 export const metadata = {
   title: "W-Cubed | Water-Process Equipment Experts",
@@ -25,7 +33,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className={`${inter.variable} ${barlowCondensed.variable} font-body`}>
         <ThemeProvider attribute="class" defaultTheme="light">
           {children}
         </ThemeProvider>
