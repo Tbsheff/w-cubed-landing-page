@@ -39,9 +39,9 @@ export type PostClientProps = {
 };
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 },
+  transition: { duration: 0.5 },
 };
 
 export default function PostClient({ post }: PostClientProps) {
@@ -132,7 +132,7 @@ export default function PostClient({ post }: PostClientProps) {
           <div className="container mx-auto px-4 lg:px-6">
             <motion.div
               className="max-w-4xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
@@ -156,7 +156,7 @@ export default function PostClient({ post }: PostClientProps) {
               {/* Main Content */}
               <motion.div
                 className="lg:col-span-3 prose prose-lg max-w-none prose-headings:text-brand-deep prose-a:text-brand-accent prose-blockquote:border-l-brand-accent prose-blockquote:bg-brand-light/20 prose-blockquote:p-4 prose-blockquote:rounded-r-lg"
-                initial={{ opacity: 0, x: -30 }}
+                initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
               >
@@ -206,7 +206,7 @@ export default function PostClient({ post }: PostClientProps) {
               {/* Sidebar */}
               <motion.div
                 className="lg:col-span-1"
-                initial={{ opacity: 0, x: 30 }}
+                initial={{ opacity: 0, x: 16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
@@ -293,7 +293,7 @@ export default function PostClient({ post }: PostClientProps) {
                 {post.related.map((relatedPost, index) => (
                   <motion.div
                     key={relatedPost.id}
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     viewport={{ once: true }}

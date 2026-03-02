@@ -12,10 +12,9 @@ import { Input } from "@/components/ui/input";
 import { PageWrapper } from "@/components/page-wrapper";
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -30 },
-  transition: { duration: 0.6 },
+  transition: { duration: 0.5 },
 };
 
 const staggerContainer = {

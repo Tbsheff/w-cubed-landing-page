@@ -61,9 +61,9 @@ type HomePageProps = {
 };
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 },
+  transition: { duration: 0.5 },
 };
 
 const staggerContainer = {
@@ -219,7 +219,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
               className="space-y-6"
-              initial={{ opacity: 0, x: -60 }}
+              initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
@@ -254,7 +254,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               </div>
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, x: 60 }}
+              initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
@@ -418,7 +418,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
 
           <motion.div
             className="text-center mt-12"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
@@ -549,7 +549,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
           {/* Secondary CTAs */}
           <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center mt-12"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
