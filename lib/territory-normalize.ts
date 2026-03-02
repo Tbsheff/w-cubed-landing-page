@@ -7,25 +7,56 @@ type RawRep = {
   role?: string | null
   phone?: string | null
   email?: string | null
+  states?: (string | null | undefined)[] | null
   servedStates?: (string | null | undefined)[] | null
   servedCounties?: Array<{ state?: string | null; county?: string | null }> | null
   photo?: any
   photoUrl?: string | null
 }
 
-const normalizeState = (value?: string | null) =>
-  value ? value.trim().toUpperCase() : ""
+const SUPPORTED_STATE_CODES = new Set(["UT", "NV", "ID", "WY"])
+
+const STATE_NAME_TO_CODE: Record<string, string> = {
+  utah: "UT",
+  nevada: "NV",
+  idaho: "ID",
+  wyoming: "WY",
+}
+
+const normalizeState = (value?: string | null) => {
+  if (!value) return ""
+  const trimmed = value.trim()
+  if (!trimmed) return ""
+
+  const directCode = trimmed.toUpperCase()
+  if (SUPPORTED_STATE_CODES.has(directCode)) {
+    return directCode
+  }
+
+  const fromName = STATE_NAME_TO_CODE[trimmed.toLowerCase()]
+  return fromName && SUPPORTED_STATE_CODES.has(fromName) ? fromName : ""
+}
 
 const normalizeCounty = (value?: string | null) =>
   value ? value.trim().toLowerCase() : ""
+
+const parseLegacyStates = (values?: (string | null | undefined)[] | null) =>
+  (values || [])
+    .flatMap((value) => (value ? value.split(/[,&/|]+/) : []))
+    .map((value) => normalizeState(value))
+    .filter(Boolean)
+
+const dedupe = (values: string[]) => Array.from(new Set(values))
 
 export function normalizeReps(raw: RawRep[]): RepCoverage[] {
   return raw
     .filter((rep) => rep?.slug && rep?.name)
     .map((rep) => {
-      const servedStates = (rep.servedStates || [])
-        .map(normalizeState)
-        .filter(Boolean)
+      const fromNew = (rep.servedStates || []).map(normalizeState).filter(Boolean)
+      const servedStates = dedupe(
+        fromNew.length > 0 ? fromNew : parseLegacyStates(rep.states)
+      )
+
       const servedCounties =
         (rep.servedCounties || [])
           .map((item) => {
@@ -35,7 +66,12 @@ export function normalizeReps(raw: RawRep[]): RepCoverage[] {
             if (!state || !county) return null
             return { state, county }
           })
-          .filter(Boolean) as ServedCounty[]
+          .filter(Boolean)
+          .filter(
+            (item, index, arr) =>
+              arr.findIndex((other) => other?.state === item?.state && other?.county === item?.county) ===
+              index
+          ) as ServedCounty[]
 
       const photoUrl =
         rep.photoUrl ||
