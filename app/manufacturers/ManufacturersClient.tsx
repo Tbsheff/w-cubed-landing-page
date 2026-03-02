@@ -129,6 +129,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                   variant={viewMode === "grid" ? "default" : "outline"}
                   size="sm"
                   type="button"
+                  aria-label="Grid view"
                   onClick={() => setViewMode("grid")}
                   className={
                     viewMode === "grid"
@@ -142,6 +143,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                   variant={viewMode === "list" ? "default" : "outline"}
                   size="sm"
                   type="button"
+                  aria-label="List view"
                   onClick={() => setViewMode("list")}
                   className={
                     viewMode === "list"
