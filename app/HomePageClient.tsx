@@ -455,7 +455,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
 
           <div className="relative">
             <motion.div
-              className="overflow-hidden"
+              className="overflow-x-clip overflow-y-visible"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.8 }}
@@ -470,19 +470,19 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                   const states = project.states ?? [];
                   return (
                     <div key={index} className="w-full flex-shrink-0 px-4">
-                      <Card className="max-w-2xl mx-auto overflow-hidden">
-                        <div className="md:flex">
-                          <div className="md:w-1/2">
+                      <Card className="max-w-3xl mx-auto">
+                        <div className="md:grid md:grid-cols-2">
+                          <div className="relative h-48 md:h-auto overflow-hidden rounded-t-lg md:rounded-l-lg md:rounded-tr-none">
                             <Image
                               src={imageSrc}
                               alt={project.title}
-                              width={300}
-                              height={200}
-                              className="w-full h-48 md:h-full object-cover"
+                              fill
+                              sizes="(min-width: 768px) 50vw, 100vw"
+                              className="object-cover"
                             />
                           </div>
-                          <div className="md:w-1/2 p-6">
-                            <Badge variant="secondary" className="mb-3">
+                          <div className="p-6 pb-8 flex flex-col">
+                            <Badge variant="secondary" className="mb-3 self-start">
                               {project.category}
                             </Badge>
                             <CardTitle className="text-xl mb-3 text-brand-deep">
@@ -491,8 +491,8 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                             <CardDescription className="mb-4">
                               {project.description}
                             </CardDescription>
-                            <div className="flex items-center justify-between gap-4">
-                              <div className="flex gap-1">
+                            <div className="flex flex-wrap items-center justify-between gap-3 mt-auto">
+                              <div className="flex flex-wrap gap-1">
                                 {states.map((state, idx) => (
                                   <Badge key={idx} variant="outline" className="text-xs">
                                     {state}
