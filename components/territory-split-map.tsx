@@ -525,23 +525,16 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     [filteredSearchResults, handleSelectCounty]
   );
 
-  const handleCopy = useCallback(async (value: string) => {
-    try {
-      await navigator.clipboard.writeText(value);
-    } catch (error) {
-      console.error("Copy failed", error);
-    }
-  }, []);
-
   const mapStyles = useCallback(
     (county: CountyFeature) => {
       if (!county.properties.served) {
+        const isSelectedUnserved = county.properties.id === selectedCountyId;
         return {
           default: {
             fill: MAP_COLORS.notServedFill,
-            fillOpacity: 0.8,
-            stroke: MAP_COLORS.notServedStroke,
-            strokeWidth: 0.6,
+            fillOpacity: isSelectedUnserved ? 0.95 : 0.8,
+            stroke: isSelectedUnserved ? MAP_COLORS.selectedStroke : MAP_COLORS.notServedStroke,
+            strokeWidth: isSelectedUnserved ? 1.8 : 0.6,
             outline: "none",
             transition: "fill-opacity 150ms ease, stroke-width 150ms ease",
           },
@@ -550,7 +543,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
             fillOpacity: 0.85,
             stroke: MAP_COLORS.notServedHoverStroke,
             strokeWidth: 0.75,
-            cursor: "not-allowed",
+            cursor: "default",
           },
           pressed: {
             fill: MAP_COLORS.notServedHoverFill,
@@ -670,6 +663,34 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     }));
   }, []);
 
+  const handleRepCardClick = useCallback(
+    (repSlug: string) => {
+      const repCounties = countiesByRep[repSlug];
+      if (!repCounties?.length) return;
+
+      const [totalLon, totalLat] = repCounties.reduce<[number, number]>(
+        (acc, county) => {
+          acc[0] += county.center[0];
+          acc[1] += county.center[1];
+          return acc;
+        },
+        [0, 0]
+      );
+
+      const center: [number, number] = [
+        totalLon / repCounties.length,
+        totalLat / repCounties.length,
+      ];
+
+      lastUserView.current = cloneViewState(viewState);
+      setSelectedCountyId(null);
+      setHoveredCountyId(null);
+      setActiveStateCode(null);
+      setViewState({ coordinates: center, zoom: 2.0 });
+    },
+    [countiesByRep, viewState]
+  );
+
   const clearSearch = useCallback(() => {
     setSearchQuery("");
   }, []);
@@ -753,6 +774,11 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
             </button>
           )}
         </form>
+        {debouncedSearch && filteredSearchResults.length === 0 && (
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            No counties found for &ldquo;{debouncedSearch}&rdquo;
+          </p>
+        )}
         {debouncedSearch && filteredSearchResults.length > 0 && (
           <div className="mt-3 rounded-lg border border-brand/10 bg-white shadow-sm">
             <ul
@@ -820,9 +846,18 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
             return (
               <div
                 key={rep.slug}
+                role="button"
+                tabIndex={0}
+                onClick={() => handleRepCardClick(rep.slug)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleRepCardClick(rep.slug);
+                  }
+                }}
                 className={clsx(
-                  "flex items-start gap-3 rounded-xl border p-4 transition-colors",
-                  isHighlighted ? "border-brand bg-brand/5" : "border-brand/10 bg-background"
+                  "flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors",
+                  isHighlighted ? "border-brand bg-brand/5" : "border-brand/10 bg-background hover:border-brand/30"
                 )}
               >
                 {rep.photoUrl ? (
@@ -875,93 +910,102 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         </div>
       </div>
 
-      {selectedCounty && (
-        <div className="space-y-4 rounded-xl border border-brand/20 bg-white p-4 shadow-sm">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className={clsx(
-                  "text-lg font-semibold",
-                  selectedCounty.served ? "text-brand" : "text-muted-foreground"
-                )}>
-                  {selectedCounty.county} County
-                </h3>
-                <Badge variant="outline" className={clsx(
-                  "text-xs",
-                  selectedCounty.served ? "border-brand/20 text-brand" : "border-muted-foreground/30 text-muted-foreground"
-                )}>
-                  {selectedCounty.state}
-                </Badge>
+      <AnimatePresence mode="wait">
+        {selectedCounty && (
+          <motion.div
+            key={selectedCounty.id}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className="space-y-4 rounded-xl border border-brand/20 bg-white p-4 shadow-sm"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className={clsx(
+                    "text-lg font-semibold",
+                    selectedCounty.served ? "text-brand" : "text-muted-foreground"
+                  )}>
+                    {selectedCounty.county} County
+                  </h3>
+                  <Badge variant="outline" className={clsx(
+                    "text-xs",
+                    selectedCounty.served ? "border-brand/20 text-brand" : "border-muted-foreground/30 text-muted-foreground"
+                  )}>
+                    {selectedCounty.state}
+                  </Badge>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">{selectedCounty.stateName}</p>
+                {!selectedCounty.served && (
+                  <p className="mt-2 text-sm text-muted-foreground">Not currently served</p>
+                )}
               </div>
-              <p className="mt-1 text-xs text-muted-foreground">{selectedCounty.stateName}</p>
-              {!selectedCounty.served && (
-                <p className="mt-2 text-sm text-muted-foreground">Not currently served</p>
-              )}
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-8 px-2 text-brand hover:bg-brand/10"
+                onClick={resetSelection}
+              >
+                <RefreshCcw className="mr-2 h-4 w-4" /> Reset
+              </Button>
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="h-8 px-2 text-brand hover:bg-brand/10"
-              onClick={resetSelection}
-            >
-              <RefreshCcw className="mr-2 h-4 w-4" /> Reset
-            </Button>
-          </div>
 
-          {selectedCounty.served && (
-            <details className="rounded-lg border border-dashed border-brand/20 bg-brand/5 text-sm text-brand">
-              <summary className="flex cursor-pointer items-center justify-between px-3 py-2 font-medium">
-                Counties served by this representative
-                <span className="text-xs text-brand/80">
-                  {
-                    (selectedCounty.repSlug ? (countiesByRep[selectedCounty.repSlug] ?? []) : [])
-                      .length
-                  }
-                </span>
-              </summary>
-              <div className="border-t border-brand/10">
-                <div className="p-3">
-                  <Input
-                    value={countyListFilter}
-                    onChange={(event) => setCountyListFilter(event.target.value)}
-                    placeholder="Filter counties"
-                    aria-label="Filter counties for representative"
-                    className="mb-3 bg-white"
-                  />
-                  <div className="max-h-44 space-y-1 overflow-y-auto">
-                    {(filteredCountyList.length
-                      ? filteredCountyList
-                      : selectedCounty.repSlug
-                        ? (countiesByRep[selectedCounty.repSlug] ?? [])
-                        : []
-                    ).map((county) => (
-                      <button
-                        key={county.id}
-                        type="button"
-                        className={clsx(
-                          "flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm text-brand-deep/80 hover:bg-brand/10 focus:bg-brand/10 focus:outline-none",
-                          county.id === selectedCountyId ? "bg-brand/15" : ""
-                        )}
-                        onClick={() => handleSelectCounty(county.id, { animate: false })}
-                        onMouseEnter={() => handleHoverCounty(county.id)}
-                        onMouseLeave={() => handleHoverCounty(null)}
-                        onFocus={() => handleHoverCounty(county.id)}
-                        onBlur={() => handleHoverCounty(null)}
-                      >
-                        <span>{county.county} County</span>
-                        <Badge variant="outline" className="border-brand/20 text-xs text-brand">
-                          {county.state}
-                        </Badge>
-                      </button>
-                    ))}
+            {selectedCounty.served && (
+              <details className="rounded-lg border border-dashed border-brand/20 bg-brand/5 text-sm text-brand">
+                <summary className="flex cursor-pointer items-center justify-between px-3 py-2 font-medium">
+                  Counties served by this representative
+                  <span className="text-xs text-brand/80">
+                    {
+                      (selectedCounty.repSlug ? (countiesByRep[selectedCounty.repSlug] ?? []) : [])
+                        .length
+                    }
+                  </span>
+                </summary>
+                <div className="border-t border-brand/10">
+                  <div className="p-3">
+                    <Input
+                      value={countyListFilter}
+                      onChange={(event) => setCountyListFilter(event.target.value)}
+                      placeholder="Filter counties"
+                      aria-label="Filter counties for representative"
+                      className="mb-3 bg-white"
+                    />
+                    <div className="max-h-44 space-y-1 overflow-y-auto">
+                      {(filteredCountyList.length
+                        ? filteredCountyList
+                        : selectedCounty.repSlug
+                          ? (countiesByRep[selectedCounty.repSlug] ?? [])
+                          : []
+                      ).map((county) => (
+                        <button
+                          key={county.id}
+                          type="button"
+                          className={clsx(
+                            "flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm text-brand-deep/80 hover:bg-brand/10 focus:bg-brand/10 focus:outline-none",
+                            county.id === selectedCountyId ? "bg-brand/15" : ""
+                          )}
+                          onClick={() => handleSelectCounty(county.id, { animate: false })}
+                          onMouseEnter={() => handleHoverCounty(county.id)}
+                          onMouseLeave={() => handleHoverCounty(null)}
+                          onFocus={() => handleHoverCounty(county.id)}
+                          onBlur={() => handleHoverCounty(null)}
+                        >
+                          <span>{county.county} County</span>
+                          <Badge variant="outline" className="border-brand/20 text-xs text-brand">
+                            {county.state}
+                          </Badge>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </details>
-          )}
-        </div>
-      )}
+              </details>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 
@@ -1130,6 +1174,13 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                             {code}
                           </span>
                         ))}
+                    <span className="flex items-center gap-1.5 text-muted-foreground">
+                      <span
+                        className="inline-block h-2.5 w-2.5 rounded-full"
+                        style={{ backgroundColor: MAP_COLORS.notServedFill }}
+                      />
+                      Unserved
+                    </span>
                   </div>
                 </div>
               )}
