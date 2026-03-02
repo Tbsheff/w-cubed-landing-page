@@ -79,7 +79,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Partners
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand">
+            <h1 className="text-4xl lg:text-6xl font-display font-extrabold uppercase tracking-wide text-brand">
               Trusted Manufacturing Partners
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -117,8 +117,8 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                     onClick={() => setSelectedCategory(category)}
                     className={
                       selectedCategory === category
-                        ? "bg-brand-accent hover:bg-brand-accent/90"
-                        : "bg-transparent"
+                        ? "bg-brand-accent hover:bg-brand-accent/90 shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
+                        : "bg-transparent shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
                     }
                   >
                     {category}
@@ -133,8 +133,8 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                   onClick={() => setViewMode("grid")}
                   className={
                     viewMode === "grid"
-                      ? "bg-brand-accent hover:bg-brand-accent/90"
-                      : "bg-transparent"
+                      ? "bg-brand-accent hover:bg-brand-accent/90 shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
+                      : "bg-transparent shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
                   }
                 >
                   <Grid className="h-4 w-4" />
@@ -146,8 +146,8 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                   onClick={() => setViewMode("list")}
                   className={
                     viewMode === "list"
-                      ? "bg-brand-accent hover:bg-brand-accent/90"
-                      : "bg-transparent"
+                      ? "bg-brand-accent hover:bg-brand-accent/90 shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
+                      : "bg-transparent shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
                   }
                 >
                   <List className="h-4 w-4" />
@@ -335,12 +335,15 @@ export default function ManufacturersClient({ manufacturers }: Props) {
       <section className="py-20 bg-brand-deep">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-bold">Need Help Choosing Equipment?</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide inline-block relative">
+              Need Help Choosing Equipment?
+              <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-[60px] h-[3px] bg-brand-yellow" />
+            </h2>
             <p className="text-xl opacity-90 max-w-2xl mx-auto">
               Our experienced team can help you select the right manufacturer and equipment for your
               specific needs.
             </p>
-            <Button asChild size="lg" className="bg-brand-accent hover:bg-brand-accent/90">
+            <Button asChild size="lg">
               <Link href="/contact">Contact Your Rep</Link>
             </Button>
           </motion.div>

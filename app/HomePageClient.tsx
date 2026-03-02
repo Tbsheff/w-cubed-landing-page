@@ -122,7 +122,7 @@ const defaultStats: StatItem[] = [
 
 const defaultHero: HeroContent = {
   badge: "Serving the Mountain West Since 1986",
-  title: "Industrial Equipment\nYou Can Count On.",
+  title: "Municipal Equipment\nYou Can Count On.",
   description:
     "Your trusted partner for water treatment, pumping systems, and process equipment. Delivering reliable solutions across the Mountain West for nearly four decades.",
   heroImage: "/hero-image.png",
@@ -227,8 +227,9 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               <Badge variant="outline" className="border-brand-accent/30 text-brand">
                 Our Story
               </Badge>
-              <h2 className="text-3xl lg:text-4xl font-bold text-brand">
+              <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand inline-block relative">
                 From Garage to Industry Leader
+                <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-[60px] h-[3px] bg-brand-yellow" />
               </h2>
               <p className="text-lg text-muted-foreground">
                 W-Cubed began in 1986 when our founder started building custom control panels in his
@@ -278,7 +279,10 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Expertise
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-brand">Water-Process Solutions</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand inline-block relative">
+              Water-Process Solutions
+              <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-[60px] h-[3px] bg-brand-yellow" />
+            </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Comprehensive water treatment and process equipment solutions for municipal,
               industrial, and pretreatment applications
@@ -340,7 +344,10 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Get In Touch
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-brand">Meet Your Territory Team</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand inline-block relative">
+              Meet Your Territory Team
+              <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-[60px] h-[3px] bg-brand-yellow" />
+            </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Reach out directly to the representative serving your area for quotes, project
               support, and technical guidance.
@@ -396,12 +403,12 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                     </div>
                     <div className="flex flex-col gap-2 pt-2">
                       <Link href={`tel:${rep.phone}`}>
-                        <Button variant="outline" size="sm" className="w-full">
+                        <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
                           <Phone className="h-4 w-4 mr-2" /> Call
                         </Button>
                       </Link>
                       <Link href={`mailto:${rep.email}`}>
-                        <Button variant="outline" size="sm" className="w-full">
+                        <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
                           <Mail className="h-4 w-4 mr-2" /> Email
                         </Button>
                       </Link>
@@ -440,7 +447,10 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Expertise
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-brand">Project Types We Serve</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand inline-block relative">
+              Project Types We Serve
+              <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-[60px] h-[3px] bg-brand-yellow" />
+            </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Specialized water-process equipment solutions across multiple industries and
               applications
@@ -497,7 +507,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className="text-brand-accent border-brand-accent hover:bg-brand-accent hover:text-white bg-transparent"
+                                  className="text-brand-accent border-brand-accent hover:bg-brand-accent hover:text-white bg-transparent shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
                                 >
                                   View Solutions
                                 </Button>

@@ -87,7 +87,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
         <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-light/5" />
         <div className="container mx-auto px-4 lg:px-6 relative">
           <motion.div className="max-w-4xl mx-auto text-center space-y-4" {...fadeInUp}>
-            <h1 className="text-3xl lg:text-5xl font-bold tracking-tight text-brand">
+            <h1 className="text-3xl lg:text-5xl font-display font-extrabold uppercase tracking-wide text-brand">
               {heroTitle}
             </h1>
             <p className="text-lg lg:text-xl text-muted-foreground">{heroSubtitle}</p>
@@ -116,7 +116,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
               whileInView="animate"
               viewport={{ once: true }}
             >
-              <h2 className="text-2xl lg:text-3xl font-semibold text-brand">Ways to Connect</h2>
+              <h2 className="text-2xl lg:text-3xl font-display font-extrabold uppercase tracking-wide text-brand">Ways to Connect</h2>
               <p className="text-lg text-muted-foreground max-w-3xl mx-auto lg:mx-0">
                 Start the conversation using the project form or reach your local representative
                 right away.
@@ -353,7 +353,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       * Required fields. By submitting this form, you agree to be contacted by
                       W-Cubed regarding your project inquiry.
                     </div>
-                    <Button className="w-full bg-brand-accent hover:bg-brand-accent/90">
+                    <Button className="w-full">
                       Submit Project Inquiry
                     </Button>
                   </form>
@@ -399,14 +399,17 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
       <section className="py-20 bg-brand">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-bold">Ready to Start Your Project?</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide inline-block relative">
+              Ready to Start Your Project?
+              <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-[60px] h-[3px] bg-brand-yellow" />
+            </h2>
             <p className="text-xl opacity-90 max-w-2xl mx-auto">
               Whether you&apos;re planning a new installation or need immediate support, our team is
               ready to help you succeed.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/manufacturers">
-                <Button size="lg" className="bg-brand-accent hover:bg-brand-accent/90">
+                <Button size="lg">
                   View Our Products
                 </Button>
               </Link>

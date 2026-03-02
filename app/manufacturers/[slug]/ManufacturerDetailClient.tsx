@@ -65,7 +65,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
               </div>
             )}
 
-            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-brand mb-2">
+            <h1 className="text-4xl lg:text-5xl font-display font-extrabold uppercase tracking-wide text-brand mb-2">
               {manufacturer.name}
             </h1>
 
@@ -101,7 +101,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
 
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <Link href="/contact">
-                <Button size="lg" className="bg-brand-accent hover:bg-brand-accent/90 px-8 py-3">
+                <Button size="lg" className="px-8 py-3">
                   <Phone className="mr-2 h-4 w-4" />
                   Contact Rep
                 </Button>
@@ -128,7 +128,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
         <div className="container mx-auto px-4 lg:px-6">
           <div className="max-w-6xl mx-auto">
             <motion.div className="text-center space-y-4 mb-12" {...fadeInUp}>
-              <h2 className="text-3xl lg:text-4xl font-bold text-brand">Key Products</h2>
+              <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand">Key Products</h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
                 Product highlights from {manufacturer.name}
               </p>
@@ -198,7 +198,7 @@ export default function ManufacturerDetailClient({ manufacturer }: Props) {
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link href="/contact">
-                  <Button size="lg" className="bg-brand-accent hover:bg-brand-accent/90">
+                  <Button size="lg">
                     Contact Your Rep
                   </Button>
                 </Link>

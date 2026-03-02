@@ -74,7 +74,7 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
             <Badge variant="outline" className="border-brand-accent/30 text-brand-deep">
               Our Work
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand-deep">
+            <h1 className="text-4xl lg:text-6xl font-display font-extrabold uppercase tracking-wide text-brand-deep">
               Project References
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -107,8 +107,8 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
                   onClick={() => setSelectedCategory(category)}
                   className={
                     selectedCategory === category
-                      ? "bg-brand-accent hover:bg-brand-accent/90"
-                      : "bg-transparent"
+                      ? "bg-brand-accent hover:bg-brand-accent/90 shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
+                      : "bg-transparent shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
                   }
                 >
                   <Filter className="h-4 w-4 mr-2" />
@@ -125,7 +125,7 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
         <section className="py-20 bg-background">
           <div className="container mx-auto px-4 lg:px-6">
             <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-              <h2 className="text-3xl lg:text-4xl font-bold text-brand-deep">Featured Projects</h2>
+              <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand-deep">Featured Projects</h2>
             </motion.div>
 
             <motion.div
@@ -180,7 +180,7 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
       <section className="py-20 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-bold text-brand-deep">Recent Projects</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand-deep">Recent Projects</h2>
           </motion.div>
 
           <motion.div
@@ -255,7 +255,7 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
               </Button>
               <div className="mt-4">
                 <Link href="/contact">
-                  <Button size="sm" className="bg-brand-accent hover:bg-brand-accent/90">
+                  <Button size="sm">
                     Discuss Your Project
                   </Button>
                 </Link>

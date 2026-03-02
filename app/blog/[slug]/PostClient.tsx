@@ -85,7 +85,7 @@ export default function PostClient({ post }: PostClientProps) {
                 </Badge>
               )}
 
-              <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-brand-deep">
+              <h1 className="text-4xl lg:text-5xl font-display font-extrabold uppercase tracking-wide text-brand-deep">
                 {post.title}
               </h1>
 
@@ -266,7 +266,7 @@ export default function PostClient({ post }: PostClientProps) {
                       </p>
                       <Button
                         size="lg"
-                        className="w-full bg-brand-accent hover:bg-brand-accent/90 text-base text-white"
+                        className="w-full text-base"
                       >
                         Contact Our Experts
                       </Button>
@@ -285,7 +285,7 @@ export default function PostClient({ post }: PostClientProps) {
           <div className="container mx-auto px-4 lg:px-6">
             <div className="max-w-4xl mx-auto">
               <motion.div className="text-center space-y-4 mb-12" {...fadeInUp}>
-                <h2 className="text-3xl font-bold text-brand-deep">Related Articles</h2>
+                <h2 className="text-3xl font-display font-extrabold uppercase tracking-wide text-brand-deep">Related Articles</h2>
                 <p className="text-muted-foreground">Continue reading</p>
               </motion.div>
 
@@ -334,13 +334,16 @@ export default function PostClient({ post }: PostClientProps) {
       <section className="py-20 bg-brand-deep">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-bold">Ready to Optimize Your Systems?</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide inline-block relative">
+              Ready to Optimize Your Systems?
+              <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-[60px] h-[3px] bg-brand-yellow" />
+            </h2>
             <p className="text-xl opacity-90 max-w-2xl mx-auto">
               Contact our team to discuss how we can help improve your water treatment efficiency
               and reduce costs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-brand-accent hover:bg-brand-accent/90">
+              <Button size="lg">
                 <Phone className="mr-2 h-4 w-4" />
                 Contact Your Rep
               </Button>

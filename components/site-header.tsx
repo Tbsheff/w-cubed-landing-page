@@ -39,7 +39,7 @@ export function SiteHeader() {
               <span className="font-display text-sm font-bold uppercase text-brand-deep">
                 Veteran Owned
               </span>
-              <span className="text-[10px] font-semibold uppercase text-gray-500">
+              <span className="text-[10px] font-semibold uppercase text-muted-foreground">
                 & Operated
               </span>
             </div>

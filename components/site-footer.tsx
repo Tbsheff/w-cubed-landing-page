@@ -16,7 +16,7 @@ export function SiteFooter() {
             </div>
           </div>
           <div>
-            <h3 className="font-semibold mb-4">Company</h3>
+            <h3 className="font-display font-extrabold uppercase tracking-wide mb-4">Company</h3>
             <ul className="space-y-2 text-brand-light/85">
               <li>
                 <Link href="/contact" className="hover:text-brand-accent transition-colors">
@@ -31,7 +31,7 @@ export function SiteFooter() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-4">Services</h3>
+            <h3 className="font-display font-extrabold uppercase tracking-wide mb-4">Services</h3>
             <ul className="space-y-2 text-brand-light/85">
               <li>
                 <Link href="/manufacturers" className="hover:text-brand-accent transition-colors">
@@ -51,7 +51,7 @@ export function SiteFooter() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-4">Connect</h3>
+            <h3 className="font-display font-extrabold uppercase tracking-wide mb-4">Connect</h3>
             <ul className="space-y-2 text-brand-light/85">
               <li>
                 <a href="tel:+18014663819" className="hover:text-brand-accent transition-colors">

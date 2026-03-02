@@ -62,7 +62,7 @@ export default function ProjectClient({ project }: ProjectClientProps) {
                 </Badge>
               )}
 
-              <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-brand-deep">
+              <h1 className="text-4xl lg:text-5xl font-display font-extrabold uppercase tracking-wide text-brand-deep">
                 {project.title}
               </h1>
 
@@ -160,7 +160,7 @@ export default function ProjectClient({ project }: ProjectClientProps) {
 
                   <Card className="p-6">
                     <Link href="/contact">
-                      <Button className="w-full bg-brand-accent hover:bg-brand-accent/90">
+                      <Button className="w-full">
                         Request Info
                       </Button>
                     </Link>

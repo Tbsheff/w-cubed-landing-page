@@ -39,7 +39,7 @@ export default function TerritoryPage({
             <Badge variant="outline" className="border-brand/30 text-brand">
               Service Territory
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand">
+            <h1 className="text-4xl lg:text-6xl font-display font-extrabold uppercase tracking-wide text-brand">
               {heroTitle}
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{heroSubtitle}</p>
@@ -53,7 +53,10 @@ export default function TerritoryPage({
       <section className="py-20 bg-brand">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-bold">Ready to Connect with Your Rep?</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide inline-block relative">
+              Ready to Connect with Your Rep?
+              <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-[60px] h-[3px] bg-brand-yellow" />
+            </h2>
             <p className="text-xl opacity-90 max-w-2xl mx-auto">
               Contact your local representative to discuss your water-process equipment needs and
               get expert guidance.
@@ -61,7 +64,7 @@ export default function TerritoryPage({
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {primaryCta?.href && primaryCta?.label && (
                 <Link href={primaryCta.href}>
-                  <Button size="lg" className="bg-brand-accent hover:bg-brand-accent/90">
+                  <Button size="lg">
                     {primaryCta.label}
                   </Button>
                 </Link>

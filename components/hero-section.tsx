@@ -76,7 +76,7 @@ export function HeroSection({ hero }: { hero: HeroContent }) {
 
             {/* Description */}
             {hero.description && (
-              <p className="text-xl font-medium text-gray-500 mb-10 leading-relaxed">
+              <p className="text-xl font-medium text-muted-foreground mb-10 leading-relaxed">
                 {hero.description}
               </p>
             )}
@@ -140,7 +140,7 @@ export function HeroSection({ hero }: { hero: HeroContent }) {
                       />
                       {/* Caption Plate */}
                       <div className="relative z-10 w-full bg-brand/95 border-t-[3px] border-brand-yellow px-6 py-6">
-                        <div className="text-[11px] uppercase tracking-widest font-bold text-gray-400 mb-1">
+                        <div className="text-[11px] uppercase tracking-widest font-bold text-brand-light/70 mb-1">
                           {label}
                         </div>
                         <div className="font-display text-2xl font-bold text-white leading-none mb-2">
