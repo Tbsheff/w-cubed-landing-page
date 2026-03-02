@@ -841,7 +841,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         {debouncedSearch && filteredSearchResults.length > 0 && (
           <div className="mt-3 rounded-lg border border-brand/10 bg-white shadow-sm">
             <ul
-              role="listbox"
+              role="list"
               aria-label="County search results"
               className="max-h-64 overflow-y-auto"
             >
@@ -955,7 +955,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                     )}
                     {rep.phone && (
                       <a
-                        href={`tel:${rep.phone}`}
+                        href={`tel:+1${rep.phone.replace(/\D/g, "")}`}
                         className="inline-flex items-center gap-1 hover:underline"
                       >
                         <Phone className="h-3.5 w-3.5" /> {rep.phone}

@@ -31,7 +31,7 @@ export type PostClientProps = {
     authorImageUrl?: string;
     categories?: string[];
     body?: any;
-    related?: Array<{ id: string; title: string; imageUrl?: string }>;
+    related?: Array<{ slug: string; title: string; imageUrl?: string }>;
     slug: string;
   };
 };
@@ -288,7 +288,7 @@ export default function PostClient({ post }: PostClientProps) {
               <div className="grid md:grid-cols-2 gap-8">
                 {post.related.map((relatedPost, index) => (
                   <motion.div
-                    key={relatedPost.id}
+                    key={relatedPost.slug}
                     initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -306,11 +306,11 @@ export default function PostClient({ post }: PostClientProps) {
                       )}
                       <CardHeader>
                         <CardTitle className="text-lg text-brand-deep hover:text-brand-accent transition-colors">
-                          <Link href={`/blog/${relatedPost.id}`}>{relatedPost.title}</Link>
+                          <Link href={`/blog/${relatedPost.slug}`}>{relatedPost.title}</Link>
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <Link href={`/blog/${relatedPost.id}`}>
+                        <Link href={`/blog/${relatedPost.slug}`}>
                           <Button variant="ghost" size="sm" className="p-0">
                             Read More
                             <ArrowRight className="ml-2 h-4 w-4" />

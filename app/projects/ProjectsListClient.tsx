@@ -52,14 +52,18 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
     return Array.from(cats);
   }, [projects]);
 
-  const filtered = projects.filter((p) => {
-    const matchesSearch =
-      p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (p.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
-      p.tags?.some((t: string) => t.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = selectedCategory === "All" || p.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const filtered = useMemo(
+    () =>
+      projects.filter((p) => {
+        const matchesSearch =
+          p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (p.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
+          (p.tags?.some((t: string) => t.toLowerCase().includes(searchTerm.toLowerCase())) ?? false);
+        const matchesCategory = selectedCategory === "All" || p.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+      }),
+    [projects, searchTerm, selectedCategory]
+  );
 
   const featured = filtered.filter((p) => p.featured);
   const regular = filtered.filter((p) => !p.featured);

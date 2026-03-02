@@ -43,8 +43,9 @@ export default async function Page() {
   if (!data) throw new Error("CMS siteSettings missing")
 
   const manufacturers =
-    data.manufacturerStrip?.map((m) => {
-      if (!m.slug) throw new Error("CMS manufacturer missing slug")
+    data.manufacturerStrip
+      ?.filter((m) => Boolean(m.slug))
+      .map((m) => {
       return {
         id: m.slug,
         name: m.name,

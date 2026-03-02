@@ -397,7 +397,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                       </div>
                     </div>
                     <div className="flex flex-col gap-2 pt-2">
-                      <Link href={`tel:${rep.phone}`}>
+                      <Link href={`tel:+1${rep.phone.replace(/\D/g, "")}`}>
                         <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
                           <Phone className="h-4 w-4 mr-2" /> Call
                         </Button>

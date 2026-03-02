@@ -202,7 +202,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                             <div className="flex items-center gap-3">
                               {rep.phone && (
                                 <a
-                                  href={`tel:${rep.phone}`}
+                                  href={`tel:+1${rep.phone.replace(/\D/g, "")}`}
                                   className="text-sm font-semibold text-brand-accent hover:text-brand"
                                 >
                                   {rep.phone}
@@ -336,7 +336,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       <div>
                         <label htmlFor="location" className="text-sm font-medium text-brand">Location *</label>
                         <Select name="location" required>
-                          <SelectTrigger>
+                          <SelectTrigger id="location">
                             <SelectValue placeholder="Select your state" />
                           </SelectTrigger>
                           <SelectContent>
@@ -353,7 +353,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       <div>
                         <label htmlFor="projectType" className="text-sm font-medium text-brand">Project Type</label>
                         <Select name="projectType">
-                          <SelectTrigger>
+                          <SelectTrigger id="projectType">
                             <SelectValue placeholder="Select project type" />
                           </SelectTrigger>
                           <SelectContent>
@@ -370,7 +370,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       <div>
                         <label htmlFor="equipment" className="text-sm font-medium text-brand">Equipment Category</label>
                         <Select name="equipment">
-                          <SelectTrigger>
+                          <SelectTrigger id="equipment">
                             <SelectValue placeholder="What type of equipment?" />
                           </SelectTrigger>
                           <SelectContent>
@@ -389,7 +389,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                     <div>
                       <label htmlFor="timeline" className="text-sm font-medium text-brand">Timeline</label>
                       <Select name="timeline">
-                        <SelectTrigger>
+                        <SelectTrigger id="timeline">
                           <SelectValue placeholder="When do you need this completed?" />
                         </SelectTrigger>
                         <SelectContent>
