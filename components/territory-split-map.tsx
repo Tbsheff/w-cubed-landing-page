@@ -172,24 +172,48 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     return map;
   }, [reps]);
 
+  /* ── Unified coverage map ────────────────────────────────────────────
+   * Expands state-level wildcards (servedStates) into explicit county
+   * entries using the loaded TopoJSON, producing a single
+   * Map<repSlug, Set<"STATE:county">> for O(1) lookups.
+   */
+  const repCoverageMap = useMemo(() => {
+    const map = new Map<string, Set<string>>();
+    if (!geographies.length) return map;
+
+    const countiesByState = new Map<string, string[]>();
+    for (const feat of geographies) {
+      const st = feat.properties.state;
+      const cn = normalizeCounty(feat.properties.county);
+      if (!countiesByState.has(st)) countiesByState.set(st, []);
+      countiesByState.get(st)!.push(cn);
+    }
+
+    for (const rep of reps) {
+      const keys = new Set<string>();
+      for (const stateCode of rep.servedStates) {
+        for (const cn of countiesByState.get(stateCode) || []) {
+          keys.add(`${stateCode}:${cn}`);
+        }
+      }
+      for (const c of rep.servedCounties) {
+        if (c.state && c.county) keys.add(`${c.state}:${c.county}`);
+      }
+      if (keys.size) map.set(rep.slug, keys);
+    }
+    return map;
+  }, [reps, geographies]);
+
   const determineRepsForCounty = useCallback(
     (stateCode: string, countyName: string): string[] => {
-      const countyNormalized = normalizeCounty(countyName);
-      const stateNormalized = normalizeState(stateCode);
+      const key = `${normalizeState(stateCode)}:${normalizeCounty(countyName)}`;
       const slugs: string[] = [];
-      for (const rep of reps) {
-        if (
-          rep.servedStates.includes(stateNormalized) ||
-          rep.servedCounties.some(
-            (c) => c.state === stateNormalized && c.county === countyNormalized
-          )
-        ) {
-          slugs.push(rep.slug);
-        }
+      for (const [slug, keys] of repCoverageMap) {
+        if (keys.has(key)) slugs.push(slug);
       }
       return slugs;
     },
-    [reps]
+    [repCoverageMap]
   );
 
   useEffect(() => {
@@ -251,56 +275,73 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
 
       const allowed = new Set(allowedStates.map(normalizeState));
 
-      const filtered = countyCollection.features
-        .map((featureItem) => {
-          if (!featureItem.geometry) {
-            return null;
-          }
+      // Pass 1: filter to allowed states and collect counties per state
+      type BasicFeature = { geometry: Geometry; stateAlpha: string; countyName: string; id: string; fips: string };
+      const basics: BasicFeature[] = [];
+      const countiesByState = new Map<string, string[]>();
 
-          const idValue = String(featureItem.id ?? "");
-          const normalized = idValue.padStart(5, "0");
-          const stateCode = normalized.slice(0, 2);
-          const stateAlpha =
-            stateCode === "49"
-              ? "UT"
-              : stateCode === "32"
-                ? "NV"
-                : stateCode === "16"
-                  ? "ID"
-                  : stateCode === "56"
-                    ? "WY"
-                    : "";
-          if (!stateAlpha || !allowed.has(stateAlpha)) {
-            return null;
-          }
+      for (const featureItem of countyCollection.features) {
+        if (!featureItem.geometry) continue;
 
-          const countyName = String(featureItem.properties?.name ?? "");
-          if (!countyName) {
-            return null;
-          }
+        const idValue = String(featureItem.id ?? "");
+        const fips = idValue.padStart(5, "0");
+        const stateCode = fips.slice(0, 2);
+        const stateAlpha =
+          stateCode === "49"
+            ? "UT"
+            : stateCode === "32"
+              ? "NV"
+              : stateCode === "16"
+                ? "ID"
+                : stateCode === "56"
+                  ? "WY"
+                  : "";
+        if (!stateAlpha || !allowed.has(stateAlpha)) continue;
 
-          const id = `${stateAlpha}:${countyName}`;
+        const countyName = String(featureItem.properties?.name ?? "");
+        if (!countyName) continue;
 
-          const repSlugs = determineRepsForCounty(stateAlpha, countyName);
-          const served = repSlugs.length > 0;
+        const cn = normalizeCounty(countyName);
+        if (!countiesByState.has(stateAlpha)) countiesByState.set(stateAlpha, []);
+        countiesByState.get(stateAlpha)!.push(cn);
 
-          const nextFeature: CountyFeature = {
-            type: "Feature",
-            geometry: featureItem.geometry,
-            properties: {
-              id,
-              county: countyName,
-              state: stateAlpha,
-              stateName: STATE_NAMES[stateAlpha] || stateAlpha,
-              repSlugs,
-              fips: normalized,
-              served,
-            },
-          } as CountyFeature;
+        basics.push({ geometry: featureItem.geometry, stateAlpha, countyName, id: `${stateAlpha}:${countyName}`, fips });
+      }
 
-          return nextFeature;
-        })
-        .filter(Boolean) as CountyFeature[];
+      // Build coverage map: expand state wildcards → explicit county keys
+      const coverage = new Map<string, Set<string>>();
+      for (const rep of reps) {
+        const keys = new Set<string>();
+        for (const sc of rep.servedStates) {
+          for (const cn of countiesByState.get(sc) || []) keys.add(`${sc}:${cn}`);
+        }
+        for (const c of rep.servedCounties) {
+          if (c.state && c.county) keys.add(`${c.state}:${c.county}`);
+        }
+        if (keys.size) coverage.set(rep.slug, keys);
+      }
+
+      // Pass 2: tag features with rep assignment
+      const filtered = basics.map(({ geometry, stateAlpha, countyName, id, fips }) => {
+        const key = `${normalizeState(stateAlpha)}:${normalizeCounty(countyName)}`;
+        const repSlugs: string[] = [];
+        for (const [slug, keys] of coverage) {
+          if (keys.has(key)) repSlugs.push(slug);
+        }
+        return {
+          type: "Feature" as const,
+          geometry,
+          properties: {
+            id,
+            county: countyName,
+            state: stateAlpha,
+            stateName: STATE_NAMES[stateAlpha] || stateAlpha,
+            repSlugs,
+            fips,
+            served: repSlugs.length > 0,
+          },
+        } as CountyFeature;
+      });
 
       setGeographies(filtered);
     };
@@ -310,7 +351,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     return () => {
       isMounted = false;
     };
-  }, [allowedStates, determineRepsForCounty, geographies.length, isInView]);
+  }, [allowedStates, reps, geographies.length, isInView]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -369,17 +410,13 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
 
   const statesByRep = useMemo(() => {
     const result: Record<string, string[]> = {};
-    reps.forEach((rep) => {
-      rep.servedStates.forEach((stateCode) => {
-        const name = STATE_NAMES[stateCode] || stateCode;
-        result[rep.slug] = result[rep.slug] || [];
-        if (!result[rep.slug].includes(name)) {
-          result[rep.slug].push(name);
-        }
-      });
-    });
+    for (const [slug, keys] of repCoverageMap) {
+      const states = new Set<string>();
+      for (const key of keys) states.add(key.split(":")[0]);
+      result[slug] = Array.from(states).map((code) => STATE_NAMES[code] || code);
+    }
     return result;
-  }, [reps]);
+  }, [repCoverageMap]);
 
   const selectedCounty = useMemo(() => {
     if (!selectedCountyId) return null;
