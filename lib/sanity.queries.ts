@@ -93,13 +93,17 @@ export const manufacturerBySlugQuery = groq`*[_type == "manufacturer" && slug.cu
 
 export const siteSettingsQuery = groq`*[_type == "siteSettings"][0]{
   heroBadge,
+  heroEyebrow,
   heroTitle,
   heroDescription,
   heroImage,
   heroSlides[]{
     image,
     alt,
-    tags
+    tags,
+    slideLabel,
+    slideTitle,
+    slideLocation
   },
   primaryCta,
   secondaryCta,
