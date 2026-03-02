@@ -335,9 +335,8 @@ export default function ManufacturersClient({ manufacturers }: Props) {
       <section className="py-20 bg-brand-deep">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide inline-block relative">
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide after:content-[''] after:block after:w-[60px] after:h-[3px] after:bg-brand-yellow after:mx-auto after:mt-3">
               Need Help Choosing Equipment?
-              <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-[60px] h-[3px] bg-brand-yellow" />
             </h2>
             <p className="text-xl opacity-90 max-w-2xl mx-auto">
               Our experienced team can help you select the right manufacturer and equipment for your

@@ -227,9 +227,8 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               <Badge variant="outline" className="border-brand-accent/30 text-brand">
                 Our Story
               </Badge>
-              <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand inline-block relative">
+              <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand after:content-[''] after:block after:w-[60px] after:h-[3px] after:bg-brand-yellow after:mt-3">
                 From Garage to Industry Leader
-                <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-[60px] h-[3px] bg-brand-yellow" />
               </h2>
               <p className="text-lg text-muted-foreground">
                 W-Cubed began in 1986 when our founder started building custom control panels in his
@@ -279,9 +278,8 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Expertise
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand inline-block relative">
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand after:content-[''] after:block after:w-[60px] after:h-[3px] after:bg-brand-yellow after:mx-auto after:mt-3">
               Water-Process Solutions
-              <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-[60px] h-[3px] bg-brand-yellow" />
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Comprehensive water treatment and process equipment solutions for municipal,
@@ -344,9 +342,8 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Get In Touch
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand inline-block relative">
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand after:content-[''] after:block after:w-[60px] after:h-[3px] after:bg-brand-yellow after:mx-auto after:mt-3">
               Meet Your Territory Team
-              <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-[60px] h-[3px] bg-brand-yellow" />
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Reach out directly to the representative serving your area for quotes, project
@@ -447,9 +444,8 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Expertise
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand inline-block relative">
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand after:content-[''] after:block after:w-[60px] after:h-[3px] after:bg-brand-yellow after:mx-auto after:mt-3">
               Project Types We Serve
-              <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-[60px] h-[3px] bg-brand-yellow" />
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Specialized water-process equipment solutions across multiple industries and
