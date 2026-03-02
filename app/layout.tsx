@@ -12,7 +12,7 @@ const barlowCondensed = Barlow_Condensed({
 
 export const metadata = {
   title: "W-Cubed | Water-Process Equipment Experts",
-  description: "Water-process equipment experts serving Utah, Idaho, and Wyoming since 1986.",
+  description: "Water-process equipment experts serving Utah, Nevada, Idaho, and Wyoming since 1986.",
   generator: 'v0.app',
   icons: {
     icon: [

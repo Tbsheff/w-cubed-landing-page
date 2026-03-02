@@ -23,7 +23,6 @@ type SiteSettingsResult = {
     tags?: string[] | null
     slideLabel?: string | null
     slideTitle?: string | null
-    slideLocation?: string | null
   }> | null
   primaryCta?: { label?: string | null; href?: string | null } | null
   secondaryCta?: { label?: string | null; href?: string | null } | null
@@ -94,7 +93,6 @@ export default async function Page() {
           tags: (slide.tags || []).filter(Boolean),
           slideLabel: slide.slideLabel,
           slideTitle: slide.slideTitle,
-          slideLocation: slide.slideLocation,
         })) || [],
     primaryCta: data.primaryCta,
     secondaryCta: data.secondaryCta,

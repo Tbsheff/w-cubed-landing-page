@@ -180,7 +180,7 @@ export default function ManufacturersClient({ manufacturers }: Props) {
                     variants={fadeInUp}
                     initial="initial"
                     animate="animate"
-                    exit="exit"
+                    exit={{ opacity: 0, scale: 0.95 }}
                     layout
                   >
                     {viewMode === "grid" ? (

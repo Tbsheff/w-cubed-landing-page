@@ -310,31 +310,31 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                   <form ref={formRef} onSubmit={handleSubmit} className="flex h-full flex-col gap-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-medium text-brand">First Name *</label>
-                        <Input name="firstName" placeholder="John" required />
+                        <label htmlFor="firstName" className="text-sm font-medium text-brand">First Name *</label>
+                        <Input id="firstName" name="firstName" placeholder="John" required />
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-brand">Last Name *</label>
-                        <Input name="lastName" placeholder="Doe" required />
-                      </div>
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm font-medium text-brand">Email *</label>
-                        <Input name="email" type="email" placeholder="john@company.com" required />
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-brand">Phone</label>
-                        <Input name="phone" type="tel" placeholder="(801) 555-1234" />
+                        <label htmlFor="lastName" className="text-sm font-medium text-brand">Last Name *</label>
+                        <Input id="lastName" name="lastName" placeholder="Doe" required />
                       </div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-medium text-brand">Company</label>
-                        <Input name="company" placeholder="Your Company Name" />
+                        <label htmlFor="email" className="text-sm font-medium text-brand">Email *</label>
+                        <Input id="email" name="email" type="email" placeholder="john@company.com" required />
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-brand">Location *</label>
+                        <label htmlFor="phone" className="text-sm font-medium text-brand">Phone</label>
+                        <Input id="phone" name="phone" type="tel" placeholder="(801) 555-1234" />
+                      </div>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="company" className="text-sm font-medium text-brand">Company</label>
+                        <Input id="company" name="company" placeholder="Your Company Name" />
+                      </div>
+                      <div>
+                        <label htmlFor="location" className="text-sm font-medium text-brand">Location *</label>
                         <Select name="location" required>
                           <SelectTrigger>
                             <SelectValue placeholder="Select your state" />
@@ -351,7 +351,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-medium text-brand">Project Type</label>
+                        <label htmlFor="projectType" className="text-sm font-medium text-brand">Project Type</label>
                         <Select name="projectType">
                           <SelectTrigger>
                             <SelectValue placeholder="Select project type" />
@@ -368,7 +368,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                         </Select>
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-brand">Equipment Category</label>
+                        <label htmlFor="equipment" className="text-sm font-medium text-brand">Equipment Category</label>
                         <Select name="equipment">
                           <SelectTrigger>
                             <SelectValue placeholder="What type of equipment?" />
@@ -387,7 +387,7 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       </div>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-brand">Timeline</label>
+                      <label htmlFor="timeline" className="text-sm font-medium text-brand">Timeline</label>
                       <Select name="timeline">
                         <SelectTrigger>
                           <SelectValue placeholder="When do you need this completed?" />
@@ -403,8 +403,9 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       </Select>
                     </div>
                     <div className="flex-1">
-                      <label className="text-sm font-medium text-brand">Project Message *</label>
+                      <label htmlFor="message" className="text-sm font-medium text-brand">Project Message *</label>
                       <Textarea
+                        id="message"
                         name="message"
                         placeholder="- Describe your specific equipment needs&#10;- Project specifications or requirements&#10;- Current system issues (if any)&#10;- Any other important details..."
                         rows={5}

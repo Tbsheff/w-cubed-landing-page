@@ -54,7 +54,7 @@ export function SiteHeader() {
               href={item.path}
               className={cn(
                 "text-[15px] font-bold uppercase tracking-wider transition-colors",
-                pathname === item.path
+                pathname === item.path.split("#")[0]
                   ? "text-brand-accent"
                   : "text-brand-deep hover:text-brand-accent"
               )}
@@ -95,7 +95,7 @@ export function SiteHeader() {
                   href={item.path}
                   className={cn(
                     "text-[15px] font-bold uppercase tracking-wider p-2 rounded transition-colors",
-                    pathname === item.path
+                    pathname === item.path.split("#")[0]
                       ? "text-brand-accent bg-brand-accent/5"
                       : "text-brand-deep hover:text-brand-accent"
                   )}

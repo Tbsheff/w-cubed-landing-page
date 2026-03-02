@@ -28,7 +28,6 @@ type HeroSlide = {
   tags: string[];
   slideLabel?: string | null;
   slideTitle?: string | null;
-  slideLocation?: string | null;
 };
 
 type HeroContent = {
@@ -521,12 +520,14 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             {/* Navigation buttons */}
             <button
               onClick={prevSlide}
+              aria-label="Previous project"
               className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-brand-light/20 transition-colors"
             >
               <ChevronLeft className="h-6 w-6 text-brand-deep" />
             </button>
             <button
               onClick={nextSlide}
+              aria-label="Next project"
               className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-brand-light/20 transition-colors"
             >
               <ChevronRight className="h-6 w-6 text-brand-deep" />
@@ -538,6 +539,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
+                  aria-label={`Go to project ${index + 1}`}
                   className={`w-3 h-3 rounded-full transition-colors ${
                     index === currentSlide ? "bg-brand-accent" : "bg-brand-light/60"
                   }`}

@@ -346,7 +346,9 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       setGeographies(filtered);
     };
 
-    load();
+    load().catch((err) => {
+      if (isMounted) console.error("Failed to load map data", err);
+    });
 
     return () => {
       isMounted = false;
@@ -399,7 +401,8 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     return countiesMeta.reduce<Record<string, CountyMeta[]>>((acc, county) => {
       if (!county.served) return acc;
       for (const slug of county.repSlugs) {
-        acc[slug] = [...(acc[slug] ?? []), county];
+        if (!acc[slug]) acc[slug] = [];
+        acc[slug].push(county);
       }
       return acc;
     }, {});
@@ -596,7 +599,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       const fillColor =
         colorMode === "rep"
           ? isMultiRep
-            ? `url(#stripe-${county.properties.repSlugs.join("-")})`
+            ? `url(#stripe-${[...county.properties.repSlugs].sort().join("-")})`
             : repColor || MAP_COLORS.fallbackServedFill
           : STATE_COLORS[county.properties.state] || MAP_COLORS.fallbackServedFill;
       const isSelected = county.properties.id === selectedCountyId;
@@ -740,7 +743,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     const patterns: { id: string; colors: string[] }[] = [];
     for (const county of countiesMeta) {
       if (county.repSlugs.length < 2) continue;
-      const key = county.repSlugs.join("-");
+      const key = [...county.repSlugs].sort().join("-");
       if (seen.has(key)) continue;
       seen.add(key);
       patterns.push({
