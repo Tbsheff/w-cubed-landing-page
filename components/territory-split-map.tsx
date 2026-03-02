@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent, KeyboardEvent, MouseEvent as ReactMouseEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ComposableMap, Geographies, Geography, ZoomableGroup } from "react-simple-maps";
+import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from "react-simple-maps";
 import { geoCentroid } from "d3-geo";
 import clsx from "clsx";
 import Image from "next/image";
@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Mail, Minus, Phone, Plus, RefreshCcw, Search, X } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import type { RepCoverage } from "@/lib/types/territory";
 
@@ -83,6 +84,13 @@ const STATE_CHIPS = [
   { code: "WY", name: "Wyoming" },
 ];
 
+const STATE_LABEL_COORDS: Record<string, [number, number]> = {
+  UT: [-111.5, 39.3],
+  NV: [-116.8, 38.8],
+  ID: [-114.5, 44.1],
+  WY: [-107.5, 43.0],
+};
+
 const DEFAULT_VIEW: MapViewState = {
   coordinates: [-112.5, 41.5],
   zoom: 1.55,
@@ -123,6 +131,8 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
   const [viewState, setViewState] = useState<MapViewState>(DEFAULT_VIEW);
   const lastUserView = useRef<MapViewState>(DEFAULT_VIEW);
   const [tooltip, setTooltip] = useState<{ content: string; x: number; y: number } | null>(null);
+  const [activeStateCode, setActiveStateCode] = useState<string | null>(null);
+  const tooltipHideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const reps = useMemo(() => {
     return (representatives || []).map((rep) => ({
@@ -311,6 +321,14 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     return () => clearTimeout(timeout);
   }, [searchQuery]);
 
+  useEffect(() => {
+    return () => {
+      if (tooltipHideTimeout.current) {
+        clearTimeout(tooltipHideTimeout.current);
+      }
+    };
+  }, []);
+
   const countiesMeta = useMemo<CountyMeta[]>(() => {
     if (!geographies.length) {
       return [];
@@ -390,9 +408,11 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     const query = debouncedSearch.toLowerCase();
 
     return countiesMeta
-      .filter((county) => county.served)
       .filter((county) => `${county.county}, ${county.state}`.toLowerCase().includes(query))
-      .sort((a, b) => a.county.localeCompare(b.county))
+      .sort((a, b) => {
+        if (a.served !== b.served) return a.served ? -1 : 1;
+        return a.county.localeCompare(b.county);
+      })
       .slice(0, 12);
   }, [countiesMeta, debouncedSearch]);
 
@@ -417,11 +437,6 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     (countyId: string, opts?: { animate?: boolean }) => {
       const county = countiesMeta.find((meta) => meta.id === countyId);
       if (!county) {
-        return;
-      }
-
-      if (!county.served) {
-        setSelectedCountyId(null);
         return;
       }
 
@@ -483,6 +498,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       lastUserView.current = cloneViewState(viewState);
       setSelectedCountyId(null);
       setHoveredCountyId(null);
+      setActiveStateCode(stateCode);
       setViewState({ coordinates: center, zoom: 2.2 });
     },
     [countiesMeta, viewState]
@@ -492,6 +508,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     setSelectedCountyId(null);
     setHoveredCountyId(null);
     setCountyListFilter("");
+    setActiveStateCode(null);
     setViewState(cloneViewState(lastUserView.current));
   }, []);
 
@@ -591,6 +608,10 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
 
   const handleMapMouseMove = useCallback(
     (event: ReactMouseEvent<SVGPathElement, globalThis.MouseEvent>, county: CountyFeature) => {
+      if (tooltipHideTimeout.current) {
+        clearTimeout(tooltipHideTimeout.current);
+        tooltipHideTimeout.current = null;
+      }
       const rep = county.properties.repSlug ? repBySlug[county.properties.repSlug] : null;
       setTooltip({
         content: county.properties.served
@@ -616,7 +637,10 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     } else {
       setHoveredCountyId(null);
     }
-    setTooltip(null);
+    tooltipHideTimeout.current = setTimeout(() => {
+      setTooltip(null);
+      tooltipHideTimeout.current = null;
+    }, 150);
   }, [handleHoverCounty, selectedCountyId]);
 
   const handleCountyKeyDown = useCallback(
@@ -695,11 +719,15 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
             <Button
               key={state.code}
               type="button"
-              variant="outline"
+              variant={activeStateCode === state.code ? "default" : "outline"}
               size="sm"
               onClick={() => handleStateChipClick(state.code)}
               aria-label={`Zoom to ${state.name}`}
-              className="border-brand/20 bg-white/70 text-brand hover:bg-brand/10"
+              className={clsx(
+                activeStateCode === state.code
+                  ? "bg-brand text-white hover:bg-brand/90"
+                  : "border-brand/20 bg-white/70 text-brand hover:bg-brand/10"
+              )}
             >
               {state.code}
             </Button>
@@ -736,20 +764,36 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                 <li key={county.id}>
                   <button
                     type="button"
-                    className="flex w-full items-center justify-between gap-4 px-3 py-2 text-left hover:bg-brand/5 focus:bg-brand/10 focus:outline-none"
+                    className={clsx(
+                      "flex w-full items-center justify-between gap-4 px-3 py-2 text-left focus:outline-none",
+                      county.served
+                        ? "hover:bg-brand/5 focus:bg-brand/10"
+                        : "hover:bg-muted/50 focus:bg-muted/60"
+                    )}
                     onClick={() => {
                       handleSelectCounty(county.id);
                       setSearchQuery("");
                     }}
-                    onMouseEnter={() => handleHoverCounty(county.id)}
+                    onMouseEnter={() => county.served && handleHoverCounty(county.id)}
                     onMouseLeave={() => handleHoverCounty(null)}
-                    onFocus={() => handleHoverCounty(county.id)}
+                    onFocus={() => county.served && handleHoverCounty(county.id)}
                     onBlur={() => handleHoverCounty(null)}
                   >
-                    <span className="text-sm font-medium text-brand">{county.county} County</span>
-                    <Badge variant="outline" className="border-brand/20 text-xs text-brand">
-                      {county.state}
-                    </Badge>
+                    <span className={clsx(
+                      "text-sm font-medium",
+                      county.served ? "text-brand" : "text-muted-foreground"
+                    )}>
+                      {county.county} County
+                    </span>
+                    {county.served ? (
+                      <Badge variant="outline" className="border-brand/20 text-xs text-brand">
+                        {county.state}
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline" className="border-muted-foreground/30 text-xs text-muted-foreground">
+                        Not served
+                      </Badge>
+                    )}
                   </button>
                 </li>
               ))}
@@ -836,12 +880,23 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-semibold text-brand">{selectedCounty.county} County</h3>
-                <Badge variant="outline" className="border-brand/20 text-xs text-brand">
+                <h3 className={clsx(
+                  "text-lg font-semibold",
+                  selectedCounty.served ? "text-brand" : "text-muted-foreground"
+                )}>
+                  {selectedCounty.county} County
+                </h3>
+                <Badge variant="outline" className={clsx(
+                  "text-xs",
+                  selectedCounty.served ? "border-brand/20 text-brand" : "border-muted-foreground/30 text-muted-foreground"
+                )}>
                   {selectedCounty.state}
                 </Badge>
               </div>
               <p className="mt-1 text-xs text-muted-foreground">{selectedCounty.stateName}</p>
+              {!selectedCounty.served && (
+                <p className="mt-2 text-sm text-muted-foreground">Not currently served</p>
+              )}
             </div>
             <Button
               type="button"
@@ -854,55 +909,57 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
             </Button>
           </div>
 
-          <details className="rounded-lg border border-dashed border-brand/20 bg-brand/5 text-sm text-brand">
-            <summary className="flex cursor-pointer items-center justify-between px-3 py-2 font-medium">
-              Counties served by this representative
-              <span className="text-xs text-brand/80">
-                {
-                  (selectedCounty.repSlug ? (countiesByRep[selectedCounty.repSlug] ?? []) : [])
-                    .length
-                }
-              </span>
-            </summary>
-            <div className="border-t border-brand/10">
-              <div className="p-3">
-                <Input
-                  value={countyListFilter}
-                  onChange={(event) => setCountyListFilter(event.target.value)}
-                  placeholder="Filter counties"
-                  aria-label="Filter counties for representative"
-                  className="mb-3 bg-white"
-                />
-                <div className="max-h-44 space-y-1 overflow-y-auto">
-                  {(filteredCountyList.length
-                    ? filteredCountyList
-                    : selectedCounty.repSlug
-                      ? (countiesByRep[selectedCounty.repSlug] ?? [])
-                      : []
-                  ).map((county) => (
-                    <button
-                      key={county.id}
-                      type="button"
-                      className={clsx(
-                        "flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm text-brand-deep/80 hover:bg-brand/10 focus:bg-brand/10 focus:outline-none",
-                        county.id === selectedCountyId ? "bg-brand/15" : ""
-                      )}
-                      onClick={() => handleSelectCounty(county.id, { animate: false })}
-                      onMouseEnter={() => handleHoverCounty(county.id)}
-                      onMouseLeave={() => handleHoverCounty(null)}
-                      onFocus={() => handleHoverCounty(county.id)}
-                      onBlur={() => handleHoverCounty(null)}
-                    >
-                      <span>{county.county} County</span>
-                      <Badge variant="outline" className="border-brand/20 text-xs text-brand">
-                        {county.state}
-                      </Badge>
-                    </button>
-                  ))}
+          {selectedCounty.served && (
+            <details className="rounded-lg border border-dashed border-brand/20 bg-brand/5 text-sm text-brand">
+              <summary className="flex cursor-pointer items-center justify-between px-3 py-2 font-medium">
+                Counties served by this representative
+                <span className="text-xs text-brand/80">
+                  {
+                    (selectedCounty.repSlug ? (countiesByRep[selectedCounty.repSlug] ?? []) : [])
+                      .length
+                  }
+                </span>
+              </summary>
+              <div className="border-t border-brand/10">
+                <div className="p-3">
+                  <Input
+                    value={countyListFilter}
+                    onChange={(event) => setCountyListFilter(event.target.value)}
+                    placeholder="Filter counties"
+                    aria-label="Filter counties for representative"
+                    className="mb-3 bg-white"
+                  />
+                  <div className="max-h-44 space-y-1 overflow-y-auto">
+                    {(filteredCountyList.length
+                      ? filteredCountyList
+                      : selectedCounty.repSlug
+                        ? (countiesByRep[selectedCounty.repSlug] ?? [])
+                        : []
+                    ).map((county) => (
+                      <button
+                        key={county.id}
+                        type="button"
+                        className={clsx(
+                          "flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm text-brand-deep/80 hover:bg-brand/10 focus:bg-brand/10 focus:outline-none",
+                          county.id === selectedCountyId ? "bg-brand/15" : ""
+                        )}
+                        onClick={() => handleSelectCounty(county.id, { animate: false })}
+                        onMouseEnter={() => handleHoverCounty(county.id)}
+                        onMouseLeave={() => handleHoverCounty(null)}
+                        onFocus={() => handleHoverCounty(county.id)}
+                        onBlur={() => handleHoverCounty(null)}
+                      >
+                        <span>{county.county} County</span>
+                        <Badge variant="outline" className="border-brand/20 text-xs text-brand">
+                          {county.state}
+                        </Badge>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          </details>
+            </details>
+          )}
         </div>
       )}
     </div>
@@ -934,6 +991,15 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
               aria-label="Territories map—use arrow keys or mouse to explore."
               className="relative"
             >
+              {geographies.length === 0 ? (
+                <div
+                  className="flex items-center justify-center"
+                  style={{ width: mapSize.width, height: mapSize.height }}
+                >
+                  <Skeleton className="absolute inset-0 rounded-2xl" />
+                  <span className="relative z-10 text-sm text-muted-foreground">Loading map…</span>
+                </div>
+              ) : (
               <ComposableMap
                 projection="geoAlbersUsa"
                 projectionConfig={{ scale: Math.max(620, mapSize.width) * 1.05 }}
@@ -981,8 +1047,28 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                       ))
                     }
                   </Geographies>
+                  {Object.entries(STATE_LABEL_COORDS).map(([code, coords]) => (
+                    <Marker key={code} coordinates={coords}>
+                      <text
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        style={{
+                          fontFamily: "var(--font-display)",
+                          fontSize: 14 / viewState.zoom,
+                          fontWeight: 600,
+                          fill: "rgb(var(--brand))",
+                          opacity: 0.4,
+                          pointerEvents: "none",
+                          userSelect: "none",
+                        }}
+                      >
+                        {code}
+                      </text>
+                    </Marker>
+                  ))}
                 </ZoomableGroup>
               </ComposableMap>
+              )}
 
               <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-background/90 to-transparent" />
 
@@ -1007,7 +1093,46 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                 >
                   <Minus className="h-4 w-4" />
                 </Button>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="secondary"
+                  onClick={() => {
+                    setViewState(cloneViewState(DEFAULT_VIEW));
+                    setSelectedCountyId(null);
+                    setActiveStateCode(null);
+                  }}
+                  aria-label="Reset zoom"
+                >
+                  <RefreshCcw className="h-4 w-4" />
+                </Button>
               </div>
+
+              {geographies.length > 0 && (
+                <div className="absolute bottom-4 right-4 rounded-lg border bg-white/90 px-3 py-2 shadow-sm backdrop-blur-sm">
+                  <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-brand">
+                    {colorMode === "rep"
+                      ? orderedReps.map((rep) => (
+                          <span key={rep.slug} className="flex items-center gap-1.5">
+                            <span
+                              className="inline-block h-2.5 w-2.5 rounded-full"
+                              style={{ backgroundColor: repColorMap.get(rep.slug) }}
+                            />
+                            {rep.name.split(" ")[0]}
+                          </span>
+                        ))
+                      : Object.entries(STATE_COLORS).map(([code, color]) => (
+                          <span key={code} className="flex items-center gap-1.5">
+                            <span
+                              className="inline-block h-2.5 w-2.5 rounded-full"
+                              style={{ backgroundColor: color }}
+                            />
+                            {code}
+                          </span>
+                        ))}
+                  </div>
+                </div>
+              )}
 
               {tooltip && (
                 <div
