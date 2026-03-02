@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type HeroSlide = {
   image: string;
@@ -11,7 +11,6 @@ type HeroSlide = {
   tags: string[];
   slideLabel?: string | null;
   slideTitle?: string | null;
-  slideLocation?: string | null;
 };
 
 type HeroContent = {
@@ -24,9 +23,9 @@ type HeroContent = {
 };
 
 const defaultSlideMetadata = [
-  { label: "Application Focus", title: "Municipal Treatment", location: "Salt Lake City, UT" },
-  { label: "Application Focus", title: "Wastewater Pumping", location: "Boise, ID" },
-  { label: "Application Focus", title: "Industrial Pretreatment", location: "Reno, NV" },
+  { label: "Application Focus", title: "Municipal Treatment" },
+  { label: "Application Focus", title: "Wastewater Pumping" },
+  { label: "Application Focus", title: "Industrial Pretreatment" },
 ];
 
 export function HeroSection({ hero }: { hero: HeroContent }) {
@@ -122,7 +121,6 @@ export function HeroSection({ hero }: { hero: HeroContent }) {
                   const meta = defaultSlideMetadata[index] ?? defaultSlideMetadata[0];
                   const label = slide.slideLabel || meta.label;
                   const title = slide.slideTitle || meta.title;
-                  const location = slide.slideLocation || meta.location;
 
                   return (
                     <div
@@ -139,16 +137,12 @@ export function HeroSection({ hero }: { hero: HeroContent }) {
                         className="object-cover"
                       />
                       {/* Caption Plate */}
-                      <div className="relative z-10 w-full bg-brand/95 border-t-[3px] border-brand-yellow px-6 py-6">
+                      <div className="relative z-10 w-full bg-brand/95 border-t-[3px] border-brand-yellow px-6 py-5">
                         <div className="text-[11px] uppercase tracking-widest font-bold text-brand-light/70 mb-1">
                           {label}
                         </div>
-                        <div className="font-display text-2xl font-bold text-white leading-none mb-2">
+                        <div className="font-display text-2xl font-bold text-white leading-none">
                           {title}
-                        </div>
-                        <div className="flex items-center gap-1.5 text-brand-yellow text-sm font-semibold">
-                          <MapPin className="h-4 w-4" />
-                          {location}
                         </div>
                       </div>
                     </div>
