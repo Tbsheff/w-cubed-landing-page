@@ -19,19 +19,17 @@ export default async function TerritoryPage() {
     sanityClient.fetch(representativesQuery),
   ])
 
-  if (!territoryInfo) {
-    throw new Error("CMS territoryInfo missing")
-  }
+  const safeTerritoryInfo = territoryInfo ?? {}
 
   const reps: RepCoverage[] = normalizeReps(repsRaw || [])
 
   return (
     <TerritoryClient
       representatives={reps}
-      heroTitle={territoryInfo?.heroTitle}
-      heroSubtitle={territoryInfo?.heroSubtitle}
-      primaryCta={territoryInfo?.primaryCta}
-      secondaryCta={territoryInfo?.secondaryCta}
+      heroTitle={safeTerritoryInfo.heroTitle}
+      heroSubtitle={safeTerritoryInfo.heroSubtitle}
+      primaryCta={safeTerritoryInfo.primaryCta}
+      secondaryCta={safeTerritoryInfo.secondaryCta}
     />
   )
 }

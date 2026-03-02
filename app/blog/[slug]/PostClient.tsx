@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,24 +30,20 @@ export type PostClientProps = {
     authorName?: string;
     authorImageUrl?: string;
     categories?: string[];
-    tags?: string[];
     body?: any;
-    related?: Array<{ id: string; title: string; imageUrl?: string }>;
+    related?: Array<{ slug: string; title: string; imageUrl?: string }>;
     slug: string;
   };
 };
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 },
+  transition: { duration: 0.5 },
 };
 
 export default function PostClient({ post }: PostClientProps) {
-  const shareUrl = useMemo(() => {
-    if (typeof window !== "undefined") return window.location.href;
-    return `https://wcubedinc.com/blog/${post.slug}`;
-  }, [post.slug]);
+  const shareUrl = `https://wcubedinc.com/blog/${post.slug}`;
   const encodedTitle = encodeURIComponent(post.title);
   const encodedUrl = encodeURIComponent(shareUrl);
   const mailtoHref = `mailto:?subject=${encodedTitle}&body=${encodedUrl}`;
@@ -57,8 +52,8 @@ export default function PostClient({ post }: PostClientProps) {
   const twitterHref = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
   const linkedInHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
 
-  const date = post.date ? new Date(post.date) : undefined;
-  const tags = post.tags || post.categories || [];
+  const date = post.date ? new Date(post.date + "T00:00:00") : undefined;
+  const tags = post.categories || [];
 
   return (
     <>
@@ -85,7 +80,7 @@ export default function PostClient({ post }: PostClientProps) {
                 </Badge>
               )}
 
-              <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-brand-deep">
+              <h1 className="text-4xl lg:text-5xl font-display font-extrabold uppercase tracking-wide text-brand-deep">
                 {post.title}
               </h1>
 
@@ -132,7 +127,7 @@ export default function PostClient({ post }: PostClientProps) {
           <div className="container mx-auto px-4 lg:px-6">
             <motion.div
               className="max-w-4xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
@@ -156,7 +151,7 @@ export default function PostClient({ post }: PostClientProps) {
               {/* Main Content */}
               <motion.div
                 className="lg:col-span-3 prose prose-lg max-w-none prose-headings:text-brand-deep prose-a:text-brand-accent prose-blockquote:border-l-brand-accent prose-blockquote:bg-brand-light/20 prose-blockquote:p-4 prose-blockquote:rounded-r-lg"
-                initial={{ opacity: 0, x: -30 }}
+                initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
               >
@@ -206,7 +201,7 @@ export default function PostClient({ post }: PostClientProps) {
               {/* Sidebar */}
               <motion.div
                 className="lg:col-span-1"
-                initial={{ opacity: 0, x: 30 }}
+                initial={{ opacity: 0, x: 16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
@@ -266,9 +261,10 @@ export default function PostClient({ post }: PostClientProps) {
                       </p>
                       <Button
                         size="lg"
-                        className="w-full bg-brand-accent hover:bg-brand-accent/90 text-base text-white"
+                        className="w-full text-base"
+                        asChild
                       >
-                        Contact Our Experts
+                        <Link href="/contact">Contact Our Experts</Link>
                       </Button>
                     </div>
                   </Card>
@@ -285,15 +281,15 @@ export default function PostClient({ post }: PostClientProps) {
           <div className="container mx-auto px-4 lg:px-6">
             <div className="max-w-4xl mx-auto">
               <motion.div className="text-center space-y-4 mb-12" {...fadeInUp}>
-                <h2 className="text-3xl font-bold text-brand-deep">Related Articles</h2>
+                <h2 className="text-3xl font-display font-extrabold uppercase tracking-wide text-brand-deep">Related Articles</h2>
                 <p className="text-muted-foreground">Continue reading</p>
               </motion.div>
 
               <div className="grid md:grid-cols-2 gap-8">
                 {post.related.map((relatedPost, index) => (
                   <motion.div
-                    key={relatedPost.id}
-                    initial={{ opacity: 0, y: 30 }}
+                    key={relatedPost.slug}
+                    initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     viewport={{ once: true }}
@@ -310,11 +306,11 @@ export default function PostClient({ post }: PostClientProps) {
                       )}
                       <CardHeader>
                         <CardTitle className="text-lg text-brand-deep hover:text-brand-accent transition-colors">
-                          <Link href={`/blog/${relatedPost.id}`}>{relatedPost.title}</Link>
+                          <Link href={`/blog/${relatedPost.slug}`}>{relatedPost.title}</Link>
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <Link href={`/blog/${relatedPost.id}`}>
+                        <Link href={`/blog/${relatedPost.slug}`}>
                           <Button variant="ghost" size="sm" className="p-0">
                             Read More
                             <ArrowRight className="ml-2 h-4 w-4" />
@@ -334,23 +330,30 @@ export default function PostClient({ post }: PostClientProps) {
       <section className="py-20 bg-brand-deep">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-bold">Ready to Optimize Your Systems?</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide after:content-[''] after:block after:w-[60px] after:h-[3px] after:bg-brand-yellow after:mx-auto after:mt-3">
+              Ready to Optimize Your Systems?
+            </h2>
             <p className="text-xl opacity-90 max-w-2xl mx-auto">
               Contact our team to discuss how we can help improve your water treatment efficiency
               and reduce costs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-brand-accent hover:bg-brand-accent/90">
-                <Phone className="mr-2 h-4 w-4" />
-                Contact Your Rep
+              <Button size="lg" asChild>
+                <Link href="/contact">
+                  <Phone className="mr-2 h-4 w-4" />
+                  Contact Your Rep
+                </Link>
               </Button>
               <Button
                 size="lg"
                 variant="outline"
                 className="border-white text-white hover:bg-white hover:text-brand-deep bg-transparent"
+                asChild
               >
-                <Mail className="mr-2 h-4 w-4" />
-                Request Consultation
+                <a href="mailto:Shared@wcubedinc.com">
+                  <Mail className="mr-2 h-4 w-4" />
+                  Request Consultation
+                </a>
               </Button>
             </div>
           </motion.div>

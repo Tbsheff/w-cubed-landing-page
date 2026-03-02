@@ -9,9 +9,9 @@ import type { RepCoverage } from "@/lib/types/territory";
 import Link from "next/link";
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 },
+  transition: { duration: 0.5 },
 };
 
 type TerritoryProps = {
@@ -31,18 +31,18 @@ export default function TerritoryPage({
 }: TerritoryProps) {
   return (
     <PageWrapper>
-      {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
+      {/* Hero + Map — merged to reduce vertical space */}
+      <section className="relative pt-10 lg:pt-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-light/5" />
         <div className="container mx-auto px-4 lg:px-6 relative">
-          <motion.div className="text-center space-y-6 max-w-4xl mx-auto" {...fadeInUp}>
+          <motion.div className="text-center space-y-4 max-w-3xl mx-auto mb-8" {...fadeInUp}>
             <Badge variant="outline" className="border-brand/30 text-brand">
               Service Territory
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand">
+            <h1 className="text-3xl lg:text-5xl font-display font-extrabold uppercase tracking-wide text-brand">
               {heroTitle}
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{heroSubtitle}</p>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{heroSubtitle}</p>
           </motion.div>
         </div>
       </section>
@@ -53,7 +53,9 @@ export default function TerritoryPage({
       <section className="py-20 bg-brand">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-6 text-white" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-bold">Ready to Connect with Your Rep?</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide after:content-[''] after:block after:w-[60px] after:h-[3px] after:bg-brand-yellow after:mx-auto after:mt-3">
+              Ready to Connect with Your Rep?
+            </h2>
             <p className="text-xl opacity-90 max-w-2xl mx-auto">
               Contact your local representative to discuss your water-process equipment needs and
               get expert guidance.
@@ -61,7 +63,7 @@ export default function TerritoryPage({
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {primaryCta?.href && primaryCta?.label && (
                 <Link href={primaryCta.href}>
-                  <Button size="lg" className="bg-brand-accent hover:bg-brand-accent/90">
+                  <Button size="lg">
                     {primaryCta.label}
                   </Button>
                 </Link>

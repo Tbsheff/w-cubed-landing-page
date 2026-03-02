@@ -27,9 +27,9 @@ type ProjectsListClientProps = {
 };
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 },
+  transition: { duration: 0.5 },
 };
 
 const staggerContainer = {
@@ -52,14 +52,18 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
     return Array.from(cats);
   }, [projects]);
 
-  const filtered = projects.filter((p) => {
-    const matchesSearch =
-      p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (p.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
-      p.tags?.some((t: string) => t.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = selectedCategory === "All" || p.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const filtered = useMemo(
+    () =>
+      projects.filter((p) => {
+        const matchesSearch =
+          p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (p.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
+          (p.tags?.some((t: string) => t.toLowerCase().includes(searchTerm.toLowerCase())) ?? false);
+        const matchesCategory = selectedCategory === "All" || p.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+      }),
+    [projects, searchTerm, selectedCategory]
+  );
 
   const featured = filtered.filter((p) => p.featured);
   const regular = filtered.filter((p) => !p.featured);
@@ -67,18 +71,18 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
   return (
     <PageWrapper>
       {/* Hero */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
+      <section className="relative py-10 lg:py-14 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-accent/5" />
         <div className="container mx-auto px-4 lg:px-6 relative">
           <motion.div className="text-center space-y-6 max-w-4xl mx-auto" {...fadeInUp}>
             <Badge variant="outline" className="border-brand-accent/30 text-brand-deep">
               Our Work
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand-deep">
+            <h1 className="text-4xl lg:text-6xl font-display font-extrabold uppercase tracking-wide text-brand-deep">
               Project References
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Explore our completed water equipment projects across Utah, Idaho, and Wyoming.
+              Explore our completed water equipment projects across Utah, Nevada, Idaho, and Wyoming.
             </p>
           </motion.div>
         </div>
@@ -107,8 +111,8 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
                   onClick={() => setSelectedCategory(category)}
                   className={
                     selectedCategory === category
-                      ? "bg-brand-accent hover:bg-brand-accent/90"
-                      : "bg-transparent"
+                      ? "bg-brand-accent hover:bg-brand-accent/90 shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
+                      : "bg-transparent shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
                   }
                 >
                   <Filter className="h-4 w-4 mr-2" />
@@ -125,7 +129,7 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
         <section className="py-20 bg-background">
           <div className="container mx-auto px-4 lg:px-6">
             <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-              <h2 className="text-3xl lg:text-4xl font-bold text-brand-deep">Featured Projects</h2>
+              <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand-deep">Featured Projects</h2>
             </motion.div>
 
             <motion.div
@@ -180,7 +184,7 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
       <section className="py-20 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-bold text-brand-deep">Recent Projects</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand-deep">Recent Projects</h2>
           </motion.div>
 
           <motion.div
@@ -255,7 +259,7 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
               </Button>
               <div className="mt-4">
                 <Link href="/contact">
-                  <Button size="sm" className="bg-brand-accent hover:bg-brand-accent/90">
+                  <Button size="sm">
                     Discuss Your Project
                   </Button>
                 </Link>

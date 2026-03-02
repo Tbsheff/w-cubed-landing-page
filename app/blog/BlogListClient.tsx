@@ -38,9 +38,9 @@ type BlogListClientProps = {
 };
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 },
+  transition: { duration: 0.5 },
 };
 
 const staggerContainer = {
@@ -96,14 +96,14 @@ export default function BlogListClient({
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
+      <section className="relative py-10 lg:py-14 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-accent/5" />
         <div className="container mx-auto px-4 lg:px-6 relative">
           <motion.div className="text-center space-y-6 max-w-4xl mx-auto" {...fadeInUp}>
             <Badge variant="outline" className="border-brand-accent/30 text-brand-deep">
               Insights & Updates
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-brand-deep">
+            <h1 className="text-4xl lg:text-6xl font-display font-extrabold uppercase tracking-wide text-brand-deep">
               W-Cubed Blog
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -139,8 +139,8 @@ export default function BlogListClient({
                   onClick={() => setSelectedCategory(category)}
                   className={
                     selectedCategory === category
-                      ? "bg-brand-accent hover:bg-brand-accent/90"
-                      : "bg-transparent"
+                      ? "bg-brand-accent hover:bg-brand-accent/90 shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
+                      : "bg-transparent shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
                   }
                 >
                   <Filter className="h-4 w-4 mr-2" />
@@ -171,7 +171,7 @@ export default function BlogListClient({
         <section className="py-20 bg-background">
           <div className="container mx-auto px-4 lg:px-6">
             <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-              <h2 className="text-3xl lg:text-4xl font-bold text-brand-deep">Featured Articles</h2>
+              <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand-deep">Featured Articles</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 Our most popular and impactful content
               </p>
@@ -252,7 +252,7 @@ export default function BlogListClient({
       <section className="py-20 bg-brand-light/20">
         <div className="container mx-auto px-4 lg:px-6">
           <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl font-bold text-brand-deep">Latest Articles</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand-deep">Latest Articles</h2>
           </motion.div>
 
           <motion.div

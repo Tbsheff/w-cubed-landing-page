@@ -24,9 +24,9 @@ export type ProjectClientProps = {
 };
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 },
+  transition: { duration: 0.5 },
 };
 
 export default function ProjectClient({ project }: ProjectClientProps) {
@@ -62,7 +62,7 @@ export default function ProjectClient({ project }: ProjectClientProps) {
                 </Badge>
               )}
 
-              <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-brand-deep">
+              <h1 className="text-4xl lg:text-5xl font-display font-extrabold uppercase tracking-wide text-brand-deep">
                 {project.title}
               </h1>
 
@@ -105,7 +105,7 @@ export default function ProjectClient({ project }: ProjectClientProps) {
           <div className="container mx-auto px-4 lg:px-6">
             <motion.div
               className="max-w-4xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
@@ -128,7 +128,7 @@ export default function ProjectClient({ project }: ProjectClientProps) {
             <div className="grid lg:grid-cols-4 gap-12">
               <motion.div
                 className="lg:col-span-3 prose prose-lg max-w-none prose-headings:text-brand-deep prose-a:text-brand-accent prose-blockquote:border-l-brand-accent prose-blockquote:bg-brand-light/20 prose-blockquote:p-4 prose-blockquote:rounded-r-lg"
-                initial={{ opacity: 0, x: -30 }}
+                initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
               >
@@ -140,7 +140,7 @@ export default function ProjectClient({ project }: ProjectClientProps) {
               {/* Sidebar */}
               <motion.div
                 className="lg:col-span-1"
-                initial={{ opacity: 0, x: 30 }}
+                initial={{ opacity: 0, x: 16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
@@ -160,7 +160,7 @@ export default function ProjectClient({ project }: ProjectClientProps) {
 
                   <Card className="p-6">
                     <Link href="/contact">
-                      <Button className="w-full bg-brand-accent hover:bg-brand-accent/90">
+                      <Button className="w-full">
                         Request Info
                       </Button>
                     </Link>

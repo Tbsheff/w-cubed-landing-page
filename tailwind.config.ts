@@ -68,7 +68,12 @@ const config: Config = {
           deep: "rgb(var(--brand-deep) / <alpha-value>)",
           accent: "rgb(var(--brand-accent) / <alpha-value>)",
           light: "rgb(var(--brand-light) / <alpha-value>)",
+          yellow: "rgb(var(--brand-yellow) / <alpha-value>)",
         },
+      },
+      fontFamily: {
+        display: ["var(--font-display)", "sans-serif"],
+        body: ["var(--font-inter)", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

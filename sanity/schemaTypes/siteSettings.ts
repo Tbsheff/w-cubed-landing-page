@@ -11,6 +11,12 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'heroEyebrow',
+      title: 'Hero Eyebrow',
+      description: 'Alternative eyebrow text displayed above the hero title.',
+      type: 'string',
+    }),
+    defineField({
       name: 'heroTitle',
       title: 'Hero Title',
       type: 'string',
@@ -56,6 +62,24 @@ export default defineType({
               description: 'Short labels shown on top of the image, e.g. Municipal, Pumps, Controls.',
               type: 'array',
               of: [{ type: 'string' }],
+            }),
+            defineField({
+              name: 'slideLabel',
+              title: 'Slide Label',
+              description: 'Caption plate label, e.g. "Application Focus"',
+              type: 'string',
+            }),
+            defineField({
+              name: 'slideTitle',
+              title: 'Slide Title',
+              description: 'Caption plate title, e.g. "Municipal Treatment"',
+              type: 'string',
+            }),
+            defineField({
+              name: 'slideLocation',
+              title: 'Slide Location',
+              description: 'Caption plate location, e.g. "Salt Lake City, UT"',
+              type: 'string',
             }),
           ],
           preview: {

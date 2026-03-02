@@ -8,8 +8,6 @@ import {
   Droplets,
   Phone,
   Mail,
-  ArrowRight,
-  CheckCircle,
   Wrench,
   Cog,
   Package,
@@ -18,16 +16,26 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PageWrapper } from "@/components/page-wrapper";
 import { territoryRepresentatives } from "@/lib/representatives";
+import { HeroSection } from "@/components/hero-section";
+import { PartnersStrip } from "@/components/partners-strip";
+
+type HeroSlide = {
+  image: string;
+  alt: string;
+  tags: string[];
+  slideLabel?: string | null;
+  slideTitle?: string | null;
+};
 
 type HeroContent = {
   badge?: string | null;
   title?: string | null;
   description?: string | null;
   heroImage?: string | null;
-  heroSlides?: { image?: string | null; alt?: string | null; tags?: string[] | null }[] | null;
+  heroSlides?: HeroSlide[] | null;
   primaryCta?: { label?: string | null; href?: string | null } | null;
   secondaryCta?: { label?: string | null; href?: string | null } | null;
 };
@@ -51,16 +59,10 @@ type HomePageProps = {
   highlights?: HighlightItem[] | null;
 };
 
-type HeroSlide = {
-  image: string;
-  alt: string;
-  tags: string[];
-};
-
 const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 },
+  transition: { duration: 0.5 },
 };
 
 const staggerContainer = {
@@ -74,11 +76,7 @@ const staggerContainer = {
 const defaultManufacturers: ManufacturerStripItem[] = [
   { id: "ksb", name: "KSB", logo: "/manufacturers/ksb-logo.svg" },
   { id: "kaeser", name: "Kaeser Blowers", logo: "/manufacturers/Kaeser-compressor-logo.png" },
-  {
-    id: "pratt",
-    name: "Pratt Valves",
-    logo: "/manufacturers/pratt-a-mueller-brand-logo-vector.png",
-  },
+  { id: "pratt", name: "Pratt Valves", logo: "/manufacturers/pratt-a-mueller-brand-logo-vector.png" },
   { id: "hydro-gate", name: "Hydro Gate", logo: "/manufacturers/Hydro-gate-logo.png" },
   { id: "fournier", name: "Fournier", logo: "/manufacturers/Fournier-logo.svg" },
   { id: "edi", name: "EDI", logo: "/manufacturers/EDI-Logo.png" },
@@ -123,7 +121,7 @@ const defaultStats: StatItem[] = [
 
 const defaultHero: HeroContent = {
   badge: "Serving the Mountain West Since 1986",
-  title: null,
+  title: "Municipal Equipment\nYou Can Count On.",
   description:
     "Your trusted partner for water treatment, pumping systems, and process equipment. Delivering reliable solutions across the Mountain West for nearly four decades.",
   heroImage: "/hero-image.png",
@@ -134,8 +132,8 @@ const defaultHero: HeroContent = {
       tags: ["Municipal", "Industrial", "Pretreatment"],
     },
   ],
-  primaryCta: { label: "Get Project Quote", href: "/contact" },
-  secondaryCta: { label: "Browse Equipment", href: "/manufacturers" },
+  primaryCta: { label: "Find Equipment", href: "/contact" },
+  secondaryCta: { label: "View Manufacturers", href: "/manufacturers" },
 };
 
 export default function WCubedLanding({ hero, stats, manufacturers, highlights }: HomePageProps) {
@@ -143,14 +141,13 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
 
   const heroSlidesData: HeroSlide[] =
     heroData.heroSlides
-      ?.filter(
-        (slide): slide is { image?: string | null; alt?: string | null; tags?: string[] | null } =>
-          Boolean(slide?.image)
-      )
+      ?.filter((slide) => Boolean(slide?.image))
       .map((slide, idx) => ({
-        image: (slide.image as string) || "/hero-image.png",
+        image: slide.image || "/hero-image.png",
         alt: slide.alt || `Hero slide ${idx + 1}`,
         tags: (slide.tags || []).filter(Boolean),
+        slideLabel: slide.slideLabel,
+        slideTitle: slide.slideTitle,
       })) || [];
 
   if (!heroSlidesData.length) {
@@ -167,8 +164,6 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
   const projectHighlights = highlights && highlights.length ? highlights : defaultHighlights;
 
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
-  const [manufacturerSlide, setManufacturerSlide] = useState(0);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % projectHighlights.length);
@@ -178,224 +173,19 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
     setCurrentSlide((prev) => (prev - 1 + projectHighlights.length) % projectHighlights.length);
   };
 
-  const nextManufacturer = () => {
-    setManufacturerSlide((prev) => (prev + 1) % Math.ceil(manufacturersData.length / 5));
-  };
-
-  const prevManufacturer = () => {
-    setManufacturerSlide(
-      (prev) =>
-        (prev - 1 + Math.ceil(manufacturersData.length / 5)) %
-        Math.ceil(manufacturersData.length / 5)
-    );
-  };
-
-  // Auto-rotate manufacturer carousel every 8 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setManufacturerSlide((prev) => (prev + 1) % Math.ceil(manufacturersData.length / 5));
-    }, 8000);
-    return () => clearInterval(interval);
-  }, [manufacturersData.length]);
-
-  // Auto-rotate hero slideshow every 6 seconds
-  useEffect(() => {
-    if (heroSlidesData.length <= 1) {
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setHeroSlideIndex((prev) => (prev + 1) % heroSlidesData.length);
-    }, 6000);
-
-    return () => clearInterval(interval);
-  }, [heroSlidesData.length]);
-
   return (
     <PageWrapper>
       {/* Hero Section */}
-      <section className="relative flex items-center overflow-hidden py-12 md:py-16 lg:py-24">
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-light/5" />
-        <div className="container mx-auto px-4 lg:px-6 relative w-full">
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center">
-            <motion.div
-              className="space-y-4 md:space-y-6 relative z-10"
-              initial={{ opacity: 0, x: -60 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              {/* Large Logo with Veteran Badge */}
-              <div className="flex flex-col items-center lg:items-start gap-6 lg:gap-8 mb-6 lg:mb-10">
-                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
-                  <Image
-                    src="/logo.png"
-                    alt="W-Cubed"
-                    width={550}
-                    height={132}
-                    className="h-auto w-auto max-w-[260px] sm:max-w-[320px] lg:max-w-[400px]"
-                    priority
-                  />
-                  <div className="bg-brand/10 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full">
-                    <span className="text-[10px] sm:text-xs font-semibold text-brand uppercase tracking-wide whitespace-nowrap">
-                      Veteran Owned & Operated
-                    </span>
-                  </div>
-                </div>
-                {heroData.badge && (
-                  <Badge variant="outline" className="border-brand/30 text-brand">
-                    {heroData.badge}
-                  </Badge>
-                )}
-              </div>
-              <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-brand leading-tight mt-8">
-                {heroData.title?.trim() ? (
-                  <span className="block whitespace-pre-line">{heroData.title}</span>
-                ) : (
-                  <HeroHeadline />
-                )}
-                <span className="text-2xl sm:text-3xl font-semibold tracking-wide text-brand-accent flex flex-wrap items-baseline gap-3 mt-2">
-                  <span>serving</span>
-                  <span className="whitespace-nowrap">UT</span>
-                  <span className="opacity-60">·</span>
-                  <span className="whitespace-nowrap">NV</span>
-                  <span className="opacity-60">·</span>
-                  <span className="whitespace-nowrap">ID</span>
-                  <span className="opacity-60">·</span>
-                  <span className="whitespace-nowrap">WY</span>
-                </span>
-              </h1>
-              {heroData.description && (
-                <p className="text-xl lg:text-2xl text-muted-foreground max-w-lg leading-relaxed">
-                  {heroData.description}
-                </p>
-              )}
-              <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                {heroData.primaryCta?.href && heroData.primaryCta?.label && (
-                  <Link href={heroData.primaryCta.href}>
-                    <Button
-                      size="lg"
-                      className="bg-brand-accent hover:bg-brand-accent/90 text-lg px-8 py-4"
-                    >
-                      {heroData.primaryCta.label}
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                  </Link>
-                )}
-                {heroData.secondaryCta?.href && heroData.secondaryCta?.label && (
-                  <Link href={heroData.secondaryCta.href}>
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="border-brand text-brand hover:bg-brand hover:text-white bg-transparent text-lg px-8 py-4"
-                    >
-                      {heroData.secondaryCta.label}
-                    </Button>
-                  </Link>
-                )}
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 60 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative flex items-center justify-center mt-4 md:mt-20 lg:mt-40"
-            >
-              {/* Clean, simple equipment showcase */}
-              <div className="relative bg-gradient-to-br from-white to-brand-light/20 rounded-3xl p-6 md:p-12 shadow-2xl border max-w-2xl w-full">
-                <div className="relative rounded-2xl w-full overflow-hidden bg-background/40">
-                  <div className="relative w-full aspect-[6/5] lg:aspect-[16/10]">
-                    <Image
-                      src={heroSlidesData[heroSlideIndex].image}
-                      alt={heroSlidesData[heroSlideIndex].alt}
-                      fill
-                      sizes="(min-width: 1024px) 600px, 100vw"
-                      className="rounded-2xl object-cover"
-                    />
-                  </div>
-
-                  {heroSlidesData[heroSlideIndex].tags.length > 0 && (
-                    <div className="absolute left-3 top-3 md:left-4 md:top-4 flex flex-wrap gap-2 max-w-[85%]">
-                      {heroSlidesData[heroSlideIndex].tags.map((tag) => (
-                        <Badge
-                          key={tag}
-                          variant="secondary"
-                          className="bg-white/90 text-brand-deep border border-brand-light/70 backdrop-blur-sm"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-
-                  {heroSlidesData.length > 1 && (
-                    <>
-                      <button
-                        onClick={() =>
-                          setHeroSlideIndex(
-                            (prev) => (prev - 1 + heroSlidesData.length) % heroSlidesData.length
-                          )
-                        }
-                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-brand-deep rounded-full p-2 shadow-md transition-colors"
-                        aria-label="Previous hero image"
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() =>
-                          setHeroSlideIndex((prev) => (prev + 1) % heroSlidesData.length)
-                        }
-                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-brand-deep rounded-full p-2 shadow-md transition-colors"
-                        aria-label="Next hero image"
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </button>
-
-                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
-                        {heroSlidesData.map((_, index) => (
-                          <button
-                            key={`hero-dot-${index}`}
-                            onClick={() => setHeroSlideIndex(index)}
-                            className={`h-2.5 w-2.5 rounded-full transition-colors ${
-                              index === heroSlideIndex ? "bg-brand-accent" : "bg-white/75"
-                            }`}
-                            aria-label={`Go to hero slide ${index + 1}`}
-                          />
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-
-                {/* Simple floating badges */}
-                <div className="absolute -top-6 -left-6 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border">
-                  <div className="flex items-center space-x-3">
-                    <div className="bg-brand-accent/10 p-3 rounded-full">
-                      <Droplets className="h-6 w-6 text-brand-accent" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-lg text-brand">38+ Years</div>
-                      <div className="text-sm text-muted-foreground">Experience</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute -bottom-6 -right-6 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border">
-                  <div className="flex items-center space-x-3">
-                    <div className="bg-brand-light/20 p-3 rounded-full">
-                      <CheckCircle className="h-6 w-6 text-brand" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-lg text-brand">4 States</div>
-                      <div className="text-sm text-muted-foreground">Coverage Area</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        hero={{
+          badge: heroData.badge,
+          title: heroData.title,
+          description: heroData.description,
+          heroSlides: heroSlidesData,
+          primaryCta: heroData.primaryCta,
+          secondaryCta: heroData.secondaryCta,
+        }}
+      />
 
       {/* Credibility Bar */}
       <section className="pt-8 pb-12 bg-brand">
@@ -409,7 +199,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
           >
             {statsData.map((stat) => (
               <motion.div key={stat.label} variants={fadeInUp} className="space-y-2">
-                <div className="text-4xl font-bold text-brand-accent">{stat.value}</div>
+                <div className="text-4xl font-bold text-brand-yellow">{stat.value}</div>
                 <div className="text-lg">{stat.label}</div>
                 {stat.detail && <div className="text-sm opacity-80">{stat.detail}</div>}
               </motion.div>
@@ -418,109 +208,8 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
         </div>
       </section>
 
-      {/* Manufacturer Logo Carousel */}
-      <section id="manufacturers" className="py-24 bg-brand-light/20">
-        <div className="container mx-auto px-4 lg:px-6">
-          <motion.div className="text-center space-y-4 mb-16" {...fadeInUp}>
-            <h2 className="text-3xl font-bold text-brand-deep">Trusted Manufacturing Partners</h2>
-            <p className="text-lg text-muted-foreground">
-              We represent industry-leading manufacturers of water-process equipment
-            </p>
-          </motion.div>
-
-          <div className="relative">
-            <motion.div
-              className="overflow-hidden"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <div
-                className="flex transition-transform duration-700 ease-in-out"
-                style={{ transform: `translateX(-${manufacturerSlide * 100}%)` }}
-              >
-                {Array.from({ length: Math.ceil(manufacturersData.length / 5) }).map(
-                  (_, slideIndex) => (
-                    <div key={slideIndex} className="w-full flex-shrink-0">
-                      <div className="flex justify-center items-center gap-8 md:gap-10 lg:gap-12 px-6">
-                        {manufacturersData
-                          .slice(slideIndex * 5, slideIndex * 5 + 5)
-                          .map((manufacturer) => (
-                            <motion.div
-                              key={manufacturer.id}
-                              className="hover:scale-102 transition-all duration-300 hover:drop-shadow-md flex items-center justify-center"
-                              whileHover={{ y: -3 }}
-                            >
-                              <Link href={`/manufacturers/${manufacturer.id}`}>
-                                {manufacturer.id === "veolia-suez" ? (
-                                  <div className="flex items-center gap-3 cursor-pointer">
-                                    <Image
-                                      src="/manufacturers/veolia-capsule-logo.svg"
-                                      alt="Veolia logo"
-                                      width={120}
-                                      height={80}
-                                      className="h-16 w-auto object-contain"
-                                    />
-                                    <Image
-                                      src="/manufacturers/suez-logo.png"
-                                      alt="Suez logo"
-                                      width={100}
-                                      height={70}
-                                      className="h-12 w-auto object-contain"
-                                    />
-                                  </div>
-                                ) : (
-                                  <Image
-                                    src={manufacturer.logo}
-                                    alt={`${manufacturer.name} logo`}
-                                    width={180}
-                                    height={90}
-                                    className="object-contain cursor-pointer max-h-16 w-auto"
-                                  />
-                                )}
-                              </Link>
-                            </motion.div>
-                          ))}
-                      </div>
-                    </div>
-                  )
-                )}
-              </div>
-            </motion.div>
-
-            {/* Navigation arrows */}
-            <button
-              onClick={prevManufacturer}
-              className="absolute -left-4 lg:-left-12 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-brand-light/20 transition-colors z-10"
-              aria-label="Previous manufacturers"
-            >
-              <ChevronLeft className="h-6 w-6 text-brand-deep" />
-            </button>
-            <button
-              onClick={nextManufacturer}
-              className="absolute -right-4 lg:-right-12 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-3 hover:bg-brand-light/20 transition-colors z-10"
-              aria-label="Next manufacturers"
-            >
-              <ChevronRight className="h-6 w-6 text-brand-deep" />
-            </button>
-
-            {/* Dot indicators */}
-            <div className="flex justify-center mt-8 space-x-3">
-              {Array.from({ length: Math.ceil(manufacturersData.length / 5) }).map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setManufacturerSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    index === manufacturerSlide ? "bg-brand-accent" : "bg-brand-light/60"
-                  }`}
-                  aria-label={`Go to manufacturer slide ${index + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Partners Strip */}
+      <PartnersStrip manufacturers={manufacturersData} />
 
       {/* Company Story Section */}
       <section className="py-20 bg-background">
@@ -528,7 +217,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
               className="space-y-6"
-              initial={{ opacity: 0, x: -60 }}
+              initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
@@ -536,7 +225,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               <Badge variant="outline" className="border-brand-accent/30 text-brand">
                 Our Story
               </Badge>
-              <h2 className="text-3xl lg:text-4xl font-bold text-brand">
+              <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand after:content-[''] after:block after:w-[60px] after:h-[3px] after:bg-brand-yellow after:mt-3">
                 From Garage to Industry Leader
               </h2>
               <p className="text-lg text-muted-foreground">
@@ -563,7 +252,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
               </div>
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, x: 60 }}
+              initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
@@ -587,7 +276,9 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Expertise
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-brand">Water-Process Solutions</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand after:content-[''] after:block after:w-[60px] after:h-[3px] after:bg-brand-yellow after:mx-auto after:mt-3">
+              Water-Process Solutions
+            </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Comprehensive water treatment and process equipment solutions for municipal,
               industrial, and pretreatment applications
@@ -649,7 +340,9 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Get In Touch
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-brand">Meet Your Territory Team</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand after:content-[''] after:block after:w-[60px] after:h-[3px] after:bg-brand-yellow after:mx-auto after:mt-3">
+              Meet Your Territory Team
+            </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Reach out directly to the representative serving your area for quotes, project
               support, and technical guidance.
@@ -704,13 +397,13 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                       </div>
                     </div>
                     <div className="flex flex-col gap-2 pt-2">
-                      <Link href={`tel:${rep.phone}`}>
-                        <Button variant="outline" size="sm" className="w-full">
+                      <Link href={`tel:+1${rep.phone.replace(/\D/g, "")}`}>
+                        <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
                           <Phone className="h-4 w-4 mr-2" /> Call
                         </Button>
                       </Link>
                       <Link href={`mailto:${rep.email}`}>
-                        <Button variant="outline" size="sm" className="w-full">
+                        <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
                           <Mail className="h-4 w-4 mr-2" /> Email
                         </Button>
                       </Link>
@@ -723,7 +416,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
 
           <motion.div
             className="text-center mt-12"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
@@ -749,7 +442,9 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             <Badge variant="outline" className="border-brand-accent/30 text-brand">
               Our Expertise
             </Badge>
-            <h2 className="text-3xl lg:text-4xl font-bold text-brand">Project Types We Serve</h2>
+            <h2 className="text-3xl lg:text-4xl font-display font-extrabold uppercase tracking-wide text-brand after:content-[''] after:block after:w-[60px] after:h-[3px] after:bg-brand-yellow after:mx-auto after:mt-3">
+              Project Types We Serve
+            </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Specialized water-process equipment solutions across multiple industries and
               applications
@@ -758,7 +453,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
 
           <div className="relative">
             <motion.div
-              className="overflow-hidden"
+              className="overflow-x-clip overflow-y-visible"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.8 }}
@@ -773,19 +468,19 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                   const states = project.states ?? [];
                   return (
                     <div key={index} className="w-full flex-shrink-0 px-4">
-                      <Card className="max-w-2xl mx-auto overflow-hidden">
-                        <div className="md:flex">
-                          <div className="md:w-1/2">
+                      <Card className="max-w-3xl mx-auto">
+                        <div className="md:grid md:grid-cols-2">
+                          <div className="relative h-48 md:h-auto overflow-hidden rounded-t-lg md:rounded-l-lg md:rounded-tr-none">
                             <Image
                               src={imageSrc}
                               alt={project.title}
-                              width={300}
-                              height={200}
-                              className="w-full h-48 md:h-full object-cover"
+                              fill
+                              sizes="(min-width: 768px) 50vw, 100vw"
+                              className="object-cover"
                             />
                           </div>
-                          <div className="md:w-1/2 p-6">
-                            <Badge variant="secondary" className="mb-3">
+                          <div className="p-6 pb-8 flex flex-col">
+                            <Badge variant="secondary" className="mb-3 self-start">
                               {project.category}
                             </Badge>
                             <CardTitle className="text-xl mb-3 text-brand-deep">
@@ -794,8 +489,8 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                             <CardDescription className="mb-4">
                               {project.description}
                             </CardDescription>
-                            <div className="flex items-center justify-between gap-4">
-                              <div className="flex gap-1">
+                            <div className="flex flex-wrap items-center justify-between gap-3 mt-auto">
+                              <div className="flex flex-wrap gap-1">
                                 {states.map((state, idx) => (
                                   <Badge key={idx} variant="outline" className="text-xs">
                                     {state}
@@ -806,7 +501,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className="text-brand-accent border-brand-accent hover:bg-brand-accent hover:text-white bg-transparent"
+                                  className="text-brand-accent border-brand-accent hover:bg-brand-accent hover:text-white bg-transparent shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal"
                                 >
                                   View Solutions
                                 </Button>
@@ -824,12 +519,14 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             {/* Navigation buttons */}
             <button
               onClick={prevSlide}
+              aria-label="Previous project"
               className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-brand-light/20 transition-colors"
             >
               <ChevronLeft className="h-6 w-6 text-brand-deep" />
             </button>
             <button
               onClick={nextSlide}
+              aria-label="Next project"
               className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 hover:bg-brand-light/20 transition-colors"
             >
               <ChevronRight className="h-6 w-6 text-brand-deep" />
@@ -841,6 +538,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
+                  aria-label={`Go to project ${index + 1}`}
                   className={`w-3 h-3 rounded-full transition-colors ${
                     index === currentSlide ? "bg-brand-accent" : "bg-brand-light/60"
                   }`}
@@ -852,7 +550,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
           {/* Secondary CTAs */}
           <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center mt-12"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
@@ -881,70 +579,5 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
 
       {/* Footer */}
     </PageWrapper>
-  );
-}
-
-function HeroHeadline() {
-  const NB_HYPHEN = "\u2011"; // keep “Waste-water” together
-
-  return (
-    <span className="block">
-      <span className="flex flex-wrap items-baseline gap-x-3 gap-y-2">
-        <WordWithAccent text="Water," />
-        <WordWithAccent text={`Waste${NB_HYPHEN}Water,`} />
-        <span className="inline-flex items-baseline whitespace-nowrap">Equipment</span>
-        <span className="inline-flex items-baseline whitespace-nowrap">Experts</span>
-      </span>
-    </span>
-  );
-}
-
-/**
- * Renders a word and adds a short accent underline under any leading 'W'/'w'.
- * For hyphenated words (e.g., Waste-water) it accents the 'W' of each part.
- * Uses brand-accent for the accent, main text stays brand (no recolor of the W).
- */
-function WordWithAccent({ text }: { text: string }) {
-  const NB_HYPHEN = "\u2011";
-
-  // Split on NB hyphen but render the hyphen back between parts
-  const parts = text.split(NB_HYPHEN);
-
-  return (
-    <span className="inline-flex items-baseline whitespace-nowrap text-brand">
-      {parts.map((part, idx) => {
-        // keep trailing punctuation out of the accent logic (e.g., the comma in "Water,")
-        const match = part.match(/^([A-Za-z]+)([^A-Za-z]*)$/);
-        const word = match ? match[1] : part;
-        const trailing = match ? match[2] : "";
-
-        const startsWithW = /^[Ww]/.test(word);
-
-        return (
-          <span key={idx} className="inline-flex items-baseline">
-            {startsWithW ? (
-              <>
-                <span className="relative inline-block font-extrabold">
-                  <span
-                    className="inline-block"
-                    style={{
-                      borderBottom: "4px solid rgb(var(--brand-accent))",
-                      paddingBottom: "2px",
-                    }}
-                  >
-                    {word[0]}
-                  </span>
-                </span>
-                <span className="font-extrabold">{word.slice(1)}</span>
-              </>
-            ) : (
-              <span className="font-extrabold">{word}</span>
-            )}
-            <span className="font-extrabold">{trailing}</span>
-            {idx < parts.length - 1 && <span className="font-extrabold">{NB_HYPHEN}</span>}
-          </span>
-        );
-      })}
-    </span>
   );
 }

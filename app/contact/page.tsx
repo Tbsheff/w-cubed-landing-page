@@ -27,16 +27,13 @@ export default async function ContactPage() {
   const representatives = await sanityClient.fetch<RepresentativeResult[]>(representativesQuery)
   const territoryInfo = await sanityClient.fetch<TerritoryInfoResult | null>(territoryInfoQuery)
 
-  if (!territoryInfo) {
-    throw new Error("CMS territoryInfo missing")
-  }
-
+  const safeTerritoryInfo = territoryInfo ?? {}
   const normalizedReps: RepCoverage[] = normalizeReps(representatives || [])
 
   return (
     <ContactClient
       representatives={normalizedReps}
-      territoryInfo={territoryInfo as TerritoryInfo}
+      territoryInfo={safeTerritoryInfo as TerritoryInfo}
     />
   )
 }

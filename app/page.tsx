@@ -21,6 +21,8 @@ type SiteSettingsResult = {
     image?: any
     alt?: string | null
     tags?: string[] | null
+    slideLabel?: string | null
+    slideTitle?: string | null
   }> | null
   primaryCta?: { label?: string | null; href?: string | null } | null
   secondaryCta?: { label?: string | null; href?: string | null } | null
@@ -41,8 +43,9 @@ export default async function Page() {
   if (!data) throw new Error("CMS siteSettings missing")
 
   const manufacturers =
-    data.manufacturerStrip?.map((m) => {
-      if (!m.slug) throw new Error("CMS manufacturer missing slug")
+    data.manufacturerStrip
+      ?.filter((m) => Boolean(m.slug))
+      .map((m) => {
       return {
         id: m.slug,
         name: m.name,
@@ -86,9 +89,11 @@ export default async function Page() {
       data.heroSlides
         ?.filter((slide) => slide?.image)
         .map((slide) => ({
-          image: slide.image ? urlForImage(slide.image).width(900).height(700).fit("max").url() : null,
-          alt: slide.alt,
+          image: slide.image ? urlForImage(slide.image).width(900).height(700).fit("max").url() ?? "" : "",
+          alt: slide.alt ?? "",
           tags: (slide.tags || []).filter(Boolean),
+          slideLabel: slide.slideLabel,
+          slideTitle: slide.slideTitle,
         })) || [],
     primaryCta: data.primaryCta,
     secondaryCta: data.secondaryCta,
