@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Droplets } from "lucide-react";
+import Image from "next/image";
 
 export function SiteFooter() {
   return (
@@ -7,10 +7,15 @@ export function SiteFooter() {
       <div className="container mx-auto px-4 lg:px-6">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <Droplets className="h-8 w-8 text-brand-accent" />
-              <span className="text-xl font-bold">W-Cubed</span>
-            </div>
+            <Link href="/" aria-label="W-Cubed home">
+              <Image
+                src="/logo.png"
+                alt="W-Cubed"
+                width={200}
+                height={48}
+                className="h-10 w-auto brightness-0 invert"
+              />
+            </Link>
             <p className="text-brand-light/85">
               Water-process equipment experts serving Utah, Nevada, Idaho, and Wyoming since 1986.
             </p>
