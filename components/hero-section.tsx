@@ -86,7 +86,7 @@ export function HeroSection({ hero }: { hero: HeroContent }) {
               {hero.primaryCta?.href && hero.primaryCta?.label && (
                 <Link
                   href={hero.primaryCta.href}
-                  className="inline-flex items-center justify-center px-9 py-[18px] bg-brand-accent text-white font-bold text-base uppercase tracking-wider rounded-sm shadow-[0_4px_0_rgb(var(--brand))] hover:translate-y-[2px] hover:shadow-[0_2px_0_rgb(var(--brand))] transition-all"
+                  className="inline-flex items-center justify-center px-9 py-[18px] bg-brand-accent text-white font-bold text-base uppercase tracking-wider rounded-sm shadow-[0_4px_0_rgb(var(--brand))] hover:translate-y-[2px] hover:shadow-[0_2px_0_rgb(var(--brand))] hover:bg-brand transition-all"
                 >
                   {hero.primaryCta.label}
                 </Link>
@@ -139,7 +139,7 @@ export function HeroSection({ hero }: { hero: HeroContent }) {
                         className="object-cover"
                       />
                       {/* Caption Plate */}
-                      <div className="relative z-10 w-full bg-brand/95 border-t-[3px] border-brand-yellow px-6 py-5">
+                      <div className="relative z-10 w-full bg-brand/95 border-t-[3px] border-brand-yellow px-6 py-6">
                         <div className="text-[11px] uppercase tracking-widest font-bold text-gray-400 mb-1">
                           {label}
                         </div>

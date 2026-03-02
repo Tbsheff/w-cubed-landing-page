@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 const navItems = [
-  { name: "Equipment", path: "/manufacturers" },
+  { name: "Equipment", path: "/#services" },
   { name: "Manufacturers", path: "/manufacturers" },
   { name: "Territory", path: "/territory" },
   { name: "Projects", path: "/projects" },
