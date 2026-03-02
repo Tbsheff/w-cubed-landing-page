@@ -115,7 +115,7 @@ export function HeroSection({ hero }: { hero: HeroContent }) {
 
             {/* Visual Frame */}
             <div className="bg-white border-2 border-gray-200 p-3 shadow-[0_20px_40px_rgba(0,0,0,0.08)]">
-              <div className="relative bg-brand aspect-[16/14] overflow-hidden border border-brand">
+              <div className="relative bg-brand aspect-[4/3] overflow-hidden border border-brand">
                 {/* Slides */}
                 {slides.map((slide, index) => {
                   const meta = defaultSlideMetadata[index] ?? defaultSlideMetadata[0];
