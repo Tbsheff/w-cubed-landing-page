@@ -148,7 +148,6 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
         tags: (slide.tags || []).filter(Boolean),
         slideLabel: slide.slideLabel,
         slideTitle: slide.slideTitle,
-        slideLocation: slide.slideLocation,
       })) || [];
 
   if (!heroSlidesData.length) {

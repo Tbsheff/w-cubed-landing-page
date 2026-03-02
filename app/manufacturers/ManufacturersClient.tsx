@@ -54,14 +54,18 @@ export default function ManufacturersClient({ manufacturers }: Props) {
     return ["All", ...Array.from(set)];
   }, [manufacturers]);
 
-  const filteredManufacturers = manufacturers.filter((manufacturer) => {
-    const matchesSearch =
-      manufacturer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (manufacturer.description || "").toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "All" || manufacturer.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const filteredManufacturers = useMemo(
+    () =>
+      manufacturers.filter((manufacturer) => {
+        const matchesSearch =
+          manufacturer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (manufacturer.description || "").toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory =
+          selectedCategory === "All" || manufacturer.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+      }),
+    [manufacturers, searchTerm, selectedCategory]
+  );
 
   const clearFilters = () => {
     setSearchTerm("");

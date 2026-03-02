@@ -748,7 +748,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       seen.add(key);
       patterns.push({
         id: `stripe-${key}`,
-        colors: county.repSlugs.map((s) => repColorMap.get(s) || MAP_COLORS.fallbackServedFill),
+        colors: [...county.repSlugs].sort().map((s) => repColorMap.get(s) || MAP_COLORS.fallbackServedFill),
       });
     }
     return patterns;

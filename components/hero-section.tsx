@@ -47,7 +47,7 @@ export function HeroSection({ hero }: { hero: HeroContent }) {
     if (slides.length <= 1) return;
     const interval = setInterval(goNext, 6000);
     return () => clearInterval(interval);
-  }, [slides.length, goNext]);
+  }, [slides.length, goNext, activeIndex]);
 
   // Split title on first newline for two-line treatment
   const titleLines = hero.title?.split("\n") ?? [];

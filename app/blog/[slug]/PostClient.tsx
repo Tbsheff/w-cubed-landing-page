@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,7 +30,6 @@ export type PostClientProps = {
     authorName?: string;
     authorImageUrl?: string;
     categories?: string[];
-    tags?: string[];
     body?: any;
     related?: Array<{ id: string; title: string; imageUrl?: string }>;
     slug: string;
@@ -45,10 +43,7 @@ const fadeInUp = {
 };
 
 export default function PostClient({ post }: PostClientProps) {
-  const shareUrl = useMemo(() => {
-    if (typeof window !== "undefined") return window.location.href;
-    return `https://wcubedinc.com/blog/${post.slug}`;
-  }, [post.slug]);
+  const shareUrl = `https://wcubedinc.com/blog/${post.slug}`;
   const encodedTitle = encodeURIComponent(post.title);
   const encodedUrl = encodeURIComponent(shareUrl);
   const mailtoHref = `mailto:?subject=${encodedTitle}&body=${encodedUrl}`;
@@ -57,8 +52,8 @@ export default function PostClient({ post }: PostClientProps) {
   const twitterHref = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
   const linkedInHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
 
-  const date = post.date ? new Date(post.date) : undefined;
-  const tags = post.tags || post.categories || [];
+  const date = post.date ? new Date(post.date + "T00:00:00") : undefined;
+  const tags = post.categories || [];
 
   return (
     <>
