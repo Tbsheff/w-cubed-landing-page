@@ -12,8 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Phone, Mail, Clock } from "lucide-react";
+import { Phone, Mail, Clock, CheckCircle } from "lucide-react";
 import Link from "next/link";
+import { useRef, useState } from "react";
 import { PageWrapper } from "@/components/page-wrapper";
 import { territoryRepresentatives } from "@/lib/representatives";
 import type { RepCoverage, TerritoryInfo as TerritoryInfoType } from "@/lib/types/territory";
@@ -69,6 +70,46 @@ const defaultBusinessHours = [
 ];
 
 export default function ContactPage({ representatives, territoryInfo }: Props) {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = formRef.current;
+    if (!form) return;
+
+    const data = new FormData(form);
+    const name = `${data.get("firstName") || ""} ${data.get("lastName") || ""}`.trim();
+    const email = data.get("email") as string;
+    const phone = data.get("phone") as string;
+    const company = data.get("company") as string;
+    const location = data.get("location") as string;
+    const projectType = data.get("projectType") as string;
+    const equipment = data.get("equipment") as string;
+    const timeline = data.get("timeline") as string;
+    const message = data.get("message") as string;
+
+    const subject = encodeURIComponent(`Project Inquiry from ${name}`);
+    const body = encodeURIComponent(
+      [
+        `Name: ${name}`,
+        email && `Email: ${email}`,
+        phone && `Phone: ${phone}`,
+        company && `Company: ${company}`,
+        location && `Location: ${location}`,
+        projectType && `Project Type: ${projectType}`,
+        equipment && `Equipment: ${equipment}`,
+        timeline && `Timeline: ${timeline}`,
+        `\nMessage:\n${message}`,
+      ]
+        .filter(Boolean)
+        .join("\n")
+    );
+
+    window.open(`mailto:Shared@wcubedinc.com?subject=${subject}&body=${body}`, "_self");
+    setSubmitted(true);
+  };
+
   const repsData: Array<RepCoverage | (typeof territoryRepresentatives)[number]> =
     representatives && representatives.length > 0 ? representatives : territoryRepresentatives;
   const hours =
@@ -246,44 +287,64 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="px-0 pb-0 flex-1">
-                  <form className="flex h-full flex-col gap-4">
+                  {submitted ? (
+                    <div className="flex flex-col items-center justify-center gap-4 py-12">
+                      <CheckCircle className="h-12 w-12 text-green-600" />
+                      <h3 className="text-lg font-semibold text-brand">Thank you!</h3>
+                      <p className="text-sm text-muted-foreground text-center max-w-sm">
+                        Your email client should have opened with the inquiry details.
+                        If it didn&apos;t, email us directly at{" "}
+                        <a href="mailto:Shared@wcubedinc.com" className="text-brand-accent hover:underline">
+                          Shared@wcubedinc.com
+                        </a>
+                      </p>
+                      <Button
+                        variant="outline"
+                        className="bg-transparent"
+                        onClick={() => setSubmitted(false)}
+                      >
+                        Send Another Inquiry
+                      </Button>
+                    </div>
+                  ) : (
+                  <form ref={formRef} onSubmit={handleSubmit} className="flex h-full flex-col gap-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-brand">First Name *</label>
-                        <Input placeholder="John" required />
+                        <Input name="firstName" placeholder="John" required />
                       </div>
                       <div>
                         <label className="text-sm font-medium text-brand">Last Name *</label>
-                        <Input placeholder="Doe" required />
+                        <Input name="lastName" placeholder="Doe" required />
                       </div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-brand">Email *</label>
-                        <Input type="email" placeholder="john@company.com" required />
+                        <Input name="email" type="email" placeholder="john@company.com" required />
                       </div>
                       <div>
                         <label className="text-sm font-medium text-brand">Phone</label>
-                        <Input type="tel" placeholder="(801) 555-1234" />
+                        <Input name="phone" type="tel" placeholder="(801) 555-1234" />
                       </div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-brand">Company</label>
-                        <Input placeholder="Your Company Name" />
+                        <Input name="company" placeholder="Your Company Name" />
                       </div>
                       <div>
                         <label className="text-sm font-medium text-brand">Location *</label>
-                        <Select required>
+                        <Select name="location" required>
                           <SelectTrigger>
                             <SelectValue placeholder="Select your state" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="utah">Utah</SelectItem>
-                            <SelectItem value="nevada">Nevada</SelectItem>
-                            <SelectItem value="idaho">Idaho</SelectItem>
-                            <SelectItem value="wyoming">Wyoming</SelectItem>
-                            <SelectItem value="other">Other State</SelectItem>
+                            <SelectItem value="Utah">Utah</SelectItem>
+                            <SelectItem value="Nevada">Nevada</SelectItem>
+                            <SelectItem value="Idaho">Idaho</SelectItem>
+                            <SelectItem value="Wyoming">Wyoming</SelectItem>
+                            <SelectItem value="Other">Other State</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -291,59 +352,60 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-brand">Project Type</label>
-                        <Select>
+                        <Select name="projectType">
                           <SelectTrigger>
                             <SelectValue placeholder="Select project type" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="new-installation">New Installation</SelectItem>
-                            <SelectItem value="replacement">Equipment Replacement</SelectItem>
-                            <SelectItem value="upgrade">System Upgrade</SelectItem>
-                            <SelectItem value="maintenance">Maintenance Contract</SelectItem>
-                            <SelectItem value="urgent-repair">Urgent Repair</SelectItem>
-                            <SelectItem value="consultation">Consultation/Design</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
+                            <SelectItem value="New Installation">New Installation</SelectItem>
+                            <SelectItem value="Equipment Replacement">Equipment Replacement</SelectItem>
+                            <SelectItem value="System Upgrade">System Upgrade</SelectItem>
+                            <SelectItem value="Maintenance Contract">Maintenance Contract</SelectItem>
+                            <SelectItem value="Urgent Repair">Urgent Repair</SelectItem>
+                            <SelectItem value="Consultation/Design">Consultation/Design</SelectItem>
+                            <SelectItem value="Other">Other</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                       <div>
                         <label className="text-sm font-medium text-brand">Equipment Category</label>
-                        <Select>
+                        <Select name="equipment">
                           <SelectTrigger>
                             <SelectValue placeholder="What type of equipment?" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="pumps">Pumps & Pumping Systems</SelectItem>
-                            <SelectItem value="valves">Valves & Flow Control</SelectItem>
-                            <SelectItem value="treatment">Water Treatment Systems</SelectItem>
-                            <SelectItem value="wastewater">Wastewater Treatment</SelectItem>
-                            <SelectItem value="blowers">Air Systems & Blowers</SelectItem>
-                            <SelectItem value="mixers">Mixers & Agitation</SelectItem>
-                            <SelectItem value="multiple">Multiple Equipment Types</SelectItem>
-                            <SelectItem value="unsure">Not Sure</SelectItem>
+                            <SelectItem value="Pumps & Pumping Systems">Pumps & Pumping Systems</SelectItem>
+                            <SelectItem value="Valves & Flow Control">Valves & Flow Control</SelectItem>
+                            <SelectItem value="Water Treatment Systems">Water Treatment Systems</SelectItem>
+                            <SelectItem value="Wastewater Treatment">Wastewater Treatment</SelectItem>
+                            <SelectItem value="Air Systems & Blowers">Air Systems & Blowers</SelectItem>
+                            <SelectItem value="Mixers & Agitation">Mixers & Agitation</SelectItem>
+                            <SelectItem value="Multiple Equipment Types">Multiple Equipment Types</SelectItem>
+                            <SelectItem value="Not Sure">Not Sure</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
                     <div>
                       <label className="text-sm font-medium text-brand">Timeline</label>
-                      <Select>
+                      <Select name="timeline">
                         <SelectTrigger>
                           <SelectValue placeholder="When do you need this completed?" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="immediate">Immediate (This Week)</SelectItem>
-                          <SelectItem value="urgent">Urgent (Within 2 Weeks)</SelectItem>
-                          <SelectItem value="month">Within 1 Month</SelectItem>
-                          <SelectItem value="quarter">Within 3 Months</SelectItem>
-                          <SelectItem value="planning">Planning Phase (6+ Months)</SelectItem>
-                          <SelectItem value="budget">Budget Planning Only</SelectItem>
+                          <SelectItem value="Immediate (This Week)">Immediate (This Week)</SelectItem>
+                          <SelectItem value="Urgent (Within 2 Weeks)">Urgent (Within 2 Weeks)</SelectItem>
+                          <SelectItem value="Within 1 Month">Within 1 Month</SelectItem>
+                          <SelectItem value="Within 3 Months">Within 3 Months</SelectItem>
+                          <SelectItem value="Planning Phase (6+ Months)">Planning Phase (6+ Months)</SelectItem>
+                          <SelectItem value="Budget Planning Only">Budget Planning Only</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="flex-1">
                       <label className="text-sm font-medium text-brand">Project Message *</label>
                       <Textarea
+                        name="message"
                         placeholder="- Describe your specific equipment needs&#10;- Project specifications or requirements&#10;- Current system issues (if any)&#10;- Any other important details..."
                         rows={5}
                         required
@@ -353,10 +415,11 @@ export default function ContactPage({ representatives, territoryInfo }: Props) {
                       * Required fields. By submitting this form, you agree to be contacted by
                       W-Cubed regarding your project inquiry.
                     </div>
-                    <Button className="w-full">
+                    <Button type="submit" className="w-full">
                       Submit Project Inquiry
                     </Button>
                   </form>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>

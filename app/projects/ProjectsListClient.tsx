@@ -67,7 +67,7 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
   return (
     <PageWrapper>
       {/* Hero */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
+      <section className="relative py-10 lg:py-14 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-accent/5" />
         <div className="container mx-auto px-4 lg:px-6 relative">
           <motion.div className="text-center space-y-6 max-w-4xl mx-auto" {...fadeInUp}>
@@ -78,7 +78,7 @@ export default function ProjectsListClient({ projects }: ProjectsListClientProps
               Project References
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Explore our completed water equipment projects across Utah, Idaho, and Wyoming.
+              Explore our completed water equipment projects across Utah, Nevada, Idaho, and Wyoming.
             </p>
           </motion.div>
         </div>
