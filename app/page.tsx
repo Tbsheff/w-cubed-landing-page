@@ -89,8 +89,8 @@ export default async function Page() {
       data.heroSlides
         ?.filter((slide) => slide?.image)
         .map((slide) => ({
-          image: slide.image ? urlForImage(slide.image).width(900).height(700).fit("max").url() : null,
-          alt: slide.alt,
+          image: slide.image ? urlForImage(slide.image).width(900).height(700).fit("max").url() ?? "" : "",
+          alt: slide.alt ?? "",
           tags: (slide.tags || []).filter(Boolean),
           slideLabel: slide.slideLabel,
           slideTitle: slide.slideTitle,
