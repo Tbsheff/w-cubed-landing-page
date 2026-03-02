@@ -53,17 +53,17 @@ const STATE_NAMES: Record<string, string> = {
 };
 
 const COLOR_PALETTE = [
-  "rgb(var(--brand))",
-  "rgb(var(--brand-deep))",
-  "rgb(var(--brand-accent))",
-  "rgb(var(--brand-light))",
+  "#0055a5", // industrial blue
+  "#0e7c6b", // teal
+  "#c06c00", // amber
+  "#6b4fa0", // plum
 ];
 
 const STATE_COLORS: Record<string, string> = {
-  UT: "rgb(var(--brand))",
-  NV: "rgb(var(--brand-deep))",
-  ID: "rgb(var(--brand-accent))",
-  WY: "rgb(var(--brand-light))",
+  UT: "#0055a5",
+  NV: "#0e7c6b",
+  ID: "#c06c00",
+  WY: "#6b4fa0",
 };
 
 const MAP_COLORS = {
@@ -564,7 +564,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       const isSelected = county.properties.id === selectedCountyId;
       const isHovered = county.properties.id === hoveredCountyId;
 
-      const opacity = isSelected ? 0.9 : isHovered ? 0.78 : 0.6;
+      const opacity = isSelected ? 0.92 : isHovered ? 0.82 : 0.72;
       const strokeWidth = isSelected ? 1.8 : isHovered ? 1.4 : 0.75;
       const strokeColor = isSelected
         ? MAP_COLORS.selectedStroke
@@ -1010,20 +1010,8 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
   );
 
   return (
-    <section ref={containerRef} className="relative py-16">
+    <section ref={containerRef} className="relative py-8 lg:py-10">
       <div className="container mx-auto px-4 lg:px-6">
-        <div className="mb-10 max-w-2xl">
-          <Badge variant="outline" className="border-brand/30 text-brand">
-            Interactive Coverage
-          </Badge>
-          <h2 className="mt-3 text-3xl font-bold text-brand md:text-4xl">
-            County-level Territory Explorer
-          </h2>
-          <p className="mt-2 text-lg text-muted-foreground">
-            Explore every county we serve across Utah, Nevada, Idaho, and Wyoming. Hover to preview,
-            search to find your area, and click a county for representative details.
-          </p>
-        </div>
 
         <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-8">
           <div

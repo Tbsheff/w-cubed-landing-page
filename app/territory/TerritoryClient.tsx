@@ -31,18 +31,18 @@ export default function TerritoryPage({
 }: TerritoryProps) {
   return (
     <PageWrapper>
-      {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
+      {/* Hero + Map — merged to reduce vertical space */}
+      <section className="relative pt-10 lg:pt-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-light/20 to-brand-light/5" />
         <div className="container mx-auto px-4 lg:px-6 relative">
-          <motion.div className="text-center space-y-6 max-w-4xl mx-auto" {...fadeInUp}>
+          <motion.div className="text-center space-y-4 max-w-3xl mx-auto mb-8" {...fadeInUp}>
             <Badge variant="outline" className="border-brand/30 text-brand">
               Service Territory
             </Badge>
-            <h1 className="text-4xl lg:text-6xl font-display font-extrabold uppercase tracking-wide text-brand">
+            <h1 className="text-3xl lg:text-5xl font-display font-extrabold uppercase tracking-wide text-brand">
               {heroTitle}
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{heroSubtitle}</p>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{heroSubtitle}</p>
           </motion.div>
         </div>
       </section>
