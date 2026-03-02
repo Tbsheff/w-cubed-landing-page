@@ -347,6 +347,9 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     }, {});
   }, [countiesMeta]);
 
+  const hasServedCoverage = useMemo(() => countiesMeta.some((county) => county.served), [countiesMeta]);
+  const showEmptyCoverageNotice = geographies.length > 0 && !hasServedCoverage;
+
   const statesByRep = useMemo(() => {
     const result: Record<string, string[]> = {};
     reps.forEach((rep) => {
@@ -651,6 +654,13 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
 
   const drawerContent = (
     <div className="space-y-6">
+      {showEmptyCoverageNotice && (
+        <div className="rounded-xl border border-amber-300/70 bg-amber-50 p-4 text-sm text-amber-900">
+          Territory coverage data is not configured in CMS yet. The map is available, but counties
+          are currently shown as unserved.
+        </div>
+      )}
+
       <div className="rounded-xl border border-brand/15 bg-brand/5 p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <span className="text-sm font-semibold text-brand">Color by</span>
@@ -943,7 +953,6 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                   onMoveEnd={(position: { coordinates: [number, number]; zoom: number }) => {
                     setViewState({ coordinates: position.coordinates, zoom: position.zoom });
                   }}
-                  zoomSensitivity={0.6}
                 >
                   <Geographies
                     geography={{
