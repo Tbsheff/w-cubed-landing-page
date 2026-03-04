@@ -93,20 +93,23 @@ async function main() {
     "\n2. Patching Pentair Fairbanks — remove 'Vortex Pumps' + new logo...",
   );
   const pentair = await client.fetch(
-    `*[_id == "manufacturer-pentair-fairbanks"][0]{ _id, keyProducts }`,
+    `*[_id == "manufacturer-pentair-fairbanks"][0]{ _id, keyProducts, logo }`,
   );
   if (pentair) {
     const updated = (pentair.keyProducts as string[]).filter(
       (p) => p !== "Vortex Pumps",
     );
-    const logoRef = await uploadImage(
-      resolve(homedir(), "Downloads/Pentair-Fairbanks-705x275.png"),
-      "pentair-fairbanks-logo.png",
-    );
-    await client
-      .patch("manufacturer-pentair-fairbanks")
-      .set({ keyProducts: updated, logo: logoRef })
-      .commit();
+    const patch = client.patch("manufacturer-pentair-fairbanks").set({ keyProducts: updated });
+    if (!pentair.logo?.asset?._ref) {
+      const logoRef = await uploadImage(
+        resolve(homedir(), "Downloads/Pentair-Fairbanks-705x275.png"),
+        "pentair-fairbanks-logo.png",
+      );
+      patch.set({ keyProducts: updated, logo: logoRef });
+    } else {
+      console.log("  Logo already uploaded — skipping");
+    }
+    await patch.commit();
     console.log(`  keyProducts: ${JSON.stringify(updated)}`);
   } else {
     console.warn("  Pentair Fairbanks document not found — skipping");
@@ -118,12 +121,17 @@ async function main() {
     `*[_id == "manufacturer-trillium-flow"][0]{ _id, keyProducts }`,
   );
   if (trillium) {
-    const updated = [...(trillium.keyProducts as string[]), "Grit Pumps"];
-    await client
-      .patch("manufacturer-trillium-flow")
-      .set({ keyProducts: updated })
-      .commit();
-    console.log(`  keyProducts: ${JSON.stringify(updated)}`);
+    const existing = trillium.keyProducts as string[];
+    if (existing.includes("Grit Pumps")) {
+      console.log("  'Grit Pumps' already present — skipping");
+    } else {
+      const updated = [...existing, "Grit Pumps"];
+      await client
+        .patch("manufacturer-trillium-flow")
+        .set({ keyProducts: updated })
+        .commit();
+      console.log(`  keyProducts: ${JSON.stringify(updated)}`);
+    }
   } else {
     console.warn("  Trillium Flow document not found — skipping");
   }

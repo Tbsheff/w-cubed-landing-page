@@ -400,7 +400,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights, 
                       </div>
                     </div>
                   </CardContent>
-                  <CardFooter className="mt-auto flex flex-col gap-2">
+                  <CardFooter className="mt-auto flex flex-col gap-2 items-stretch">
                     <Link href={`tel:+1${rep.phone.replace(/\D/g, "")}`} className="w-full">
                       <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
                         <Phone className="h-4 w-4 mr-2" /> Call
