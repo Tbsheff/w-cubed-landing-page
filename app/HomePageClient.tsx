@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Droplets,
@@ -379,7 +379,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights, 
                       {rep.role}
                     </Badge>
                   </CardHeader>
-                  <CardContent className="flex flex-1 flex-col space-y-4">
+                  <CardContent className="space-y-4">
                     <div className="space-y-2">
                       <div className="flex flex-wrap justify-center gap-1">
                         {rep.territories.map((territory) => (
@@ -399,19 +399,19 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights, 
                         <span>{rep.email}</span>
                       </div>
                     </div>
-                    <div className="mt-auto flex flex-col gap-2 pt-2">
-                      <Link href={`tel:+1${rep.phone.replace(/\D/g, "")}`}>
-                        <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
-                          <Phone className="h-4 w-4 mr-2" /> Call
-                        </Button>
-                      </Link>
-                      <Link href={`mailto:${rep.email}`}>
-                        <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
-                          <Mail className="h-4 w-4 mr-2" /> Email
-                        </Button>
-                      </Link>
-                    </div>
                   </CardContent>
+                  <CardFooter className="mt-auto flex flex-col gap-2">
+                    <Link href={`tel:+1${rep.phone.replace(/\D/g, "")}`} className="w-full">
+                      <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
+                        <Phone className="h-4 w-4 mr-2" /> Call
+                      </Button>
+                    </Link>
+                    <Link href={`mailto:${rep.email}`} className="w-full">
+                      <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
+                        <Mail className="h-4 w-4 mr-2" /> Email
+                      </Button>
+                    </Link>
+                  </CardFooter>
                 </Card>
               </motion.div>
             ))}
