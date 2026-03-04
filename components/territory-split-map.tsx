@@ -901,6 +901,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
             const isHighlighted = activeReps.some((r) => r.slug === rep.slug) || selectedReps.some((r) => r.slug === rep.slug);
             const totalCounties = countiesByRep[rep.slug]?.length ?? 0;
             const statesServed = (statesByRep[rep.slug] || []).join(" • ");
+            const hasTerritory = rep.servedStates.length > 0 || rep.servedCounties.length > 0;
 
             return (
               <div
@@ -937,11 +938,15 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                     <div className="flex flex-wrap items-center gap-2">
                       <p className="text-sm font-semibold text-brand">{rep.name}</p>
                       <Badge variant="outline" className="border-brand/20 text-xs text-brand">
-                        {totalCounties ? `${totalCounties} counties` : "Loading counties"}
+                        {hasTerritory
+                          ? totalCounties ? `${totalCounties} counties` : "Loading counties"
+                          : rep.role}
                       </Badge>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      {statesServed ? `Serving ${statesServed}` : "Coverage not specified"}
+                      {hasTerritory
+                        ? statesServed ? `Serving ${statesServed}` : "Coverage not specified"
+                        : "All Territories"}
                     </p>
                   </div>
                   <div className="flex flex-col gap-1 text-xs text-brand">
