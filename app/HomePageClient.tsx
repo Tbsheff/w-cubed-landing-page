@@ -358,16 +358,18 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
           >
             {territoryRepresentatives.map((rep) => (
               <motion.div key={rep.email} variants={fadeInUp}>
-                <Card className="text-center hover:shadow-lg transition-shadow h-full">
+                <Card className="flex flex-col text-center hover:shadow-lg transition-shadow h-full">
                   <CardHeader>
-                    <div className="relative w-16 h-16 mx-auto mb-4">
-                      <Image
-                        src={rep.image || "/placeholder.svg"}
-                        alt={rep.name}
-                        fill
-                        className="rounded-full object-cover"
-                      />
-                    </div>
+                    {rep.image && (
+                      <div className="relative w-16 h-16 mx-auto mb-4">
+                        <Image
+                          src={rep.image}
+                          alt={rep.name}
+                          fill
+                          className="rounded-full object-cover"
+                        />
+                      </div>
+                    )}
                     <CardTitle className="text-xl text-brand">{rep.name}</CardTitle>
                     <CardDescription className="text-brand-accent font-medium">
                       {rep.title}
@@ -376,7 +378,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                       {rep.role}
                     </Badge>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="flex flex-1 flex-col space-y-4">
                     <div className="space-y-2">
                       <div className="flex flex-wrap justify-center gap-1">
                         {rep.territories.map((territory) => (
@@ -396,7 +398,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
                         <span>{rep.email}</span>
                       </div>
                     </div>
-                    <div className="flex flex-col gap-2 pt-2">
+                    <div className="mt-auto flex flex-col gap-2 pt-2">
                       <Link href={`tel:+1${rep.phone.replace(/\D/g, "")}`}>
                         <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
                           <Phone className="h-4 w-4 mr-2" /> Call
