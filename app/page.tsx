@@ -1,6 +1,6 @@
 import HomePageClient from "./HomePageClient"
 import { sanityClient } from "@/lib/sanity.client"
-import { siteSettingsQuery } from "@/lib/sanity.queries"
+import { siteSettingsQuery, representativesQuery } from "@/lib/sanity.queries"
 import { urlForImage } from "@/lib/sanity.image"
 
 export const dynamic = "force-static"
@@ -37,8 +37,22 @@ type SiteSettingsResult = {
   }>
 }
 
+type RepResult = {
+  name: string
+  slug: string
+  role?: string | null
+  phone?: string | null
+  email?: string | null
+  states?: string[] | null
+  regions?: string | null
+  photo?: any
+}
+
 export default async function Page() {
-  const data = await sanityClient.fetch<SiteSettingsResult | null>(siteSettingsQuery)
+  const [data, repsRaw] = await Promise.all([
+    sanityClient.fetch<SiteSettingsResult | null>(siteSettingsQuery),
+    sanityClient.fetch<RepResult[]>(representativesQuery),
+  ])
 
   if (!data) throw new Error("CMS siteSettings missing")
 
@@ -75,6 +89,16 @@ export default async function Page() {
         detail: s.detail,
       })) || []
 
+  const representatives = (repsRaw || []).map((rep) => ({
+    name: rep.name,
+    title: rep.regions || "",
+    territories: rep.states || [],
+    phone: rep.phone || "",
+    email: rep.email || "",
+    role: rep.role || "",
+    image: rep.photo ? urlForImage(rep.photo).width(300).height(300).fit("crop").url() : undefined,
+  }))
+
   if (!data.heroTitle || !data.heroDescription) throw new Error("CMS hero content missing")
   if (!stats.length) throw new Error("CMS stats missing")
   if (!manufacturers.length) throw new Error("CMS manufacturers strip missing")
@@ -105,6 +129,7 @@ export default async function Page() {
       stats={stats}
       manufacturers={manufacturers}
       highlights={highlights}
+      representatives={representatives}
     />
   )
 }

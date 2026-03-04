@@ -18,7 +18,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { PageWrapper } from "@/components/page-wrapper";
-import { territoryRepresentatives } from "@/lib/representatives";
+import type { RepresentativeCard } from "@/lib/representatives";
 import { HeroSection } from "@/components/hero-section";
 import { PartnersStrip } from "@/components/partners-strip";
 
@@ -57,6 +57,7 @@ type HomePageProps = {
   stats?: StatItem[] | null;
   manufacturers?: ManufacturerStripItem[] | null;
   highlights?: HighlightItem[] | null;
+  representatives?: RepresentativeCard[] | null;
 };
 
 const fadeInUp = {
@@ -136,7 +137,7 @@ const defaultHero: HeroContent = {
   secondaryCta: { label: "View Manufacturers", href: "/manufacturers" },
 };
 
-export default function WCubedLanding({ hero, stats, manufacturers, highlights }: HomePageProps) {
+export default function WCubedLanding({ hero, stats, manufacturers, highlights, representatives }: HomePageProps) {
   const heroData = { ...defaultHero, ...(hero || {}) };
 
   const heroSlidesData: HeroSlide[] =
@@ -356,7 +357,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights }
             whileInView="animate"
             viewport={{ once: true }}
           >
-            {territoryRepresentatives.map((rep) => (
+            {(representatives || []).map((rep) => (
               <motion.div key={rep.email} variants={fadeInUp}>
                 <Card className="flex flex-col text-center hover:shadow-lg transition-shadow h-full">
                   <CardHeader>
