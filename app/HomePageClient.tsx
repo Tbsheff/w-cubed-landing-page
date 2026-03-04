@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Droplets,
@@ -358,61 +358,60 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights, 
             viewport={{ once: true }}
           >
             {(representatives || []).map((rep) => (
-              <motion.div key={rep.email} variants={fadeInUp} style={{ display: "flex" }}>
-                <Card className="flex flex-1 flex-col text-center hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    {rep.image && (
-                      <div className="relative w-16 h-16 mx-auto mb-4">
-                        <Image
-                          src={rep.image}
-                          alt={rep.name}
-                          fill
-                          className="rounded-full object-cover"
-                        />
-                      </div>
-                    )}
-                    <CardTitle className="text-xl text-brand">{rep.name}</CardTitle>
-                    <CardDescription className="text-brand-accent font-medium">
-                      {rep.title}
-                    </CardDescription>
-                    <Badge variant="secondary" className="mt-2 mx-auto">
-                      {rep.role}
+              <motion.div
+                key={rep.email}
+                variants={fadeInUp}
+                className="row-span-6 grid-rows-subgrid gap-y-3 rounded-lg border bg-card text-card-foreground shadow-sm text-center hover:shadow-lg transition-shadow p-6"
+                style={{ display: "grid" }}
+              >
+                <div className="text-xl font-semibold leading-none tracking-tight text-brand">
+                  {rep.image && (
+                    <div className="relative w-16 h-16 mx-auto mb-2">
+                      <Image
+                        src={rep.image}
+                        alt={rep.name}
+                        fill
+                        className="rounded-full object-cover"
+                      />
+                    </div>
+                  )}
+                  {rep.name}
+                </div>
+                <div className="text-sm text-brand-accent font-medium">
+                  {rep.title}
+                </div>
+                <div>
+                  <Badge variant="secondary">{rep.role}</Badge>
+                </div>
+                <div className="flex flex-wrap justify-center gap-1">
+                  {rep.territories.map((territory) => (
+                    <Badge key={territory} variant="outline" className="text-xs">
+                      {territory}
                     </Badge>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex flex-wrap justify-center gap-1">
-                        {rep.territories.map((territory) => (
-                          <Badge key={territory} variant="outline" className="text-xs">
-                            {territory}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center justify-center gap-2 text-brand">
-                        <Phone className="h-4 w-4 text-brand-accent" />
-                        <span>{rep.phone}</span>
-                      </div>
-                      <div className="flex items-center justify-center gap-2 text-brand">
-                        <Mail className="h-4 w-4 text-brand-accent" />
-                        <span>{rep.email}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="mt-auto flex flex-col gap-2 items-stretch">
-                    <Link href={`tel:+1${rep.phone.replace(/\D/g, "")}`} className="w-full">
-                      <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
-                        <Phone className="h-4 w-4 mr-2" /> Call
-                      </Button>
-                    </Link>
-                    <Link href={`mailto:${rep.email}`} className="w-full">
-                      <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
-                        <Mail className="h-4 w-4 mr-2" /> Email
-                      </Button>
-                    </Link>
-                  </CardFooter>
-                </Card>
+                  ))}
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center justify-center gap-2 text-brand">
+                    <Phone className="h-4 w-4 text-brand-accent" />
+                    <span>{rep.phone}</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-2 text-brand">
+                    <Mail className="h-4 w-4 text-brand-accent" />
+                    <span>{rep.email}</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Link href={`tel:+1${rep.phone.replace(/\D/g, "")}`} className="w-full">
+                    <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
+                      <Phone className="h-4 w-4 mr-2" /> Call
+                    </Button>
+                  </Link>
+                  <Link href={`mailto:${rep.email}`} className="w-full">
+                    <Button variant="outline" size="sm" className="w-full shadow-none hover:shadow-none hover:translate-y-0 normal-case tracking-normal">
+                      <Mail className="h-4 w-4 mr-2" /> Email
+                    </Button>
+                  </Link>
+                </div>
               </motion.div>
             ))}
           </motion.div>
