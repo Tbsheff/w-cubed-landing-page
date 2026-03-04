@@ -358,7 +358,7 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights, 
             viewport={{ once: true }}
           >
             {(representatives || []).map((rep) => (
-              <motion.div key={rep.email} variants={fadeInUp}>
+              <motion.div key={rep.email} variants={fadeInUp} className="h-full">
                 <Card className="flex flex-col text-center hover:shadow-lg transition-shadow h-full">
                   <CardHeader>
                     {rep.image && (
