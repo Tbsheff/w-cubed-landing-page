@@ -16,7 +16,6 @@ export const territoryRepresentatives: RepresentativeCard[] = [
     phone: "801-232-8241",
     email: "Bradg@wcubedinc.com",
     role: "Utah, Nevada",
-    image: "/placeholder.svg?height=300&width=300&text=Brad+Gwinnup",
   },
   {
     name: "Austin Gwinnup",
@@ -25,7 +24,6 @@ export const territoryRepresentatives: RepresentativeCard[] = [
     phone: "801-803-8558",
     email: "Austing@wcubedinc.com",
     role: "Idaho, Wyoming",
-    image: "/placeholder.svg?height=300&width=300&text=Austin+Gwinnup",
   },
   {
     name: "Cason Gwinnup",
@@ -34,7 +32,6 @@ export const territoryRepresentatives: RepresentativeCard[] = [
     phone: "801-664-2438",
     email: "Casong@wcubedinc.com",
     role: "Aftermarket Sales",
-    image: "/placeholder.svg?height=300&width=300&text=Cason+Gwinnup",
   },
   {
     name: "Robert Haws",
@@ -43,6 +40,5 @@ export const territoryRepresentatives: RepresentativeCard[] = [
     phone: "385-270-6128",
     email: "Roberth@wcubedinc.com",
     role: "Parts",
-    image: "/placeholder.svg?height=300&width=300&text=Robert+Haws",
   },
 ]
