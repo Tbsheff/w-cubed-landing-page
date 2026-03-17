@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "account_id": "7b4d79c6d0d2404264c6c04ab5e2e613",
+  "account_id": "fdfbbbd15b6f56adc45eba38698ac2eb",
   "main": ".open-next/worker.js",
   "name": "w-cubed-landing-page",
   "compatibility_date": "2026-03-01",
