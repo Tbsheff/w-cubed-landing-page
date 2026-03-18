@@ -5,6 +5,7 @@ import { urlForImage } from "@/lib/sanity.image"
 import { notFound } from "next/navigation"
 
 export const dynamic = "force-static"
+export const dynamicParams = false
 
 type ManufacturerResult = {
   slug: string
@@ -55,4 +56,3 @@ export default async function ManufacturerPage({
 
   return <ManufacturerDetailClient manufacturer={manufacturer} />
 }
-

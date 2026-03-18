@@ -1,11 +1,12 @@
 # W-Cubed Landing Page
 
-A modern, responsive landing page for W-Cubed - Mountain West's premier water equipment representative, built with Next.js 14, TypeScript, and Tailwind CSS.
+A modern, responsive landing page for W-Cubed - Mountain West's premier water equipment representative, built with Next.js 16, TypeScript, and Tailwind CSS.
 
 ## Features
 
-- **Modern Tech Stack**: Next.js 14, React 18, TypeScript, Tailwind CSS
+- **Modern Tech Stack**: Next.js 16, React 19, TypeScript, Tailwind CSS
 - **CMS Integration**: Sanity CMS for dynamic content management
+- **Static Public Build**: Uses Next.js static export to generate deployable artifacts in `out/`
 - **Responsive Design**: Mobile-first approach with Framer Motion animations
 - **Component Library**: Radix UI components with shadcn/ui styling
 - **Interactive Territory Map**: Visual representation of service areas
@@ -51,10 +52,35 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 |--------|------------|
 | `pnpm dev` | Start the development server |
 | `pnpm build` | Build the production application |
+| `pnpm build:static` | Build static-export output into `out/` |
+| `pnpm pages:dev` | Build static output and serve it locally with Wrangler Pages |
+| `pnpm pages:deploy` | Build static output and deploy to Cloudflare Pages |
+| `pnpm pages:project:create` | Create the Cloudflare Pages project (one-time) |
+| `pnpm pages:project:list` | List Cloudflare Pages projects for the configured account |
 | `pnpm start` | Start the production server |
 | `pnpm lint` | Run ESLint for code quality |
 | `pnpm typecheck` | Run TypeScript type checking |
 | `pnpm clean` | Remove build cache and node_modules |
+
+## Static Public Site
+
+The public marketing site can be deployed as fully static artifacts:
+
+1. Run `pnpm build:static`
+2. Deploy the generated `out/` directory to Cloudflare Pages (`pnpm pages:deploy`)
+
+Wrangler setup:
+- `wrangler.jsonc` is configured for Pages with `pages_build_output_dir: "out"`.
+- Set `CLOUDFLARE_ACCOUNT_ID` in your shell/CI for non-interactive deploys.
+- Create the project once via `pnpm pages:project:create`.
+- Authenticate Wrangler with `wrangler login` before first deploy.
+
+Notes:
+- The static build uses native Next.js `output: 'export'`.
+- Public content is baked at build time from Sanity.
+- CMS updates should trigger a new deploy (webhook -> CI/CD), not runtime revalidation.
+- Sanity Studio/admin is intentionally excluded from this static app and should be deployed separately.
+- If the projects collection is empty, the export emits a placeholder detail route (`/projects/__no-projects__`) that resolves to 404.
 
 ## Project Structure
 
@@ -95,7 +121,7 @@ It performs:
 ## Technology Stack
 
 ### Frontend
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **Components**: Radix UI + shadcn/ui

@@ -5,14 +5,24 @@ import { notFound } from 'next/navigation'
 import { urlForImage } from '@/lib/sanity.image'
 
 export const dynamic = 'force-static'
+export const dynamicParams = false
+const EMPTY_PROJECT_SENTINEL = "__no-projects__"
 
 export async function generateStaticParams() {
     const slugs: Array<{ slug: string }> = await sanityClient.fetch(allProjectSlugsQuery)
+    if (slugs.length === 0) {
+        return [{ slug: EMPTY_PROJECT_SENTINEL }]
+    }
+
     return slugs.map(({ slug }) => ({ slug }))
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params
+
+    if (slug === EMPTY_PROJECT_SENTINEL) {
+        return notFound()
+    }
 
     type ProjectResult = {
         title: string
@@ -41,5 +51,3 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
     return <ProjectClient project={project} />
 }
-
-

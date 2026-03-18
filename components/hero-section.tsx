@@ -1,9 +1,5 @@
-"use client";
-
-import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type HeroSlide = {
   image: string;
@@ -22,32 +18,14 @@ type HeroContent = {
   secondaryCta?: { label?: string | null; href?: string | null } | null;
 };
 
-const defaultSlideMetadata = [
-  { label: "Application Focus", title: "Municipal Treatment" },
-  { label: "Application Focus", title: "Wastewater Pumping" },
-  { label: "Application Focus", title: "Industrial Pretreatment" },
-];
+const defaultSlideMetadata = [{ label: "Application Focus", title: "Municipal Treatment" }];
 
 export function HeroSection({ hero }: { hero: HeroContent }) {
   const slides = hero.heroSlides ?? [];
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const goNext = useCallback(() => {
-    if (slides.length <= 1) return;
-    setActiveIndex((prev) => (prev + 1) % slides.length);
-  }, [slides.length]);
-
-  const goPrev = useCallback(() => {
-    if (slides.length <= 1) return;
-    setActiveIndex((prev) => (prev - 1 + slides.length) % slides.length);
-  }, [slides.length]);
-
-  // Auto-rotate slideshow every 6s — necessary external timer sync
-  useEffect(() => {
-    if (slides.length <= 1) return;
-    const interval = setInterval(goNext, 6000);
-    return () => clearInterval(interval);
-  }, [slides.length, goNext, activeIndex]);
+  const activeSlide = slides[0];
+  const activeMeta = defaultSlideMetadata[0];
+  const activeLabel = activeSlide?.slideLabel || activeMeta.label;
+  const activeTitle = activeSlide?.slideTitle || activeMeta.title;
 
   // Split title on first newline for two-line treatment
   const titleLines = hero.title?.split("\n") ?? [];
@@ -85,6 +63,7 @@ export function HeroSection({ hero }: { hero: HeroContent }) {
               {hero.primaryCta?.href && hero.primaryCta?.label && (
                 <Link
                   href={hero.primaryCta.href}
+                  prefetch={false}
                   className="inline-flex items-center justify-center px-9 py-[18px] bg-brand-accent text-white font-bold text-base uppercase tracking-wider rounded-sm shadow-[0_4px_0_rgb(var(--brand))] hover:translate-y-[2px] hover:shadow-[0_2px_0_rgb(var(--brand))] hover:bg-brand transition-all"
                 >
                   {hero.primaryCta.label}
@@ -93,6 +72,7 @@ export function HeroSection({ hero }: { hero: HeroContent }) {
               {hero.secondaryCta?.href && hero.secondaryCta?.label && (
                 <Link
                   href={hero.secondaryCta.href}
+                  prefetch={false}
                   className="inline-flex items-center justify-center px-9 py-[18px] bg-white text-brand font-bold text-base uppercase tracking-wider rounded-sm border-2 border-brand shadow-[0_4px_0_rgb(var(--brand))] hover:translate-y-[2px] hover:shadow-[0_2px_0_rgb(var(--brand))] hover:bg-brand-light transition-all"
                 >
                   {hero.secondaryCta.label}
@@ -101,71 +81,38 @@ export function HeroSection({ hero }: { hero: HeroContent }) {
             </div>
           </div>
 
-          {/* Right Column — Framed Slideshow */}
+          {/* Right Column — Framed Hero Visual */}
           <div className="relative">
             {/* Territory Badge */}
             <div className="absolute -top-4 -right-4 lg:right-[-16px] bg-brand-accent text-white px-5 py-3 shadow-lg text-center z-20 border-2 border-white rounded-sm">
-              <div className="text-[10px] font-bold uppercase tracking-widest opacity-90">
-                Coverage
-              </div>
-              <div className="font-display text-xl font-extrabold tracking-wider">
-                UT &bull; ID &bull; NV &bull; WY
-              </div>
+              <div className="text-[10px] font-bold uppercase tracking-widest opacity-90">Coverage</div>
+              <div className="font-display text-xl font-extrabold tracking-wider">UT &bull; ID &bull; NV &bull; WY</div>
             </div>
 
             {/* Visual Frame */}
             <div className="bg-white border-2 border-gray-200 p-3 shadow-[0_20px_40px_rgba(0,0,0,0.08)]">
               <div className="relative bg-brand aspect-[4/3] overflow-hidden border border-brand">
-                {/* Slides */}
-                {slides.map((slide, index) => {
-                  const meta = defaultSlideMetadata[index] ?? defaultSlideMetadata[0];
-                  const label = slide.slideLabel || meta.label;
-                  const title = slide.slideTitle || meta.title;
-
-                  return (
-                    <div
-                      key={index}
-                      className={`absolute inset-0 transition-opacity duration-500 ease-in-out flex items-end ${
-                        index === activeIndex ? "opacity-100 z-10" : "opacity-0 z-0"
-                      }`}
-                    >
-                      <Image
-                        src={slide.image}
-                        alt={slide.alt}
-                        fill
-                        sizes="(min-width: 1024px) 600px, 100vw"
-                        className="object-cover"
-                      />
-                      {/* Caption Plate */}
-                      <div className="relative z-10 w-full bg-brand/95 border-t-[3px] border-brand-yellow px-6 py-5">
-                        <div className="text-[11px] uppercase tracking-widest font-bold text-brand-light/70 mb-1">
-                          {label}
-                        </div>
-                        <div className="font-display text-2xl font-bold text-white leading-none">
-                          {title}
-                        </div>
+                {activeSlide && (
+                  <div className="absolute inset-0 flex items-end">
+                    <Image
+                      src={activeSlide.image}
+                      alt={activeSlide.alt}
+                      fill
+                      priority
+                      fetchPriority="high"
+                      loading="eager"
+                      sizes="(min-width: 1280px) 620px, (min-width: 1024px) 560px, 92vw"
+                      className="object-cover"
+                    />
+                    {/* Caption Plate */}
+                    <div className="relative z-10 w-full bg-brand/95 border-t-[3px] border-brand-yellow px-6 py-5">
+                      <div className="text-[11px] uppercase tracking-widest font-bold text-brand-light/70 mb-1">
+                        {activeLabel}
+                      </div>
+                      <div className="font-display text-2xl font-bold text-white leading-none">
+                        {activeTitle}
                       </div>
                     </div>
-                  );
-                })}
-
-                {/* Slide Controls */}
-                {slides.length > 1 && (
-                  <div className="absolute bottom-6 right-6 z-20 flex gap-2">
-                    <button
-                      onClick={goPrev}
-                      className="w-11 h-11 bg-white text-brand flex items-center justify-center rounded-sm hover:bg-brand-accent hover:text-white transition-colors"
-                      aria-label="Previous slide"
-                    >
-                      <ChevronLeft className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={goNext}
-                      className="w-11 h-11 bg-white text-brand flex items-center justify-center rounded-sm hover:bg-brand-accent hover:text-white transition-colors"
-                      aria-label="Next slide"
-                    >
-                      <ChevronRight className="h-5 w-5" />
-                    </button>
                   </div>
                 )}
               </div>
