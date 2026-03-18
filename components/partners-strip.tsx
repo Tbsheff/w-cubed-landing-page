@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,7 +5,10 @@ type ManufacturerItem = { id: string; name: string; logo: string };
 
 export function PartnersStrip({ manufacturers }: { manufacturers: ManufacturerItem[] }) {
   return (
-    <section className="bg-white py-16">
+    <section
+      className="bg-white py-16"
+      style={{ contentVisibility: "auto", containIntrinsicSize: "1px 420px" }}
+    >
       <div className="container mx-auto px-4 lg:px-6">
         {/* Header with yellow underline accent */}
         <div className="text-center mb-12">
@@ -23,6 +24,7 @@ export function PartnersStrip({ manufacturers }: { manufacturers: ManufacturerIt
             <Link
               key={m.id}
               href={`/manufacturers/${m.id}`}
+              prefetch={false}
               className="transition-all duration-200"
             >
               {m.id === "veolia-suez" ? (
@@ -32,13 +34,15 @@ export function PartnersStrip({ manufacturers }: { manufacturers: ManufacturerIt
                     alt="Veolia logo"
                     width={120}
                     height={80}
+                    sizes="120px"
                     className="h-12 w-auto object-contain"
                   />
                   <Image
-                    src="/manufacturers/suez-logo.png"
+                    src="/manufacturers/suez-logo.webp"
                     alt="Suez logo"
                     width={100}
                     height={70}
+                    sizes="100px"
                     className="h-10 w-auto object-contain"
                   />
                 </div>
@@ -48,6 +52,7 @@ export function PartnersStrip({ manufacturers }: { manufacturers: ManufacturerIt
                   alt={`${m.name} logo`}
                   width={180}
                   height={90}
+                  sizes="(max-width: 768px) 36vw, 180px"
                   className="object-contain max-h-12 w-auto grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-200"
                 />
               )}

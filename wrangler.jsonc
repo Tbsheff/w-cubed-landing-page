@@ -1,12 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "account_id": "fdfbbbd15b6f56adc45eba38698ac2eb",
-  "main": ".open-next/worker.js",
   "name": "w-cubed-landing-page",
-  "compatibility_date": "2026-03-01",
-  "compatibility_flags": ["nodejs_compat"],
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
-  }
+  "compatibility_date": "2026-03-18",
+  "pages_build_output_dir": "out"
 }

@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { urlForImage } from '@/lib/sanity.image'
 
 export const dynamic = 'force-static'
+export const dynamicParams = false
 
 export async function generateStaticParams() {
   const slugs: Array<{ slug: string }> = await sanityClient.fetch(allPostSlugsQuery)

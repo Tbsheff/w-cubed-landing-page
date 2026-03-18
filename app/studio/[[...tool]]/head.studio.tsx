@@ -1,4 +1,3 @@
-// Provide the default head metadata for the Studio route.
 import { metadata as studioMetadata, viewport as studioViewport } from "next-sanity/studio";
 
 const viewportContent = [

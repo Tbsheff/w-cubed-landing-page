@@ -4,13 +4,20 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "build:static": "NEXT_OUTPUT_MODE=export next build",
     "clean": "rm -rf .next .open-next node_modules",
     "dev": "next dev",
-    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint . --max-warnings=0",
+    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint app components lib sanity next.config.mjs postcss.config.mjs sanity.config.ts sanity.cli.ts tailwind.config.ts --max-warnings=0",
+    "pages:dev": "pnpm build:static && CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:?Set CLOUDFLARE_ACCOUNT_ID} wrangler pages dev out --port 8788",
+    "pages:deploy": "pnpm build:static && CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:?Set CLOUDFLARE_ACCOUNT_ID} wrangler pages deploy out --project-name w-cubed-landing-page",
+    "pages:project:create": "CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:?Set CLOUDFLARE_ACCOUNT_ID} wrangler pages project create w-cubed-landing-page",
+    "pages:project:list": "CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:?Set CLOUDFLARE_ACCOUNT_ID} wrangler pages project list --json",
+    "studio:dev": "pnpm exec sanity dev --host 0.0.0.0 --port 3333",
+    "studio:deploy": "pnpm exec sanity deploy",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+    "preview": "pnpm pages:dev",
+    "deploy": "pnpm pages:deploy"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
