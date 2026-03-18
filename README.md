@@ -74,6 +74,7 @@ The public marketing site can be deployed as fully static artifacts:
 Wrangler setup:
 - `wrangler.jsonc` is configured for Pages with `pages_build_output_dir: "out"`.
 - Set `CLOUDFLARE_ACCOUNT_ID` in your shell/CI for non-interactive deploys.
+- Pages scripts fail fast if `CLOUDFLARE_ACCOUNT_ID` is missing to prevent accidental deploys to the wrong account.
 - Create the project once via `pnpm pages:project:create`.
 - Authenticate Wrangler with `wrangler login` before first deploy.
 
