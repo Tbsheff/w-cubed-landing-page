@@ -12,6 +12,8 @@
     "pages:deploy": "pnpm build:static && CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:-7b4d79c6d0d2404264c6c04ab5e2e613} wrangler pages deploy out --project-name w-cubed-landing-page",
     "pages:project:create": "CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:-7b4d79c6d0d2404264c6c04ab5e2e613} wrangler pages project create w-cubed-landing-page",
     "pages:project:list": "CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:-7b4d79c6d0d2404264c6c04ab5e2e613} wrangler pages project list --json",
+    "studio:dev": "pnpm exec sanity dev --host 0.0.0.0 --port 3333",
+    "studio:deploy": "pnpm exec sanity deploy",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "preview": "pnpm pages:dev",

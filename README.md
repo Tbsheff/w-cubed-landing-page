@@ -57,6 +57,8 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 | `pnpm pages:deploy` | Build static output and deploy to Cloudflare Pages |
 | `pnpm pages:project:create` | Create the Cloudflare Pages project (one-time) |
 | `pnpm pages:project:list` | List Cloudflare Pages projects for the configured account |
+| `pnpm studio:dev` | Run Sanity Studio locally on port 3333 |
+| `pnpm studio:deploy` | Deploy Sanity Studio to Sanity-hosted Studio |
 | `pnpm start` | Start the production server |
 | `pnpm lint` | Run ESLint for code quality |
 | `pnpm typecheck` | Run TypeScript type checking |
@@ -79,7 +81,8 @@ Notes:
 - The static build uses native Next.js `output: 'export'`.
 - Public content is baked at build time from Sanity.
 - CMS updates should trigger a new deploy (webhook -> CI/CD), not runtime revalidation.
-- Sanity Studio/admin is intentionally excluded from this static app and should be deployed separately.
+- `/studio` is available in normal Next runtime (`pnpm dev` / `pnpm build`) for authoring.
+- In static export mode, Studio is intentionally disabled in the public artifact and should be hosted separately (`pnpm studio:deploy`).
 - If the projects collection is empty, the export emits a placeholder detail route (`/projects/__no-projects__`) that resolves to 404.
 
 ## Project Structure
