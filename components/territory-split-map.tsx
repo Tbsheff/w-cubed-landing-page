@@ -191,7 +191,13 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
 
     for (const rep of reps) {
       const keys = new Set<string>();
+      const statesWithCountyOverrides = new Set(
+        (rep.servedCounties || []).map((c) => c.state).filter(Boolean)
+      );
       for (const stateCode of rep.servedStates) {
+        if (statesWithCountyOverrides.has(stateCode)) {
+          continue;
+        }
         for (const cn of countiesByState.get(stateCode) || []) {
           keys.add(`${stateCode}:${cn}`);
         }
@@ -312,7 +318,13 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       const coverage = new Map<string, Set<string>>();
       for (const rep of reps) {
         const keys = new Set<string>();
+        const statesWithCountyOverrides = new Set(
+          (rep.servedCounties || []).map((c) => c.state).filter(Boolean)
+        );
         for (const sc of rep.servedStates) {
+          if (statesWithCountyOverrides.has(sc)) {
+            continue;
+          }
           for (const cn of countiesByState.get(sc) || []) keys.add(`${sc}:${cn}`);
         }
         for (const c of rep.servedCounties) {
