@@ -64,6 +64,19 @@ export default defineType({
             defineField({ name: 'state', title: 'State Code', type: 'string' }),
             defineField({ name: 'county', title: 'County Name', type: 'string' }),
           ],
+          preview: {
+            select: {
+              state: 'state',
+              county: 'county',
+            },
+            prepare({ state, county }) {
+              const stateCode = state || 'State'
+              const countyName = county || 'County'
+              return {
+                title: `${stateCode} - ${countyName}`,
+              }
+            },
+          },
         },
       ],
       description: 'Specific counties served (optional, for partial state coverage)',
