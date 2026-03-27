@@ -192,7 +192,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     for (const rep of reps) {
       const keys = new Set<string>();
       const statesWithCountyOverrides = new Set(
-        (rep.servedCounties || []).map((c) => c.state).filter(Boolean)
+        (rep.servedCounties || []).map((c) => c.state).filter(Boolean),
       );
       for (const stateCode of rep.servedStates) {
         if (statesWithCountyOverrides.has(stateCode)) {
@@ -219,7 +219,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       }
       return slugs;
     },
-    [repCoverageMap]
+    [repCoverageMap],
   );
 
   useEffect(() => {
@@ -231,7 +231,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
           observer.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
 
     if (containerRef.current) {
@@ -274,7 +274,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       const { feature } = topoClient;
       const countyCollection = feature(
         topoJson,
-        topoJson.objects.counties
+        topoJson.objects.counties,
       ) as unknown as FeatureCollection<Geometry | null, { name: string }>;
 
       if (!isMounted) return;
@@ -282,7 +282,13 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       const allowed = new Set(allowedStates.map(normalizeState));
 
       // Pass 1: filter to allowed states and collect counties per state
-      type BasicFeature = { geometry: Geometry; stateAlpha: string; countyName: string; id: string; fips: string };
+      type BasicFeature = {
+        geometry: Geometry;
+        stateAlpha: string;
+        countyName: string;
+        id: string;
+        fips: string;
+      };
       const basics: BasicFeature[] = [];
       const countiesByState = new Map<string, string[]>();
 
@@ -311,7 +317,13 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         if (!countiesByState.has(stateAlpha)) countiesByState.set(stateAlpha, []);
         countiesByState.get(stateAlpha)!.push(cn);
 
-        basics.push({ geometry: featureItem.geometry, stateAlpha, countyName, id: `${stateAlpha}:${countyName}`, fips });
+        basics.push({
+          geometry: featureItem.geometry,
+          stateAlpha,
+          countyName,
+          id: `${stateAlpha}:${countyName}`,
+          fips,
+        });
       }
 
       // Build coverage map: expand state wildcards → explicit county keys
@@ -319,7 +331,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       for (const rep of reps) {
         const keys = new Set<string>();
         const statesWithCountyOverrides = new Set(
-          (rep.servedCounties || []).map((c) => c.state).filter(Boolean)
+          (rep.servedCounties || []).map((c) => c.state).filter(Boolean),
         );
         for (const sc of rep.servedStates) {
           if (statesWithCountyOverrides.has(sc)) {
@@ -392,7 +404,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       const center = geoCentroid(featureItem) as [number, number];
       const repSlugs = determineRepsForCounty(
         featureItem.properties.state,
-        featureItem.properties.county
+        featureItem.properties.county,
       );
       const served = repSlugs.length > 0;
 
@@ -420,7 +432,10 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
     }, {});
   }, [countiesMeta]);
 
-  const hasServedCoverage = useMemo(() => countiesMeta.some((county) => county.served), [countiesMeta]);
+  const hasServedCoverage = useMemo(
+    () => countiesMeta.some((county) => county.served),
+    [countiesMeta],
+  );
   const showEmptyCoverageNotice = geographies.length > 0 && !hasServedCoverage;
 
   const statesByRep = useMemo(() => {
@@ -502,7 +517,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         });
       }
     },
-    [countiesMeta, viewState]
+    [countiesMeta, viewState],
   );
 
   const handleHoverCounty = useCallback(
@@ -520,13 +535,13 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
 
       setHoveredCountyId(countyId);
     },
-    [countiesMeta]
+    [countiesMeta],
   );
 
   const handleStateChipClick = useCallback(
     (stateCode: string) => {
       const countiesForState = countiesMeta.filter(
-        (county) => county.state === stateCode && county.served
+        (county) => county.state === stateCode && county.served,
       );
       if (!countiesForState.length) {
         return;
@@ -538,7 +553,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
           acc[1] += county.center[1];
           return acc;
         },
-        [0, 0]
+        [0, 0],
       );
 
       const center: [number, number] = [
@@ -552,7 +567,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       setActiveStateCode(stateCode);
       setViewState({ coordinates: center, zoom: 2.2 });
     },
-    [countiesMeta, viewState]
+    [countiesMeta, viewState],
   );
 
   const resetSelection = useCallback(() => {
@@ -573,7 +588,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       handleSelectCounty(filteredSearchResults[0].id);
       setSearchQuery("");
     },
-    [filteredSearchResults, handleSelectCounty]
+    [filteredSearchResults, handleSelectCounty],
   );
 
   const mapStyles = useCallback(
@@ -649,7 +664,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         },
       };
     },
-    [colorMode, hoveredCountyId, repColorMap, selectedCountyId]
+    [colorMode, hoveredCountyId, repColorMap, selectedCountyId],
   );
 
   const handleMapMouseMove = useCallback(
@@ -658,9 +673,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         clearTimeout(tooltipHideTimeout.current);
         tooltipHideTimeout.current = null;
       }
-      const repNames = county.properties.repSlugs
-        .map((s) => repBySlug[s]?.name)
-        .filter(Boolean);
+      const repNames = county.properties.repSlugs.map((s) => repBySlug[s]?.name).filter(Boolean);
       setTooltip({
         content: county.properties.served
           ? `${county.properties.county} County • ${county.properties.state} • ${
@@ -676,7 +689,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         setHoveredCountyId(null);
       }
     },
-    [handleHoverCounty, repBySlug]
+    [handleHoverCounty, repBySlug],
   );
 
   const handleMapMouseLeave = useCallback(() => {
@@ -701,7 +714,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         handleSelectCounty(county.properties.id);
       }
     },
-    [handleSelectCounty]
+    [handleSelectCounty],
   );
 
   const zoomIn = useCallback(() => {
@@ -729,7 +742,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
           acc[1] += county.center[1];
           return acc;
         },
-        [0, 0]
+        [0, 0],
       );
 
       const center: [number, number] = [
@@ -743,7 +756,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       setActiveStateCode(null);
       setViewState({ coordinates: center, zoom: 2.0 });
     },
-    [countiesByRep, viewState]
+    [countiesByRep, viewState],
   );
 
   const clearSearch = useCallback(() => {
@@ -760,7 +773,9 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
       seen.add(key);
       patterns.push({
         id: `stripe-${key}`,
-        colors: [...county.repSlugs].sort().map((s) => repColorMap.get(s) || MAP_COLORS.fallbackServedFill),
+        colors: [...county.repSlugs]
+          .sort()
+          .map((s) => repColorMap.get(s) || MAP_COLORS.fallbackServedFill),
       });
     }
     return patterns;
@@ -798,7 +813,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                   "rounded-full border-brand/30 px-3",
                   colorMode === item.value
                     ? "bg-brand text-white hover:bg-brand/90"
-                    : "bg-white/70 text-brand hover:bg-brand/10"
+                    : "bg-white/70 text-brand hover:bg-brand/10",
                 )}
               >
                 {item.label}
@@ -818,7 +833,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
               className={clsx(
                 activeStateCode === state.code
                   ? "bg-brand text-white hover:bg-brand/90"
-                  : "border-brand/20 bg-white/70 text-brand hover:bg-brand/10"
+                  : "border-brand/20 bg-white/70 text-brand hover:bg-brand/10",
               )}
             >
               {state.code}
@@ -852,11 +867,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         )}
         {debouncedSearch && filteredSearchResults.length > 0 && (
           <div className="mt-3 rounded-lg border border-brand/10 bg-white shadow-sm">
-            <ul
-              role="list"
-              aria-label="County search results"
-              className="max-h-64 overflow-y-auto"
-            >
+            <ul role="list" aria-label="County search results" className="max-h-64 overflow-y-auto">
               {filteredSearchResults.map((county) => (
                 <li key={county.id}>
                   <button
@@ -865,7 +876,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                       "flex w-full items-center justify-between gap-4 px-3 py-2 text-left focus:outline-none",
                       county.served
                         ? "hover:bg-brand/5 focus:bg-brand/10"
-                        : "hover:bg-muted/50 focus:bg-muted/60"
+                        : "hover:bg-muted/50 focus:bg-muted/60",
                     )}
                     onClick={() => {
                       handleSelectCounty(county.id);
@@ -876,10 +887,12 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                     onFocus={() => county.served && handleHoverCounty(county.id)}
                     onBlur={() => handleHoverCounty(null)}
                   >
-                    <span className={clsx(
-                      "text-sm font-medium",
-                      county.served ? "text-brand" : "text-muted-foreground"
-                    )}>
+                    <span
+                      className={clsx(
+                        "text-sm font-medium",
+                        county.served ? "text-brand" : "text-muted-foreground",
+                      )}
+                    >
                       {county.county} County
                     </span>
                     {county.served ? (
@@ -887,7 +900,10 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                         {county.state}
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="border-muted-foreground/30 text-xs text-muted-foreground">
+                      <Badge
+                        variant="outline"
+                        className="border-muted-foreground/30 text-xs text-muted-foreground"
+                      >
                         Not served
                       </Badge>
                     )}
@@ -910,7 +926,9 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
         </div>
         <div className="space-y-3">
           {orderedReps.map((rep) => {
-            const isHighlighted = activeReps.some((r) => r.slug === rep.slug) || selectedReps.some((r) => r.slug === rep.slug);
+            const isHighlighted =
+              activeReps.some((r) => r.slug === rep.slug) ||
+              selectedReps.some((r) => r.slug === rep.slug);
             const totalCounties = countiesByRep[rep.slug]?.length ?? 0;
             const statesServed = (statesByRep[rep.slug] || []).join(" • ");
             const hasTerritory = rep.servedStates.length > 0 || rep.servedCounties.length > 0;
@@ -929,7 +947,9 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                 }}
                 className={clsx(
                   "flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors",
-                  isHighlighted ? "border-brand bg-brand/5" : "border-brand/10 bg-background hover:border-brand/30"
+                  isHighlighted
+                    ? "border-brand bg-brand/5"
+                    : "border-brand/10 bg-background hover:border-brand/30",
                 )}
               >
                 {rep.photoUrl ? (
@@ -951,13 +971,17 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                       <p className="text-sm font-semibold text-brand">{rep.name}</p>
                       <Badge variant="outline" className="border-brand/20 text-xs text-brand">
                         {hasTerritory
-                          ? totalCounties ? `${totalCounties} counties` : "Loading counties"
+                          ? totalCounties
+                            ? `${totalCounties} counties`
+                            : "Loading counties"
                           : rep.role}
                       </Badge>
                     </div>
                     <p className="text-xs text-muted-foreground">
                       {hasTerritory
-                        ? statesServed ? `Serving ${statesServed}` : "Coverage not specified"
+                        ? statesServed
+                          ? `Serving ${statesServed}`
+                          : "Coverage not specified"
                         : "All Territories"}
                     </p>
                   </div>
@@ -999,16 +1023,23 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
             <div className="flex items-start justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className={clsx(
-                    "text-lg font-semibold",
-                    selectedCounty.served ? "text-brand" : "text-muted-foreground"
-                  )}>
+                  <h3
+                    className={clsx(
+                      "text-lg font-semibold",
+                      selectedCounty.served ? "text-brand" : "text-muted-foreground",
+                    )}
+                  >
                     {selectedCounty.county} County
                   </h3>
-                  <Badge variant="outline" className={clsx(
-                    "text-xs",
-                    selectedCounty.served ? "border-brand/20 text-brand" : "border-muted-foreground/30 text-muted-foreground"
-                  )}>
+                  <Badge
+                    variant="outline"
+                    className={clsx(
+                      "text-xs",
+                      selectedCounty.served
+                        ? "border-brand/20 text-brand"
+                        : "border-muted-foreground/30 text-muted-foreground",
+                    )}
+                  >
                     {selectedCounty.state}
                   </Badge>
                 </div>
@@ -1047,7 +1078,10 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                   if (!rep) return null;
                   const counties = filteredCountyListByRep[slug] ?? countiesByRep[slug] ?? [];
                   return (
-                    <details key={slug} className="rounded-lg border border-dashed border-brand/20 bg-brand/5 text-sm text-brand">
+                    <details
+                      key={slug}
+                      className="rounded-lg border border-dashed border-brand/20 bg-brand/5 text-sm text-brand"
+                    >
                       <summary className="flex cursor-pointer items-center justify-between px-3 py-2 font-medium">
                         {rep.name}
                         <span className="text-xs text-brand/80">{counties.length}</span>
@@ -1060,7 +1094,7 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                               type="button"
                               className={clsx(
                                 "flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm text-brand-deep/80 hover:bg-brand/10 focus:bg-brand/10 focus:outline-none",
-                                county.id === selectedCountyId ? "bg-brand/15" : ""
+                                county.id === selectedCountyId ? "bg-brand/15" : "",
                               )}
                               onClick={() => handleSelectCounty(county.id, { animate: false })}
                               onMouseEnter={() => handleHoverCounty(county.id)}
@@ -1069,7 +1103,10 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                               onBlur={() => handleHoverCounty(null)}
                             >
                               <span>{county.county} County</span>
-                              <Badge variant="outline" className="border-brand/20 text-xs text-brand">
+                              <Badge
+                                variant="outline"
+                                className="border-brand/20 text-xs text-brand"
+                              >
                                 {county.state}
                               </Badge>
                             </button>
@@ -1090,7 +1127,6 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
   return (
     <section ref={containerRef} className="relative py-8 lg:py-10">
       <div className="container mx-auto px-4 lg:px-6">
-
         <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-8">
           <div
             ref={mapWrapperRef}
@@ -1110,97 +1146,97 @@ export function TerritorySplitMap({ representatives = [] }: TerritorySplitMapPro
                   <span className="relative z-10 text-sm text-muted-foreground">Loading map…</span>
                 </div>
               ) : (
-              <ComposableMap
-                projection="geoAlbersUsa"
-                projectionConfig={{ scale: Math.max(620, mapSize.width) * 1.05 }}
-                width={mapSize.width}
-                height={mapSize.height}
-                className="w-full"
-              >
-                <defs>
-                  {stripePatterns.map(({ id, colors }) => (
-                    <pattern
-                      key={id}
-                      id={id}
-                      width={colors.length * 4}
-                      height={colors.length * 4}
-                      patternUnits="userSpaceOnUse"
-                      patternTransform="rotate(45)"
-                    >
-                      {colors.map((color, i) => (
-                        <rect
-                          key={i}
-                          x={i * 4}
-                          y={0}
-                          width={4}
-                          height={colors.length * 4}
-                          fill={color}
-                        />
-                      ))}
-                    </pattern>
-                  ))}
-                </defs>
-                <ZoomableGroup
-                  center={viewState.coordinates}
-                  zoom={viewState.zoom}
-                  minZoom={MAP_MIN_ZOOM}
-                  maxZoom={MAP_MAX_ZOOM}
-                  translateExtent={[
-                    [-500, -200],
-                    [mapSize.width + 500, mapSize.height + 300],
-                  ]}
-                  onMoveEnd={(position: { coordinates: [number, number]; zoom: number }) => {
-                    setViewState({ coordinates: position.coordinates, zoom: position.zoom });
-                  }}
+                <ComposableMap
+                  projection="geoAlbersUsa"
+                  projectionConfig={{ scale: Math.max(620, mapSize.width) * 1.05 }}
+                  width={mapSize.width}
+                  height={mapSize.height}
+                  className="w-full"
                 >
-                  <Geographies
-                    geography={{
-                      type: "FeatureCollection",
-                      features: geographies as CountyFeature[],
+                  <defs>
+                    {stripePatterns.map(({ id, colors }) => (
+                      <pattern
+                        key={id}
+                        id={id}
+                        width={colors.length * 4}
+                        height={colors.length * 4}
+                        patternUnits="userSpaceOnUse"
+                        patternTransform="rotate(45)"
+                      >
+                        {colors.map((color, i) => (
+                          <rect
+                            key={i}
+                            x={i * 4}
+                            y={0}
+                            width={4}
+                            height={colors.length * 4}
+                            fill={color}
+                          />
+                        ))}
+                      </pattern>
+                    ))}
+                  </defs>
+                  <ZoomableGroup
+                    center={viewState.coordinates}
+                    zoom={viewState.zoom}
+                    minZoom={MAP_MIN_ZOOM}
+                    maxZoom={MAP_MAX_ZOOM}
+                    translateExtent={[
+                      [-500, -200],
+                      [mapSize.width + 500, mapSize.height + 300],
+                    ]}
+                    onMoveEnd={(position: { coordinates: [number, number]; zoom: number }) => {
+                      setViewState({ coordinates: position.coordinates, zoom: position.zoom });
                     }}
                   >
-                    {({ geographies: mapGeographies }: { geographies: CountyFeature[] }) =>
-                      mapGeographies.map((geo) => (
-                        <Geography
-                          key={geo.properties.id as string}
-                          geography={geo}
-                          onMouseMove={(event) => handleMapMouseMove(event, geo as CountyFeature)}
-                          onMouseLeave={handleMapMouseLeave}
-                          onFocus={() => handleHoverCounty((geo as CountyFeature).properties.id)}
-                          onBlur={() => handleHoverCounty(null)}
-                          onClick={() => handleSelectCounty((geo as CountyFeature).properties.id)}
-                          onKeyDown={(event) => handleCountyKeyDown(event, geo as CountyFeature)}
-                          tabIndex={0}
-                          role="button"
-                          aria-label={`${(geo as CountyFeature).properties.county} County, ${
-                            (geo as CountyFeature).properties.state
-                          }`}
-                          style={mapStyles(geo as CountyFeature)}
-                        />
-                      ))
-                    }
-                  </Geographies>
-                  {Object.entries(STATE_LABEL_COORDS).map(([code, coords]) => (
-                    <Marker key={code} coordinates={coords}>
-                      <text
-                        textAnchor="middle"
-                        dominantBaseline="central"
-                        style={{
-                          fontFamily: "var(--font-display)",
-                          fontSize: 14 / viewState.zoom,
-                          fontWeight: 600,
-                          fill: "rgb(var(--brand))",
-                          opacity: 0.4,
-                          pointerEvents: "none",
-                          userSelect: "none",
-                        }}
-                      >
-                        {code}
-                      </text>
-                    </Marker>
-                  ))}
-                </ZoomableGroup>
-              </ComposableMap>
+                    <Geographies
+                      geography={{
+                        type: "FeatureCollection",
+                        features: geographies as CountyFeature[],
+                      }}
+                    >
+                      {({ geographies: mapGeographies }: { geographies: CountyFeature[] }) =>
+                        mapGeographies.map((geo) => (
+                          <Geography
+                            key={geo.properties.id as string}
+                            geography={geo}
+                            onMouseMove={(event) => handleMapMouseMove(event, geo as CountyFeature)}
+                            onMouseLeave={handleMapMouseLeave}
+                            onFocus={() => handleHoverCounty((geo as CountyFeature).properties.id)}
+                            onBlur={() => handleHoverCounty(null)}
+                            onClick={() => handleSelectCounty((geo as CountyFeature).properties.id)}
+                            onKeyDown={(event) => handleCountyKeyDown(event, geo as CountyFeature)}
+                            tabIndex={0}
+                            role="button"
+                            aria-label={`${(geo as CountyFeature).properties.county} County, ${
+                              (geo as CountyFeature).properties.state
+                            }`}
+                            style={mapStyles(geo as CountyFeature)}
+                          />
+                        ))
+                      }
+                    </Geographies>
+                    {Object.entries(STATE_LABEL_COORDS).map(([code, coords]) => (
+                      <Marker key={code} coordinates={coords}>
+                        <text
+                          textAnchor="middle"
+                          dominantBaseline="central"
+                          style={{
+                            fontFamily: "var(--font-display)",
+                            fontSize: 14 / viewState.zoom,
+                            fontWeight: 600,
+                            fill: "rgb(var(--brand))",
+                            opacity: 0.4,
+                            pointerEvents: "none",
+                            userSelect: "none",
+                          }}
+                        >
+                          {code}
+                        </text>
+                      </Marker>
+                    ))}
+                  </ZoomableGroup>
+                </ComposableMap>
               )}
 
               <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-background/90 to-transparent" />
