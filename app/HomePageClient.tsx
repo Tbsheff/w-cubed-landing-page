@@ -54,6 +54,8 @@ type HighlightItem = {
 
 type HomePageProps = {
   hero?: HeroContent | null;
+  companyStoryImage?: string | null;
+  companyStoryImageAlt?: string | null;
   stats?: StatItem[] | null;
   manufacturers?: ManufacturerStripItem[] | null;
   highlights?: HighlightItem[] | null;
@@ -137,7 +139,15 @@ const defaultHero: HeroContent = {
   secondaryCta: { label: "View Manufacturers", href: "/manufacturers" },
 };
 
-export default function WCubedLanding({ hero, stats, manufacturers, highlights, representatives }: HomePageProps) {
+export default function WCubedLanding({
+  hero,
+  companyStoryImage,
+  companyStoryImageAlt,
+  stats,
+  manufacturers,
+  highlights,
+  representatives,
+}: HomePageProps) {
   const heroData = { ...defaultHero, ...(hero || {}) };
 
   const heroSlidesData: HeroSlide[] =
@@ -259,8 +269,8 @@ export default function WCubedLanding({ hero, stats, manufacturers, highlights, 
               viewport={{ once: true }}
             >
               <Image
-                src="/placeholder.svg?height=500&width=600&text=Company+History"
-                alt="W-Cubed Company History"
+                src={companyStoryImage || "/placeholder.svg?height=500&width=600&text=Company+History"}
+                alt={companyStoryImageAlt || "W-Cubed Company History"}
                 width={600}
                 height={500}
                 className="rounded-lg shadow-lg"

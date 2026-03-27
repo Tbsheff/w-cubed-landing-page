@@ -17,6 +17,8 @@ type SiteSettingsResult = {
   heroTitle?: string | null
   heroDescription?: string | null
   heroImage?: any
+  companyStoryImage?: any
+  companyStoryImageAlt?: string | null
   heroSlides?: Array<{
     image?: any
     alt?: string | null
@@ -126,6 +128,12 @@ export default async function Page() {
   return (
     <HomePageClient
       hero={hero}
+      companyStoryImage={
+        data.companyStoryImage
+          ? urlForImage(data.companyStoryImage).width(1200).height(1000).fit("max").url()
+          : null
+      }
+      companyStoryImageAlt={data.companyStoryImageAlt}
       stats={stats}
       manufacturers={manufacturers}
       highlights={highlights}

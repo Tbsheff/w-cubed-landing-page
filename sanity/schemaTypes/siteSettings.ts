@@ -133,6 +133,19 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'companyStoryImage',
+      title: 'Company Story Image',
+      description: 'Image used in the "From Garage to Industry Leader" section on the homepage.',
+      type: 'image',
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: 'companyStoryImageAlt',
+      title: 'Company Story Image Alt Text',
+      type: 'string',
+      description: 'Accessible description for the company story image.',
+    }),
+    defineField({
       name: 'manufacturerStrip',
       title: 'Manufacturer Strip',
       type: 'array',
