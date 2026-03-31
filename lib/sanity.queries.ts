@@ -1,11 +1,11 @@
-import groq from 'groq'
+import groq from "groq";
 
 export const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][0]{
   _id,
   _updatedAt,
   title,
   "slug": slug.current,
-  "excerpt": coalesce(excerpt, body[0].children[0].text),
+  "excerpt": coalesce(excerpt, pt::text(body)[0...220]),
   publishedAt,
   "date": coalesce(publishedAt, _updatedAt),
   mainImage,
@@ -13,50 +13,50 @@ export const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][
   author->{ name, image },
   categories[]->{ title },
   body
-}`
+}`;
 
-export const allPostSlugsQuery = groq`*[_type == "post" && defined(slug.current)]{ "slug": slug.current }`
+export const allPostSlugsQuery = groq`*[_type == "post" && defined(slug.current)]{ "slug": slug.current }`;
 
 export const postsListQuery = groq`*[_type == "post"]|order(coalesce(publishedAt,_updatedAt) desc){
   _id,
   title,
   "slug": slug.current,
-  "excerpt": coalesce(excerpt, body[0].children[0].text),
+  "excerpt": coalesce(excerpt, pt::text(body)[0...220]),
   "date": coalesce(publishedAt, _updatedAt),
   mainImage,
   "imageUrl": mainImage.asset->url,
   author->{ name },
   categories[]->{ title }
-}`
+}`;
 
 export const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug][0]{
   _id,
   _updatedAt,
   title,
   "slug": slug.current,
-  "excerpt": coalesce(excerpt, body[0].children[0].text),
+  "excerpt": coalesce(excerpt, pt::text(body)[0...220]),
   publishedAt,
   "date": coalesce(publishedAt, _updatedAt),
   mainImage,
   "imageUrl": mainImage.asset->url,
   categories[]->{ title },
   body
-}`
+}`;
 
-export const allProjectSlugsQuery = groq`*[_type == "project" && defined(slug.current)]{ "slug": slug.current }`
+export const allProjectSlugsQuery = groq`*[_type == "project" && defined(slug.current)]{ "slug": slug.current }`;
 
 export const projectsListQuery = groq`*[_type == "project"]|order(coalesce(publishedAt,_updatedAt) desc){
   _id,
   title,
   "slug": slug.current,
-  "excerpt": coalesce(excerpt, body[0].children[0].text),
+  "excerpt": coalesce(excerpt, pt::text(body)[0...220]),
   "date": coalesce(publishedAt, _updatedAt),
   mainImage,
   "imageUrl": mainImage.asset->url,
   categories[]->{ title }
-}`
+}`;
 
-export const allManufacturerSlugsQuery = groq`*[_type == "manufacturer" && defined(slug.current)]{ "slug": slug.current }`
+export const allManufacturerSlugsQuery = groq`*[_type == "manufacturer" && defined(slug.current)]{ "slug": slug.current }`;
 
 export const manufacturersListQuery = groq`*[_type == "manufacturer"]|order(coalesce(order, 9999) asc, name asc){
   _id,
@@ -72,7 +72,7 @@ export const manufacturersListQuery = groq`*[_type == "manufacturer"]|order(coal
   order,
   logo,
   "logoUrl": logo.asset->url
-}`
+}`;
 
 export const manufacturerBySlugQuery = groq`*[_type == "manufacturer" && slug.current == $slug][0]{
   _id,
@@ -89,7 +89,7 @@ export const manufacturerBySlugQuery = groq`*[_type == "manufacturer" && slug.cu
   order,
   logo,
   "logoUrl": logo.asset->url
-}`
+}`;
 
 export const siteSettingsQuery = groq`*[_type == "siteSettings"][0]{
   heroBadge,
@@ -124,7 +124,7 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0]{
     states,
     image
   }
-}`
+}`;
 
 export const representativesQuery = groq`*[_type == "representative"]|order(coalesce(order, 9999) asc, name asc){
   name,
@@ -140,7 +140,7 @@ export const representativesQuery = groq`*[_type == "representative"]|order(coal
     county
   },
   photo
-}`
+}`;
 
 export const territoryInfoQuery = groq`*[_type == "territoryInfo"][0]{
   heroTitle,
@@ -149,8 +149,8 @@ export const territoryInfoQuery = groq`*[_type == "territoryInfo"][0]{
   secondaryCta,
   coverageBlurb,
   businessHours
-}`
+}`;
 
-export const categoriesListQuery = groq`*[_type == "category"]{ title }`
+export const categoriesListQuery = groq`*[_type == "category"]{ title }`;
 
-export const authorsListQuery = groq`*[_type == "author"]{ name }`
+export const authorsListQuery = groq`*[_type == "author"]{ name }`;

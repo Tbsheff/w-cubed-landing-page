@@ -20,6 +20,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "@portabletext/react";
+import { portableRichContentComponents } from "@/components/portable-rich-content";
 
 export type PostClientProps = {
   post: {
@@ -30,7 +31,7 @@ export type PostClientProps = {
     authorName?: string;
     authorImageUrl?: string;
     categories?: string[];
-    body?: any;
+    body?: unknown[];
     related?: Array<{ slug: string; title: string; imageUrl?: string }>;
     slug: string;
   };
@@ -150,12 +151,14 @@ export default function PostClient({ post }: PostClientProps) {
             <div className="grid lg:grid-cols-4 gap-12">
               {/* Main Content */}
               <motion.div
-                className="lg:col-span-3 prose prose-lg max-w-none prose-headings:text-brand-deep prose-a:text-brand-accent prose-blockquote:border-l-brand-accent prose-blockquote:bg-brand-light/20 prose-blockquote:p-4 prose-blockquote:rounded-r-lg"
+                className="lg:col-span-3 prose prose-lg max-w-none prose-p:text-[1.06rem] prose-p:leading-8 prose-p:text-foreground/95 prose-p:my-5 prose-h2:text-3xl prose-h2:leading-tight prose-h2:mt-12 prose-h2:mb-5 prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4 prose-strong:text-brand-deep prose-a:text-brand-accent prose-a:no-underline hover:prose-a:underline prose-li:my-1 prose-blockquote:border-l-brand-accent prose-blockquote:bg-brand-light/20 prose-blockquote:p-4 prose-blockquote:rounded-r-lg"
                 initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
               >
-                {post.body ? <PortableText value={post.body} /> : null}
+                {post.body ? (
+                  <PortableText value={post.body} components={portableRichContentComponents} />
+                ) : null}
 
                 <Separator className="my-12" />
 
@@ -259,11 +262,7 @@ export default function PostClient({ post }: PostClientProps) {
                         Our team can help you optimize your water treatment systems for maximum
                         efficiency.
                       </p>
-                      <Button
-                        size="lg"
-                        className="w-full text-base"
-                        asChild
-                      >
+                      <Button size="lg" className="w-full text-base" asChild>
                         <Link href="/contact">Contact Our Experts</Link>
                       </Button>
                     </div>
@@ -281,7 +280,9 @@ export default function PostClient({ post }: PostClientProps) {
           <div className="container mx-auto px-4 lg:px-6">
             <div className="max-w-4xl mx-auto">
               <motion.div className="text-center space-y-4 mb-12" {...fadeInUp}>
-                <h2 className="text-3xl font-display font-extrabold uppercase tracking-wide text-brand-deep">Related Articles</h2>
+                <h2 className="text-3xl font-display font-extrabold uppercase tracking-wide text-brand-deep">
+                  Related Articles
+                </h2>
                 <p className="text-muted-foreground">Continue reading</p>
               </motion.div>
 
